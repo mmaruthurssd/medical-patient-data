@@ -152,7 +152,7 @@ npm run scan-phi:projects     # Scan projects-in-development
 **Direct access to medical-practice-workspace projects:**
 
 ```bash
-# Symlink to development workspace
+# Development projects symlink
 ls projects-in-development/
 
 # Available projects:
@@ -163,6 +163,15 @@ ls projects-in-development/
 # - Security Compliance MCP
 # - Workflow Orchestrator
 # - And more...
+
+# Live practice management system symlink
+ls live-practice-management-system/
+
+# Production system (code only, no PHI):
+# - Google Sheets Apps Script code
+# - Version control system
+# - Deployment guides
+# - Monitoring dashboards
 ```
 
 **HIPAA-Safe:** PHI Guard blocks any PHI before it reaches development workspace
@@ -226,6 +235,11 @@ medical-patient-data/
 │   ├── Google Sheets Projects
 │   ├── MCP Standardization Project
 │   └── 5+ more active projects
+│
+├── live-practice-management-system/ → ../medical-practice-workspace/live-practice-management-system/  (SYMLINK)
+│   ├── 2-Application Layer (Google Sheets)
+│   ├── 4-Monitoring Layer
+│   └── GitHub Version Control System
 │
 ├── 01-planning-and-roadmap/            # Strategic planning
 ├── 02-goals-and-roadmap/               # Active goals
