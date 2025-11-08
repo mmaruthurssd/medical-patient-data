@@ -1,0 +1,44 @@
+{
+  "name": "medical-patient-data",
+  "version": "0.1.0",
+  "description": "HIPAA-compliant Gemini AI integration for patient data workflows",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --loader ts-node/esm 04-product-under-development/gemini-examples/test-gemini.ts",
+    "classify": "node --loader ts-node/esm 04-product-under-development/gemini-examples/patient-inquiry-classifier.ts",
+    "deidentify": "node --loader ts-node/esm 04-product-under-development/gemini-examples/utils/de-identify.ts",
+    "audit": "node --loader ts-node/esm 04-product-under-development/gemini-examples/utils/audit-logger.ts",
+    "dev": "ts-node --esm",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\""
+  },
+  "keywords": [
+    "gemini",
+    "hipaa",
+    "medical",
+    "patient-data",
+    "ai",
+    "healthcare"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
