@@ -17,13 +17,21 @@ tags: [workspace-standards, AI-collaboration, constitution, resource-index]
 
 ## 🚀 NEW: Workspace Management Documentation
 
-**This workspace is part of a three-workspace architecture.** For comprehensive guidance on:
+**This workspace is part of a three-workspace architecture** operating across **four synchronized components**:
+
+1. **Local Computers** (Multiple Macs, VPS, servers)
+2. **External Brain** (workspace-brain MCP for persistent learning)
+3. **GitHub** (Version control and cross-computer sync)
+4. **Google Drive** (Cloud backup and AI-accessible documentation)
+
+**For comprehensive guidance on:**
 - Workspace architecture and boundaries
 - HIPAA compliance and PHI handling
 - GitHub collaboration and sync procedures
 - Event logging and telemetry
 - Daily workflows and team collaboration
 - AI collaboration protocols
+- Google Drive automation and service account setup
 
 **See**: `workspace-management/` folder (accessible from all three workspaces via symlinks)
 
@@ -35,10 +43,30 @@ tags: [workspace-standards, AI-collaboration, constitution, resource-index]
 - `workspace-management/HIPAA-COMPLIANCE-BOUNDARIES.md` - PHI handling rules
 - `workspace-management/DAILY-WORKFLOW.md` - Daily procedures
 - `workspace-management/EVENT-LOGGING-PROCEDURES.md` - Event logging system
+- `workspace-management/GOOGLE-DRIVE-API-SETUP.md` - Google Drive automation setup
+- `workspace-management/CREDENTIALS-AND-AUTHENTICATION.md` - Service account credentials
 
 **OR** read `START_HERE.md` in the workspace root for quick orientation.
 
 **This WORKSPACE_GUIDE.md contains workspace-specific standards and resources. The workspace-management/ folder contains cross-workspace architecture and procedures.**
+
+### Google Drive Automation (Service Account)
+
+**Status**: ✅ Active - All Google Drive automation uses service account authentication
+
+- **Service Account Email**: ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com
+- **Access**: Manager permissions on all 9 Shared Drives
+- **Benefits**: No browser interaction, works on servers/VPS, consistent authentication
+- **Primary Use**: Automated documentation sync via `upload-workspace-management.js`
+- **Secondary Authentication**: OAuth 2.0 (automation@ssdspc.com) for Apps Script only
+
+**Upload documentation to Google Drive**:
+```bash
+cd /Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup
+node upload-workspace-management.js
+```
+
+**For complete setup details**: See `workspace-management/GOOGLE-DRIVE-API-SETUP.md`
 
 ---
 

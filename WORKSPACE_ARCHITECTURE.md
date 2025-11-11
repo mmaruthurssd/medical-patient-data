@@ -264,6 +264,57 @@ When building something new, ask these questions in order:
 
 ---
 
+# Four-Part Workspace Management System
+
+## Overview
+
+The workspace operates across **four synchronized components**: Local computers, External brain (workspace-brain MCP), GitHub (version control), and Google Drive (cloud backup). This architecture enables cross-computer sync, persistent learning, team collaboration, and AI-accessible documentation.
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              FOUR-PART WORKSPACE SYSTEM                      │
+└─────────────────────────────────────────────────────────────┘
+
+ LOCAL COMPUTERS                EXTERNAL BRAIN
+ (Multiple Macs, VPS)           (workspace-brain MCP)
+ ├── workspace-management/  ←→  ~/workspace-brain/
+ ├── EVENT_LOG.md               ├── telemetry.json
+ └── .ai-planning/              ├── analytics.json
+                                └── learning.json
+         │                               │
+         ├───────────┬───────────────────┘
+         │           │
+         ▼           ▼
+      GITHUB      GOOGLE DRIVE
+      (Sync)      (Backup & AI Access)
+      ├── Repos   └── AI Development - No PHI/
+      │             └── workspace-management/
+      └── Auto-pull
+          (every 5 min)
+```
+
+### Service Account Authentication (Active)
+
+**Google Drive automation** uses service account for server-to-server authentication:
+
+- **Email**: ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com
+- **Status**: ✅ Active and in use for all Google Drive automation
+- **Access**: Manager permissions on all 9 Shared Drives
+- **Benefits**: No browser interaction, works on servers/VPS, consistent authentication
+- **Used by**: `upload-workspace-management.js`, backup automation (future)
+- **Location**: `/Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup/service-account.json`
+
+**OAuth 2.0 authentication** (Secondary - Apps Script only):
+- Used for Google Apps Script automation (service accounts not supported by Apps Script)
+- User: automation@ssdspc.com
+- Future use: Event logging automation (pending Claude Code BAA)
+
+**For complete Google Drive setup:** See `workspace-management/GOOGLE-DRIVE-API-SETUP.md`
+
+---
+
 # Three-Workspace Architecture
 
 ## Overview
@@ -337,9 +388,9 @@ The workspace is organized into **three specialized workspaces** to support HIPA
 
 ## Workspace 1: Development & Planning
 
-**Name:** medical-practice-workspace
-**Location:** ~/Desktop/medical-practice-workspace
-**GitHub:** github.com/mmaruthurssd/medical-practice-workspace
+**Name:** operations-workspace
+**Location:** ~/Desktop/operations-workspace
+**GitHub:** github.com/mmaruthurssd/operations-workspace
 **AI Client:** Claude Code
 **PHI Allowed:** ❌ No
 
@@ -350,7 +401,7 @@ Central hub for development, planning, documentation, and project management. NO
 ### Contents
 
 ```
-medical-practice-workspace/
+operations-workspace/
 ├── planning-and-roadmap/        # Strategic planning
 ├── brainstorming/               # Ideas and exploration
 ├── templates-and-patterns/      # Reusable patterns
@@ -557,7 +608,7 @@ if (workspace !== 'medical-patient-data' && containsPHI(content)) {
 ### Before (Single Workspace)
 
 ```
-medical-practice-workspace/
+operations-workspace/
 ├── local-instances/mcp-servers/    # 26 MCPs (276K files)
 ├── projects-in-development/        # Mixed PHI/non-PHI
 ├── planning-and-roadmap/
@@ -573,7 +624,7 @@ medical-practice-workspace/
 ### After (Three Workspaces)
 
 ```
-1. medical-practice-workspace/      # Development (no PHI)
+1. operations-workspace/      # Development (no PHI)
 2. mcp-infrastructure/              # Shared MCPs (no PHI)
 3. medical-patient-data/            # Gemini + PHI (Google BAA)
 ```
@@ -602,7 +653,7 @@ medical-practice-workspace/
 ### Workspace Access Levels
 
 **Level 1: Development Access**
-- Workspace: medical-practice-workspace
+- Workspace: operations-workspace
 - GitHub: Public (code only, no secrets)
 - Who: All team members
 - Tools: Claude Code, full MCP access
@@ -626,8 +677,8 @@ medical-practice-workspace/
 
 **Step 1: Clone Development Workspace**
 ```bash
-git clone https://github.com/mmaruthurssd/medical-practice-workspace
-cd medical-practice-workspace
+git clone https://github.com/mmaruthurssd/operations-workspace
+cd operations-workspace
 ```
 
 **Step 2: Install MCP Infrastructure**
@@ -658,11 +709,16 @@ git clone https://github.com/mmaruthurssd/medical-patient-data ~/Desktop/medical
 - ✅ HIPAA compliance documentation
 - ✅ Pre-commit security scanning
 
-### Phase 2: Gemini Integration (Next)
-- [ ] Build Gemini MCP client (Python)
-- [ ] Configure `.gemini-mcp.json` for MCP access
-- [ ] Test Gemini API with patient workflows
-- [ ] Implement audit logging for Gemini
+### Phase 2: Gemini Integration (Complete - 2025-11-09)
+- ✅ Build Gemini MCP client (Node.js with MCP Bridge Server)
+- ✅ HTTP wrapper exposing all 26 MCP servers as Gemini functions
+- ✅ Interactive CLI with PHI detection and de-identification
+- ✅ HIPAA-compliant audit logging for all operations
+- ✅ 156+ MCP tools available to Gemini via function calling
+- ✅ Test suite with 100% success rate
+
+**Implementation:** See `Implementation Projects/gemini-mcp-integration/`
+**Cost:** $0/month (within free tiers for both Gemini and Cloud Functions)
 
 ### Phase 3: Google Drive Sync
 - [ ] Configure Google Drive API
@@ -972,7 +1028,7 @@ npm test
     "example-mcp": {
       "command": "node",
       "args": [
-        "/Users/[user]/Desktop/medical-practice-workspace/local-instances/mcp-servers/example-mcp/dist/index.js"
+        "/Users/[user]/Desktop/operations-workspace/local-instances/mcp-servers/example-mcp/dist/index.js"
       ]
     }
   }
