@@ -15,6 +15,33 @@ tags: [workspace-standards, AI-collaboration, constitution, resource-index]
 
 ---
 
+## 🚀 NEW: Workspace Management Documentation
+
+**This workspace is part of a three-workspace architecture.** For comprehensive guidance on:
+- Workspace architecture and boundaries
+- HIPAA compliance and PHI handling
+- GitHub collaboration and sync procedures
+- Event logging and telemetry
+- Daily workflows and team collaboration
+- AI collaboration protocols
+
+**See**: `workspace-management/` folder (accessible from all three workspaces via symlinks)
+
+**Quick Links**:
+- `workspace-management/README.md` - Complete documentation index
+- `workspace-management/AI-WORKSPACE-INITIALIZATION.md` - AI initialization guide
+- `workspace-management/AI-GUIDELINES-BY-WORKSPACE.md` - AI permissions by workspace
+- `workspace-management/THREE-WORKSPACE-ARCHITECTURE.md` - System overview
+- `workspace-management/HIPAA-COMPLIANCE-BOUNDARIES.md` - PHI handling rules
+- `workspace-management/DAILY-WORKFLOW.md` - Daily procedures
+- `workspace-management/EVENT-LOGGING-PROCEDURES.md` - Event logging system
+
+**OR** read `START_HERE.md` in the workspace root for quick orientation.
+
+**This WORKSPACE_GUIDE.md contains workspace-specific standards and resources. The workspace-management/ folder contains cross-workspace architecture and procedures.**
+
+---
+
 # PART 1: CONSTITUTION
 
 ## Core Directives
