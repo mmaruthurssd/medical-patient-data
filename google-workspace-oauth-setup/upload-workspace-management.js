@@ -5,27 +5,24 @@ const { google } = require('googleapis');
 /**
  * Upload workspace-management to Google Drive
  * Creates folder structure and uploads all documentation
+ *
+ * Uses SERVICE ACCOUNT for authentication (no user interaction required)
  */
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
-const TOKEN_PATH = path.join(__dirname, 'token.json');
-const CREDENTIALS_PATH = path.join(__dirname, 'credentials.json');
-
-// Shared Drive ID for "AI Development - No PHI"
-const AI_DEV_NO_PHI_DRIVE_ID = '0AJvXuqWyF0njUk9PVA'; // Will be found dynamically
+const SERVICE_ACCOUNT_PATH = path.join(__dirname, 'service-account.json');
 
 async function authorize() {
-  const credentials = JSON.parse(await fs.readFile(CREDENTIALS_PATH));
-  const { client_secret, client_id, redirect_uris } = credentials.installed;
-  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+  // Load service account credentials
+  const serviceAccount = JSON.parse(await fs.readFile(SERVICE_ACCOUNT_PATH));
 
-  try {
-    const token = JSON.parse(await fs.readFile(TOKEN_PATH));
-    oAuth2Client.setCredentials(token);
-    return oAuth2Client;
-  } catch (err) {
-    throw new Error('Token not found. Run test-oauth.js first to authenticate.');
-  }
+  // Create auth client with service account
+  const auth = new google.auth.GoogleAuth({
+    credentials: serviceAccount,
+    scopes: SCOPES
+  });
+
+  return auth;
 }
 
 async function findSharedDrive(auth, name) {
@@ -131,10 +128,11 @@ async function uploadFile(auth, localPath, name, parentId, driveId) {
 async function main() {
   console.log('========================================');
   console.log('Uploading workspace-management to Google Drive');
+  console.log('Using SERVICE ACCOUNT Authentication');
   console.log('========================================\n');
 
   const auth = await authorize();
-  console.log('✓ Authenticated\n');
+  console.log('✓ Authenticated with service account\n');
 
   // Find AI Development - No PHI shared drive
   console.log('Finding "AI Development - No PHI" shared drive...');
