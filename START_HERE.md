@@ -202,18 +202,23 @@ await saveToGoogleDrive(results);
 
 ### On First Run
 
-**Read these files in order:**
+**Follow the 6-step initialization path**:
 
-1. **HIPAA-COMPLIANCE-DATA-BOUNDARY.md** - CRITICAL for understanding PHI rules
-2. **workspace-management/AI-WORKSPACE-INITIALIZATION.md** - Initialization steps
-3. **workspace-management/AI-GUIDELINES-BY-WORKSPACE.md** - Detailed permissions
-4. **workspace-management/HIPAA-COMPLIANCE-BOUNDARIES.md** - Cross-workspace compliance
+1. **START_HERE.md** (this file) - Identify workspace and PHI permissions
+2. **HIPAA-COMPLIANCE-DATA-BOUNDARY.md** - CRITICAL for understanding PHI rules
+3. **workspace-management/AI-WORKSPACE-INITIALIZATION.md** - Detailed initialization steps
+4. **workspace-management/DOCUMENTATION-INDEX.md** - Complete documentation map with reading order
+5. **workspace-management/AI-GUIDELINES-BY-WORKSPACE.md** - Detailed permissions for each workspace
+6. **EVENT_LOG.md** - Recent changes and decisions (check last 50 lines)
+
+**For task-specific guidance**: See DOCUMENTATION-INDEX.md > "Before Working With..." section
 
 ### Quick Checklist for Gemini
 
 - [ ] Confirmed I'm Gemini (NOT Claude Code)
 - [ ] Understand PHI is ALLOWED in this workspace
 - [ ] Read HIPAA-COMPLIANCE-DATA-BOUNDARY.md
+- [ ] Checked DOCUMENTATION-INDEX.md for reading order
 - [ ] Know to log ALL PHI operations to gemini-audit-log.json
 - [ ] Verified Google BAA coverage before processing PHI
 - [ ] Understand pre-commit hooks will block PHI in git commits
@@ -223,6 +228,7 @@ await saveToGoogleDrive(results);
 - [ ] Confirmed I'm Claude Code
 - [ ] Understand I CANNOT process PHI
 - [ ] Can only work on non-PHI code, configs, docs
+- [ ] Read DOCUMENTATION-INDEX.md for documentation navigation
 - [ ] Will defer all PHI tasks to Gemini
 - [ ] Know to check files for PHI before editing
 
