@@ -1,0 +1,138 @@
+{
+  "version": "1.0",
+  "workflowType": "task-executor",
+  "name": "superseded-docs-review-automation",
+  "created": "2025-11-13T20:20:50.648Z",
+  "lastUpdated": "2025-11-13T20:24:01.409Z",
+  "currentPhase": "completion",
+  "currentStep": "task-execution",
+  "phases": {
+    "execution": {
+      "status": "complete",
+      "startedAt": "2025-11-13T20:20:50.648Z",
+      "completedAt": "2025-11-13T20:24:01.409Z",
+      "steps": []
+    }
+  },
+  "customData": {
+    "tasks": [
+      {
+        "id": "1",
+        "description": "Understand workspace-index superseded detection criteria",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "estimatedHours": 0.05,
+        "startedAt": "2025-11-13T20:22:42.844Z",
+        "completedAt": "2025-11-13T20:22:42.844Z",
+        "notes": "Analyzed workspace-index MCP source code. Superseded detection uses: (1) supersession keywords, (2) framework replacement detection, (3) cross-references to newer docs, (4) age + unreferenced status. Confidence scoring based on pattern match, historical success, complexity, reversibility, and context clarity.",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Analyzed workspace-index MCP source code. Superseded detection uses: (1) supersession keywords, (2) ...",
+            "Task marked complete at 2025-11-13T20:22:42.844Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-13T20:22:42.844Z"
+      },
+      {
+        "id": "2",
+        "description": "Build programmatic document review algorithm with scoring",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "estimatedHours": 0.2,
+        "startedAt": "2025-11-13T20:22:42.887Z",
+        "completedAt": "2025-11-13T20:22:42.887Z",
+        "notes": "Built programmatic review algorithm with 4-factor scoring: (1) Location-based (25%), (2) Content analysis (30%), (3) Reference checking (25%), (4) Age/staleness (20%). Thresholds: ≥0.85 auto-archive, ≥0.60 manual review, <0.60 keep.",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Built programmatic review algorithm with 4-factor scoring: (1) Location-based (25%), (2) Content ana...",
+            "Task marked complete at 2025-11-13T20:22:42.887Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-13T20:22:42.887Z"
+      },
+      {
+        "id": "3",
+        "description": "Scan 560 documents and generate confidence-sorted archive candidates",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "estimatedHours": 0.15,
+        "startedAt": "2025-11-13T20:24:01.282Z",
+        "completedAt": "2025-11-13T20:24:01.282Z",
+        "notes": "Scanned all 574 markdown files in workspace. Reviewed 127 non-critical documents. Algorithm scored all documents < 0.60 (keep threshold), meaning all documentation in this workspace is active and relevant.",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Scanned all 574 markdown files in workspace. Reviewed 127 non-critical documents. Algorithm scored a...",
+            "Task marked complete at 2025-11-13T20:24:01.282Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-13T20:24:01.282Z"
+      },
+      {
+        "id": "4",
+        "description": "Create safe archival recommendations with reasoning",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "estimatedHours": 0.1,
+        "startedAt": "2025-11-13T20:24:01.336Z",
+        "completedAt": "2025-11-13T20:24:01.336Z",
+        "notes": "Created programmatic review system with 4-factor scoring. Result: 0 auto-archive candidates, 0 manual review needed, 127 documents recommended to keep. This workspace is clean - all documentation is for active Implementation Projects.",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Created programmatic review system with 4-factor scoring. Result: 0 auto-archive candidates, 0 manua...",
+            "Task marked complete at 2025-11-13T20:24:01.336Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-13T20:24:01.336Z"
+      }
+    ],
+    "constraints": [],
+    "context": {
+      "category": "documentation-automation",
+      "phiHandling": false,
+      "estimatedHours": 0.5
+    },
+    "documentation": {
+      "existing": [
+        "README.md",
+        "docs/"
+      ],
+      "needsUpdate": [],
+      "updated": []
+    },
+    "metadata": {
+      "totalTasks": 4,
+      "completedTasks": 4,
+      "verifiedTasks": 4,
+      "percentComplete": 100,
+      "lastUpdated": "2025-11-13T20:24:01.409Z"
+    }
+  }
+}
