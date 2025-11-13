@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communications Approval Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: #ecf0f1;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      color: #2c3e50;
+    }
+
+    .filters {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filters label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .filters select, .filters button {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .filters button {
+      background: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .filters button:hover {
+      background: #2980b9;
+    }
+
+    #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      background: white;
+      border: 2px solid #e0e0e0;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .message:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .message.urgent {
+      border-color: #e74c3c;
+      background: #fff5f5;
+    }
+
+    .message.high {
+      border-color: #f39c12;
+      background: #fffaf0;
+    }
+
+    .message.normal {
+      border-color: #3498db;
+    }
+
+    .message.low {
+      border-color: #95a5a6;
+      background: #f9f9f9;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .message-title {
+      flex: 1;
+    }
+
+    .message-title h3 {
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .message-meta {
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+
+    .priority-badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .priority-urgent {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .priority-high {
+      background: #f39c12;
+      color: white;
+    }
+
+    .priority-normal {
+      background: #3498db;
+      color: white;
+    }
+
+    .priority-low {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .message-details {
+      margin-bottom: 15px;
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #555;
+      min-width: 80px;
+    }
+
+    .detail-value {
+      color: #333;
+      flex: 1;
+    }
+
+    .message-preview {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 3px solid #3498db;
+      margin: 15px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+    }
+
+    .btn-approve {
+      background: #27ae60;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #229954;
+      transform: translateY(-1px);
+    }
+
+    .btn-reject {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #c0392b;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .empty-state h2 {
+      color: #27ae60;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: #7f8c8d;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .phi-warning {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .phi-warning::before {
+      content: "⚠️";
+      font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .message-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .message-actions {
+        flex-direction: column;
+      }
+
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📨 Communications Approval Dashboard</h1>
+      <div class="stats" id="stats">
+        <div class="stat-card"><strong>Total:</strong> <span id="stat-total">0</span></div>
+        <div class="stat-card"><strong>Urgent:</strong> <span id="stat-urgent">0</span></div>
+        <div class="stat-card"><strong>High:</strong> <span id="stat-high">0</span></div>
+        <div class="stat-card"><strong>Normal:</strong> <span id="stat-normal">0</span></div>
+        <div class="stat-card"><strong>Low:</strong> <span id="stat-low">0</span></div>
+        <div class="stat-card"><strong>Contains PHI:</strong> <span id="stat-phi">0</span></div>
+      </div>
+    </header>
+
+    <div class="filters">
+      <label>Filter by:</label>
+      <select id="filterPriority" onchange="applyFilters()">
+        <option value="all">All Priorities</option>
+        <option value="urgent">Urgent</option>
+        <option value="high">High</option>
+        <option value="normal">Normal</option>
+        <option value="low">Low</option>
+      </select>
+
+      <select id="filterType" onchange="applyFilters()">
+        <option value="all">All Types</option>
+        <option value="email">Email</option>
+        <option value="chat">Chat</option>
+        <option value="sms">SMS</option>
+      </select>
+
+      <select id="filterAI" onchange="applyFilters()">
+        <option value="all">All AI Systems</option>
+        <option value="claude">Claude</option>
+        <option value="gemini">Gemini</option>
+      </select>
+
+      <button onclick="loadMessages()">🔄 Refresh</button>
+      <button onclick="approveAll()">✅ Approve All</button>
+    </div>
+
+    <div id="messages">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading messages...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allMessages = [];
+    let currentUser = '';
+
+    // Load on page load
+    window.onload = function() {
+      loadMessages();
+      getCurrentUser();
+    };
+
+    // Get current user email
+    function getCurrentUser() {
+      google.script.run
+        .withSuccessHandler(user => currentUser = user)
+        .getCurrentUserEmail();
+    }
+
+    // Load messages from Google Sheets
+    function loadMessages() {
+      document.getElementById('messages').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading messages...</p>
+        </div>
+      `;
+
+      google.script.run
+        .withSuccessHandler(displayMessages)
+        .withFailureHandler(showError)
+        .getStagedCommunications();
+    }
+
+    // Display messages
+    function displayMessages(messages) {
+      allMessages = messages;
+      applyFilters();
+      updateStats();
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const priorityFilter = document.getElementById('filterPriority').value;
+      const typeFilter = document.getElementById('filterType').value;
+      const aiFilter = document.getElementById('filterAI').value;
+
+      let filtered = allMessages;
+
+      if (priorityFilter !== 'all') {
+        filtered = filtered.filter(m => m.priority === priorityFilter);
+      }
+      if (typeFilter !== 'all') {
+        filtered = filtered.filter(m => m.type === typeFilter);
+      }
+      if (aiFilter !== 'all') {
+        filtered = filtered.filter(m => m.aiSystem === aiFilter);
+      }
+
+      renderMessages(filtered);
+    }
+
+    // Render messages to DOM
+    function renderMessages(messages) {
+      const container = document.getElementById('messages');
+
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h2>✅ All Clear!</h2>
+            <p>No messages pending approval.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map(msg => `
+        <div class="message ${msg.priority}" id="msg-${msg.operationId}">
+          ${msg.phiFlag === 'TRUE' ? '<div class="phi-warning"><strong>PHI WARNING:</strong> This message may contain protected health information. Review carefully.</div>' : ''}
+
+          <div class="message-header">
+            <div class="message-title">
+              <h3>${msg.type.toUpperCase()}: ${msg.subject || 'No Subject'}</h3>
+              <div class="message-meta">
+                Staged by ${msg.stagedBy} • ${formatDate(msg.stagedAt)} • ID: ${msg.operationId}
+              </div>
+            </div>
+            <span class="priority-badge priority-${msg.priority}">${msg.priority}</span>
+          </div>
+
+          <div class="message-details">
+            <div class="detail-row">
+              <span class="detail-label">AI System:</span>
+              <span class="detail-value">${msg.aiSystem.toUpperCase()}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">From:</span>
+              <span class="detail-value">${msg.from}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">To:</span>
+              <span class="detail-value">${msg.to}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Channel:</span>
+              <span class="detail-value">${msg.channel}</span>
+            </div>
+          </div>
+
+          <div class="message-preview">
+            ${msg.bodyPreview}
+          </div>
+
+          <div class="message-actions">
+            <button class="btn btn-approve" onclick="approve('${msg.operationId}')">
+              ✅ Approve & Send
+            </button>
+            <button class="btn btn-reject" onclick="reject('${msg.operationId}')">
+              ❌ Reject
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Update statistics
+    function updateStats() {
+      const stats = {
+        total: allMessages.length,
+        urgent: allMessages.filter(m => m.priority === 'urgent').length,
+        high: allMessages.filter(m => m.priority === 'high').length,
+        normal: allMessages.filter(m => m.priority === 'normal').length,
+        low: allMessages.filter(m => m.priority === 'low').length,
+        phi: allMessages.filter(m => m.phiFlag === 'TRUE').length
+      };
+
+      document.getElementById('stat-total').textContent = stats.total;
+      document.getElementById('stat-urgent').textContent = stats.urgent;
+      document.getElementById('stat-high').textContent = stats.high;
+      document.getElementById('stat-normal').textContent = stats.normal;
+      document.getElementById('stat-low').textContent = stats.low;
+      document.getElementById('stat-phi').textContent = stats.phi;
+    }
+
+    // Approve message
+    function approve(operationId) {
+      if (!confirm('Approve and send this message?')) return;
+
+      const messageEl = document.getElementById('msg-' + operationId);
+      const buttons = messageEl.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = true);
+
+      google.script.run
+        .withSuccessHandler(() => {
+          showSuccess('Message approved and sent!');
+          messageEl.style.opacity = '0.5';
+          setTimeout(() => loadMessages(), 1000);
+        })
+        .withFailureHandler(error => {
+          showError('Failed to approve: ' + error.message);
+          buttons.forEach(btn => btn.disabled = false);
+        })
+        .approveCommunication(operationId, currentUser);
+    }
+
+    // Reject message
+    function reject(operationId) {
+      const reason = prompt('Enter rejection reason:');
+      if (!reason) return;
+
+      const messageEl = document.getElementById('msg-' + operationId);
+      const buttons = messageEl.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = true);
+
+      google.script.run
+        .withSuccessHandler(() => {
+          showSuccess('Message rejected.');
+          messageEl.style.opacity = '0.5';
+          setTimeout(() => loadMessages(), 1000);
+        })
+        .withFailureHandler(error => {
+          showError('Failed to reject: ' + error.message);
+          buttons.forEach(btn => btn.disabled = false);
+        })
+        .rejectCommunication(operationId, currentUser, reason);
+    }
+
+    // Approve all visible messages
+    function approveAll() {
+      const visible = allMessages.filter(m => {
+        const el = document.getElementById('msg-' + m.operationId);
+        return el && el.style.display !== 'none';
+      });
+
+      if (visible.length === 0) return;
+
+      if (!confirm(`Approve and send all ${visible.length} visible messages?`)) return;
+
+      const operationIds = visible.map(m => m.operationId);
+
+      google.script.run
+        .withSuccessHandler(results => {
+          const succeeded = results.filter(r => r.success).length;
+          showSuccess(`Approved ${succeeded} of ${results.length} messages.`);
+          setTimeout(() => loadMessages(), 1000);
+        })
+        .withFailureHandler(showError)
+        .batchApproveCommunications(operationIds, currentUser);
+    }
+
+    // Utility functions
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      return date.toLocaleString();
+    }
+
+    function showSuccess(message) {
+      alert('✅ ' + message);
+    }
+
+    function showError(error) {
+      console.error(error);
+      alert('❌ Error: ' + (error.message || error));
+    }
+  </script>
+</body>
+</html>
