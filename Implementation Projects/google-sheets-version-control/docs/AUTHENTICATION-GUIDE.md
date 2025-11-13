@@ -80,29 +80,71 @@ This will:
 - Set `GOOGLE_APPLICATION_CREDENTIALS` environment variable
 - Configure your shell for future sessions
 
-#### Step 3: Grant Service Account Access
+#### Step 3: Grant Service Account Access (AUTOMATED)
 
-The service account needs access to your Google Sheets.
+The service account needs access to your Google Sheets. **We can automate this for all 235 sheets!**
 
-**For EACH production sheet:**
-
-1. Open the Google Sheet
-2. Click **Share**
-3. Add the service account email (found in the key file):
-   ```
-   # Example format:
-   your-service-account@your-project.iam.gserviceaccount.com
-   ```
-4. Grant **Editor** permissions
-5. Uncheck "Notify people" (it's a service account)
-6. Click **Share**
-
-**Bulk Method (Faster):**
+**Run the automated sharing script:**
 
 ```bash
-# Create a script to share all sheets with service account
-# This reads from your CSV and shares each sheet
+# First, test without making changes (dry run)
+node scripts/grant-service-account-access.js --dry-run
+
+# If everything looks good, run for real
+node scripts/grant-service-account-access.js
 ```
+
+This script will:
+- Read all 235 sheets from `production-sheets.csv`
+- Check which sheets the service account already has access to
+- Grant Editor permissions to sheets that need it
+- Skip sheets that already have access
+- Show progress as it works through all sheets
+- Complete in ~1-2 minutes (vs hours manually!)
+
+**Example Output:**
+
+```
+🔐 Service Account Access Grant Tool
+
+📋 Loading service account credentials...
+   Service Account: sheets-automation@project.iam.gserviceaccount.com
+
+📊 Loading production sheets from CSV...
+   Found 235 sheets
+
+🔌 Initializing Google Drive API...
+   Connected ✅
+
+🔄 Granting access to sheets...
+
+[1/235] Transcripts - Dashboards - D25-527...
+  ✅ Access granted
+[2/235] Medicare Physician Practitioner - D25-525...
+  ✅ Already has access (skipping)
+...
+
+📊 Summary
+✅ Successfully granted access: 198
+ℹ️  Already had access: 37
+❌ Failed: 0
+📊 Total processed: 235
+
+✅ All sheets successfully shared with service account!
+```
+
+**Manual Method (if needed):**
+
+If the automated script doesn't work for some reason:
+
+1. Open each Google Sheet
+2. Click **Share**
+3. Add the service account email: `your-service-account@project.iam.gserviceaccount.com`
+4. Grant **Editor** permissions
+5. Uncheck "Notify people"
+6. Click **Share**
+
+(But the automated script is **much** faster!)
 
 #### Step 4: Test Authentication
 
