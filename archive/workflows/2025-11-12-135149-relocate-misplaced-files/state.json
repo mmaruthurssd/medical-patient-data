@@ -1,0 +1,257 @@
+{
+  "version": "1.0",
+  "workflowType": "task-executor",
+  "name": "relocate-misplaced-files",
+  "created": "2025-11-12T19:49:18.521Z",
+  "lastUpdated": "2025-11-12T19:51:49.202Z",
+  "currentPhase": "completion",
+  "currentStep": "task-execution",
+  "phases": {
+    "execution": {
+      "status": "complete",
+      "startedAt": "2025-11-12T19:49:18.521Z",
+      "completedAt": "2025-11-12T19:51:49.202Z",
+      "steps": []
+    }
+  },
+  "customData": {
+    "tasks": [
+      {
+        "id": "1",
+        "description": "Move gemini-examples code to Implementation Projects/gemini-mcp-integration/",
+        "status": "completed",
+        "complexity": {
+          "score": 3,
+          "level": "simple",
+          "emoji": "🟡"
+        },
+        "startedAt": "2025-11-12T19:49:27.879Z",
+        "completedAt": "2025-11-12T19:49:27.879Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:49:27.879Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "2",
+        "description": "Move GEMINI-SETUP-GUIDE.md to Implementation Projects/gemini-mcp-integration/",
+        "status": "completed",
+        "complexity": {
+          "score": 3,
+          "level": "simple",
+          "emoji": "🟡"
+        },
+        "startedAt": "2025-11-12T19:49:35.288Z",
+        "completedAt": "2025-11-12T19:49:35.288Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:49:35.288Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "3",
+        "description": "Evaluate and relocate HIPAA documentation files",
+        "status": "completed",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T19:49:47.059Z",
+        "completedAt": "2025-11-12T19:49:47.059Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:49:47.059Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "4",
+        "description": "Move PHI-GUARD-README.md to appropriate location",
+        "status": "completed",
+        "complexity": {
+          "score": 3,
+          "level": "simple",
+          "emoji": "🟡"
+        },
+        "startedAt": "2025-11-12T19:50:15.713Z",
+        "completedAt": "2025-11-12T19:50:15.713Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:50:15.713Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "5",
+        "description": "Evaluate QUICK-START.md and TEAM-ONBOARDING.md for relocation or archival",
+        "status": "completed",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T19:50:33.351Z",
+        "completedAt": "2025-11-12T19:50:33.351Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:50:33.351Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "6",
+        "description": "Move planning docs (NEXT_STEPS, INTEGRATION-PROGRESS) to temp/ or archive",
+        "status": "completed",
+        "complexity": {
+          "score": 3,
+          "level": "simple",
+          "emoji": "🟡"
+        },
+        "startedAt": "2025-11-12T19:50:53.069Z",
+        "completedAt": "2025-11-12T19:50:53.069Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:50:53.069Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "7",
+        "description": "Delete backup file QUICK-START.md.bak-103906",
+        "status": "completed",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T19:51:12.832Z",
+        "completedAt": "2025-11-12T19:51:12.832Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:51:12.832Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "8",
+        "description": "Verify all 01-08 folders are empty",
+        "status": "completed",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T19:51:21.642Z",
+        "completedAt": "2025-11-12T19:51:21.642Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:51:21.642Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      },
+      {
+        "id": "9",
+        "description": "Remove empty 01-08 numbered folders from root",
+        "status": "completed",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T19:51:31.319Z",
+        "completedAt": "2025-11-12T19:51:31.319Z",
+        "verification": {
+          "status": "partial",
+          "evidence": [
+            "Task marked complete at 2025-11-12T19:51:31.319Z"
+          ],
+          "concerns": [
+            "No completion notes provided"
+          ],
+          "recommendations": [
+            "Add notes explaining how the task was completed"
+          ]
+        }
+      }
+    ],
+    "constraints": [],
+    "context": {
+      "category": "workspace-reorganization",
+      "phiHandling": false,
+      "estimatedHours": 0
+    },
+    "documentation": {
+      "existing": [
+        "README.md"
+      ],
+      "needsUpdate": [],
+      "updated": []
+    },
+    "metadata": {
+      "totalTasks": 9,
+      "completedTasks": 9,
+      "verifiedTasks": 0,
+      "percentComplete": 100,
+      "lastUpdated": "2025-11-12T19:51:49.202Z"
+    }
+  }
+}

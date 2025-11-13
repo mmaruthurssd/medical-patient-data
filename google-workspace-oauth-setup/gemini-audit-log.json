@@ -1,0 +1,91 @@
+[
+  {
+    "timestamp": "2025-11-09T15:11:33.271Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "routine",
+    "confidence": 1,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 2
+    }
+  },
+  {
+    "timestamp": "2025-11-09T15:11:35.343Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "routine",
+    "confidence": 1,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 2,
+      "originalTimestamp": "2025-11-09T15:11:32.497Z"
+    }
+  },
+  {
+    "timestamp": "2025-11-09T15:11:37.305Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "urgent",
+    "confidence": 1,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 3,
+      "originalTimestamp": "2025-11-09T15:11:32.498Z"
+    }
+  },
+  {
+    "timestamp": "2025-11-09T15:11:39.224Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "administrative",
+    "confidence": 1,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 4,
+      "originalTimestamp": "2025-11-09T15:11:32.498Z"
+    }
+  },
+  {
+    "timestamp": "2025-11-09T15:11:42.335Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "routine",
+    "confidence": 0.98,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 5,
+      "originalTimestamp": "2025-11-09T15:11:32.498Z"
+    }
+  },
+  {
+    "timestamp": "2025-11-09T15:11:45.197Z",
+    "operation": "classify_patient_inquiry",
+    "user": "automation@ssdsbc.com",
+    "hasPHI": false,
+    "deidentified": false,
+    "classification": "urgent",
+    "confidence": 1,
+    "metadata": {
+      "originalHadPHI": false,
+      "deidentificationApplied": false,
+      "rowNumber": 6,
+      "originalTimestamp": "2025-11-09T15:11:32.498Z"
+    }
+  }
+]

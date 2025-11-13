@@ -1,0 +1,19 @@
+{
+  "name": "google-drive-sync",
+  "version": "1.0.0",
+  "description": "A utility to synchronize files between a local directory and Google Drive.",
+  "main": "sync.js",
+  "scripts": {
+    "start": "node sync.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google-drive",
+    "sync"
+  ],
+  "author": "Gemini",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^165.0.0"
+  }
+}

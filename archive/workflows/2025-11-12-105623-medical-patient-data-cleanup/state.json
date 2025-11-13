@@ -1,0 +1,179 @@
+{
+  "version": "1.0",
+  "workflowType": "task-executor",
+  "name": "medical-patient-data-cleanup",
+  "created": "2025-11-12T16:54:53.112Z",
+  "lastUpdated": "2025-11-12T16:56:23.747Z",
+  "currentPhase": "completion",
+  "currentStep": "task-execution",
+  "phases": {
+    "execution": {
+      "status": "complete",
+      "startedAt": "2025-11-12T16:54:53.112Z",
+      "completedAt": "2025-11-12T16:56:23.747Z",
+      "steps": []
+    }
+  },
+  "customData": {
+    "tasks": [
+      {
+        "id": "1",
+        "description": "Verify symlink status and identify broken links",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.352Z",
+        "completedAt": "2025-11-12T16:56:17.352Z",
+        "notes": "Verified all symlinks. Found 6 valid, 4 broken (all pointing to non-existent medical-practice-workspace)",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Verified all symlinks. Found 6 valid, 4 broken (all pointing to non-existent medical-practice-worksp...",
+            "Task marked complete at 2025-11-12T16:56:17.352Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.352Z"
+      },
+      {
+        "id": "2",
+        "description": "Remove duplicate symlinks with ' 2' suffix",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.396Z",
+        "completedAt": "2025-11-12T16:56:17.396Z",
+        "notes": "Removed 4 broken symlinks with ' 2' suffix",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Removed 4 broken symlinks with ' 2' suffix...",
+            "Task marked complete at 2025-11-12T16:56:17.396Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.396Z"
+      },
+      {
+        "id": "3",
+        "description": "Create archive/backups/ directory for backup files",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.443Z",
+        "completedAt": "2025-11-12T16:56:17.443Z",
+        "notes": "Created archive/backups/ directory",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Created archive/backups/ directory...",
+            "Task marked complete at 2025-11-12T16:56:17.443Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.443Z"
+      },
+      {
+        "id": "4",
+        "description": "Move *.bak-* files to archive/backups/",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.495Z",
+        "completedAt": "2025-11-12T16:56:17.495Z",
+        "notes": "Moved 8 backup files to archive/backups/",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Moved 8 backup files to archive/backups/...",
+            "Task marked complete at 2025-11-12T16:56:17.495Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.495Z"
+      },
+      {
+        "id": "5",
+        "description": "Analyze root-level documentation files",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.550Z",
+        "completedAt": "2025-11-12T16:56:17.550Z",
+        "notes": "Analyzed 11 root-level markdown files. Identified 5 essential docs to keep at root, 6 to relocate",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Analyzed 11 root-level markdown files. Identified 5 essential docs to keep at root, 6 to relocate...",
+            "Task marked complete at 2025-11-12T16:56:17.550Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.550Z"
+      },
+      {
+        "id": "6",
+        "description": "Organize root-level docs to proper locations",
+        "status": "verified",
+        "complexity": {
+          "score": 2,
+          "level": "trivial",
+          "emoji": "🟢"
+        },
+        "startedAt": "2025-11-12T16:56:17.610Z",
+        "completedAt": "2025-11-12T16:56:17.610Z",
+        "notes": "Organized docs: 2 to 01-planning-and-roadmap/, 3 to 03-resources-docs-assets-tools/, 1 to archive/",
+        "verification": {
+          "status": "passed",
+          "evidence": [
+            "Task notes provided: Organized docs: 2 to 01-planning-and-roadmap/, 3 to 03-resources-docs-assets-tools/, 1 to archive/...",
+            "Task marked complete at 2025-11-12T16:56:17.610Z"
+          ],
+          "concerns": [],
+          "recommendations": []
+        },
+        "verifiedAt": "2025-11-12T16:56:17.610Z"
+      }
+    ],
+    "constraints": [],
+    "context": {
+      "category": "workspace-cleanup",
+      "phiHandling": false,
+      "estimatedHours": 0
+    },
+    "documentation": {
+      "existing": [
+        "README.md"
+      ],
+      "needsUpdate": [],
+      "updated": []
+    },
+    "metadata": {
+      "totalTasks": 6,
+      "completedTasks": 6,
+      "verifiedTasks": 6,
+      "percentComplete": 100,
+      "lastUpdated": "2025-11-12T16:56:23.747Z"
+    }
+  }
+}

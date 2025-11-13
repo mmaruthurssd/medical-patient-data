@@ -1,0 +1,1 @@
+../shared-commands/mcp-list.md
