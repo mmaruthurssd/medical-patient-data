@@ -112,6 +112,44 @@ This workspace operates like a **distributed team** with specialized roles, wher
                    └──────────→ ALL FUTURE WORK (continuous improvement)
 ```
 
+## Workflow Playbook: Operational Procedures
+
+**Role:** Institutional knowledge base for "how we do things"
+**Location:** `/WORKFLOW_PLAYBOOK.md`
+
+The Workflow Playbook complements the strategic functions above by documenting **established operational patterns** for recurring tasks:
+
+**What it contains:**
+- Available credentials and access (service account, automation account)
+- Established workflow patterns (create Google Sheet, send email, etc.)
+- Standard processes with code examples
+- Shared Drive IDs and resource locations
+- Common variations and edge cases
+
+**How it grows:**
+1. **First time:** We work through a task together → Figure out best approach
+2. **Document:** Add the pattern to playbook with real code example
+3. **Next time:** Reference playbook → Follow established pattern → Faster execution
+4. **Evolve:** Discover better approach → Update playbook → Future work uses improvement
+
+**Integration with feedback loop:**
+- Smart File Organizer → Organizes workflow scripts
+- Autonomous Framework → Classifies workflow improvements
+- workspace-brain → Logs workflow execution patterns
+- **Workflow Playbook → Documents proven patterns for reuse**
+
+**Key difference:** Strategic functions handle "what to do" and "how to improve." Workflow Playbook handles "how we typically do this specific task."
+
+**Example workflows:**
+- Create a new Google Sheet (established 2025-01-13)
+- Update existing Google Sheet (to be established)
+- Send email with approval workflow (to be established)
+- Deploy Apps Script to production sheet (to be established)
+
+**See:** `/WORKFLOW_PLAYBOOK.md` for complete documentation
+
+---
+
 ## Dual Environment Pattern: Staging → Production
 
 **Why:** Separate experimentation from production stability
@@ -2602,6 +2640,7 @@ For comprehensive lists of all available resources, see these detailed indexes:
 
 | Category | Index File | Contents |
 |----------|-----------|----------|
+| **Workflow Playbook** | /WORKFLOW_PLAYBOOK.md | Living knowledge base of established workflows, credentials, "how we do things" |
 | **Project Templates** | templates-and-patterns/project-structure-templates/START_HERE.md | Base template + specialized variants, improvement tracking |
 | **Frameworks** | templates-and-patterns/frameworks/FRAMEWORKS-INDEX.md | All 4 frameworks with detailed descriptions |
 | **Tools** | templates-and-patterns/tools-templates/TOOLS-INDEX.md | All 8+ stable tools with setup guides |
