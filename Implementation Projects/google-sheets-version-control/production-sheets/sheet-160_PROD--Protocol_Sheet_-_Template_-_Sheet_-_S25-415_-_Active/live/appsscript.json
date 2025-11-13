@@ -1,0 +1,15 @@
+{
+  "timeZone": "Asia/Karachi",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "PDC",
+        "version": "0",
+        "libraryId": "1wipMhbgjsokmkePSOyxG7vMrEP6squ6FPKV69FTTBaOJb3aMeHkj7LOE",
+        "developmentMode": true
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

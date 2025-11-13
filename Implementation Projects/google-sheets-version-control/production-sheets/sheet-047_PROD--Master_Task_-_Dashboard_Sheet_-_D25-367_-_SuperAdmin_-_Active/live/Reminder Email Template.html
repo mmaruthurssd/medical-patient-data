@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <h4 style="color:#FFAE42"><u>
+      <?= heading ?>
+    </u></h4>
+  <br>
+
+
+  <h4 style="color:#FFAE42">Incomplete Tasks</h4>
+  <div>
+    <table style="width:100%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? incompletedHeadings.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? incompletedData.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+
+
+
+
+
+
+
+
+</body>
+
+</html>

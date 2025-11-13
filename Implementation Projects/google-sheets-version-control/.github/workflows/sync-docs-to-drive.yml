@@ -1,0 +1,28 @@
+name: Sync Documentation to Google Drive
+
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    # Run daily at 9 AM Central Time (3 PM UTC)
+    - cron: '0 15 * * *'
+
+jobs:
+  sync-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install googleapis
+
+      - name: Sync documentation to Google Drive
+        env:
+          GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+        run: node scripts/sync-docs-to-drive.js

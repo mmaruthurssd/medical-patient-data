@@ -1,0 +1,72 @@
+
+<script>
+
+  const form = document.getElementById('inputForm')
+  const btnSave = document.getElementById('btnSave');
+  const btnReset = document.getElementById('btnReset');
+  const msg = document.getElementById('msg');
+  const recordId = document.getElementById('recordId');
+  const faxStatus = document.getElementById('faxStatus');
+  const faxAssignmentNotes = document.getElementById('faxAssignmentNotes');
+  const otherFaxNotes = document.getElementById('otherFaxNotes');
+  const patientId = document.getElementById('patientId');
+  const patientDob = document.getElementById('patientDob');
+
+  window.addEventListener('load', () => {
+    form.addEventListener('submit', (e) => e.preventDefault());
+  });
+
+  document.addEventListener("DOMContentLoaded", (e) => {
+    
+    // get and fill data field values
+    google.script.run
+      .withSuccessHandler((data) => {
+        const output = data.split('|');
+        console.log(output);
+        faxStatus.innerHTML = output[0];
+        recordId.value = output[1];
+        faxStatus.value = output[2];
+        faxAssignmentNotes.value = output[4];
+        otherFaxNotes.value = output[5];
+        patientId.value = output[6];
+        patientDob.value = output[7];
+      })
+      .withFailureHandler(() => {
+        return;
+      })
+      .getData();
+
+  });
+
+  btnReset.addEventListener('click', resetForm);
+
+  function handleFormSubmit(formObject) {
+    if (recordId.value === '') return;
+    google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).updateData(formObject);
+  }
+
+  function onSuccess(status) {
+    msg.innerHTML = `
+      <div class="bg-green-100 text-green-500 rounded-lg text-sm px-3 py-2" role="alert">
+        Data successfully saved to the master sheet!
+      </div>
+    `;
+    setTimeout(resetForm, 3000);
+  }
+
+  function onFailure(error) {
+    msg.innerHTML = `
+      <div class="bg-red-100 text-red-500 rounded-lg text-sm px-3 py-2" role="alert">
+        There was an error saving the data!
+      </div>
+    `;
+    setTimeout(resetForm, 3000);
+  }
+
+  function resetForm() {
+    form.reset();
+    msg.innerHTML = '';
+    // google.script.host.close();
+  }
+
+</script>
