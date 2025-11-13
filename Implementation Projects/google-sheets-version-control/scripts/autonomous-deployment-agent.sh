@@ -87,7 +87,8 @@ echo ""
 BLOCKING_ISSUES=()
 
 [ "$TM_STATUS" = "❌ Not configured" ] && BLOCKING_ISSUES+=("Time Machine not configured")
-[ "$GITHUB_AUTH" = "❌ Not authenticated" ] && BLOCKING_ISSUES+=("GitHub not authenticated")
+# Note: GitHub CLI (gh) is not required - git commands work fine
+# [ "$GITHUB_AUTH" = "❌ Not authenticated" ] && BLOCKING_ISSUES+=("GitHub not authenticated")
 [ "$NODE_VERSION" = "Not installed" ] && BLOCKING_ISSUES+=("Node.js not installed")
 [ "$MEDICAL_EXISTS" = "❌" ] && BLOCKING_ISSUES+=("medical-patient-data repository not cloned")
 
