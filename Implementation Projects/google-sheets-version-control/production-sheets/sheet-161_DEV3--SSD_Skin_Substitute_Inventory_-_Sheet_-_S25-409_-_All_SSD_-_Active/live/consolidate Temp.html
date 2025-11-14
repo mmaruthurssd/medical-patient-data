@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+
+
+  <p>Hello everyone!</p>
+  <p>Hope you have a great weekend ahead.</p>
+  <p>Please see below the current inventory of skin substitute products at each location:</p>
+  <table style="width:100%;">
+    <thead>
+      <tr style="background-color: gray; color: white; text-align:center;">
+        <? headers.forEach( h => {  ?>
+        <th>
+          <?= h ?>
+        </th>
+
+        <? }) ?>
+      </tr>
+    </thead>
+    <tbody>
+      <? tableData.forEach( r => {  ?>
+      <tr style="text-align:center;">
+        <? r.forEach( c => {  ?>
+        <td>
+          <?= c ?>
+        </td>
+        <? }) ?>
+
+      </tr>
+      <? }) ?>
+      <!-- Add more rows here if needed -->
+    </tbody>
+  </table>
+
+
+  <?!= signature ?>
+</body>
+
+</html>

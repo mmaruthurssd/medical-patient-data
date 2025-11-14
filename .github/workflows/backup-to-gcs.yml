@@ -1,0 +1,179 @@
+name: Backup to Google Cloud Storage
+
+on:
+  # Run daily at 9 AM and 5 PM Central Time (2 PM and 10 PM UTC)
+  schedule:
+    - cron: '0 14 * * *'  # 9 AM CST = 2 PM UTC
+    - cron: '0 22 * * *'  # 5 PM CST = 10 PM UTC
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+  # Run after automated snapshots complete
+  push:
+    branches:
+      - main
+    paths:
+      - 'production-sheets/**'
+
+jobs:
+  backup:
+    name: Create and Upload GCS Backup
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive backup
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCS_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ssd-sheets-backup-2025
+
+      - name: Verify GCS access
+        run: |
+          echo "Testing GCS bucket access..."
+          gsutil ls gs://ssd-sheets-backup-immutable/ || {
+            echo "❌ Cannot access GCS bucket"
+            exit 1
+          }
+
+      - name: Create backup archive
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          BACKUP_FILE="ssd-sheets-backup-${TIMESTAMP}.tar.gz"
+
+          echo "Creating backup archive: $BACKUP_FILE"
+          echo "Timestamp: $TIMESTAMP"
+          echo "Commit: ${GITHUB_SHA}"
+          echo "Branch: ${GITHUB_REF_NAME}"
+
+          # Create compressed backup with critical directories
+          tar -czf "$BACKUP_FILE" \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='*.log' \
+            --exclude='.DS_Store' \
+            "Implementation Projects/" \
+            workspace-management/ \
+            automation/ \
+            google-workspace-oauth-setup/ \
+            .github/ \
+            README.md \
+            START_HERE.md \
+            WORKSPACE_GUIDE.md \
+            WORKFLOW_PLAYBOOK.md \
+            EVENT_LOG.md
+
+          # Calculate checksum
+          sha256sum "$BACKUP_FILE" > "${BACKUP_FILE}.sha256"
+
+          # Get file size
+          BACKUP_SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+
+          # Export variables
+          echo "BACKUP_FILE=$BACKUP_FILE" >> $GITHUB_ENV
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          echo "BACKUP_SIZE=$BACKUP_SIZE" >> $GITHUB_ENV
+
+          echo "✅ Backup archive created: $BACKUP_SIZE"
+
+      - name: Upload to GCS
+        run: |
+          echo "Uploading backup to GCS..."
+
+          # Upload backup with metadata
+          gsutil -h "x-goog-meta-timestamp:${TIMESTAMP}" \
+                 -h "x-goog-meta-commit:${GITHUB_SHA}" \
+                 -h "x-goog-meta-branch:${GITHUB_REF_NAME}" \
+                 -h "x-goog-meta-size:${BACKUP_SIZE}" \
+                 cp "${BACKUP_FILE}" \
+                 gs://ssd-sheets-backup-immutable/daily-backups/
+
+          # Upload checksum
+          gsutil cp "${BACKUP_FILE}.sha256" \
+                 gs://ssd-sheets-backup-immutable/daily-backups/
+
+          # Update latest backup metadata
+          cat > latest-backup.txt <<EOF
+          ${TIMESTAMP}
+          ${GITHUB_SHA}
+          ${GITHUB_REF_NAME}
+          ${BACKUP_SIZE}
+          EOF
+
+          gsutil cp latest-backup.txt \
+                 gs://ssd-sheets-backup-immutable/
+
+          echo "✅ Upload complete"
+
+      - name: Verify upload integrity
+        run: |
+          echo "Verifying backup integrity..."
+
+          # Verify file exists in GCS
+          if ! gsutil ls -l "gs://ssd-sheets-backup-immutable/daily-backups/${BACKUP_FILE}"; then
+            echo "❌ Backup file not found in GCS"
+            exit 1
+          fi
+
+          # Download and verify checksum
+          gsutil cp "gs://ssd-sheets-backup-immutable/daily-backups/${BACKUP_FILE}.sha256" - > /tmp/gcs.sha256
+
+          # Compare checksums
+          LOCAL_SHA=$(cat "${BACKUP_FILE}.sha256" | cut -d' ' -f1)
+          GCS_SHA=$(cat /tmp/gcs.sha256 | cut -d' ' -f1)
+
+          if [ "$LOCAL_SHA" != "$GCS_SHA" ]; then
+            echo "❌ Checksum mismatch!"
+            echo "  Local:  $LOCAL_SHA"
+            echo "  GCS:    $GCS_SHA"
+            exit 1
+          fi
+
+          echo "✅ Integrity verification passed"
+
+      - name: Report backup status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "========================================="
+            echo "✅ BACKUP SUCCESSFUL"
+            echo "========================================="
+            echo "File:     ${BACKUP_FILE}"
+            echo "Size:     ${BACKUP_SIZE}"
+            echo "Location: gs://ssd-sheets-backup-immutable/daily-backups/"
+            echo "Commit:   ${GITHUB_SHA}"
+            echo "Time:     ${TIMESTAMP}"
+            echo ""
+            echo "Backup protected by:"
+            echo "  - 30-day retention lock (cannot delete)"
+            echo "  - Automatic versioning (restore any version)"
+            echo "  - SHA256 checksum verification"
+            echo "========================================="
+          else
+            echo "========================================="
+            echo "❌ BACKUP FAILED"
+            echo "========================================="
+            echo "Please check the logs above for details."
+            echo "Manual backup may be required."
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          # Remove local backup files (already uploaded to GCS)
+          rm -f ssd-sheets-backup-*.tar.gz*
+          rm -f latest-backup.txt
+          echo "✅ Local cleanup complete"

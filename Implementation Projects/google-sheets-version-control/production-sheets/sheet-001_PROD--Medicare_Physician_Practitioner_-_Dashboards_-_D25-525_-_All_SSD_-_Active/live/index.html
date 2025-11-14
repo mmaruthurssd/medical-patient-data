@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Address Labels Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    .infowindow {
+      font-size: 14px;
+      line-height: 1.3;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <script>
+    let map, bounds;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: 37.0902, lng: -95.7129 }, // United States center
+          zoom: 4, // better zoom for US-wide view
+          mapTypeControl: false,
+        });
+        bounds = new google.maps.LatLngBounds();
+
+        google.script.run.withSuccessHandler(addMarkers).getMarkers();
+      }
+function addMarkers(markers) {
+  if (!markers || !markers.length) return;
+
+  markers.forEach(m => {
+    const pos = new google.maps.LatLng(m.lat, m.lng);
+
+    const customIcon = {
+      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW, // or CIRCLE, FORWARD_CLOSED_ARROW
+      fillColor: m.color,  // 💠 Change this to your desired color
+      fillOpacity: 1,
+      strokeColor: "#000",   // Outline color
+      strokeWeight: 1,
+      scale: 6,              // Size of the pin
+    };
+
+    // Create the actual marker pin
+    const marker = new google.maps.Marker({
+      position: pos,
+      map,
+      icon: customIcon,
+    });
+
+    const info = new google.maps.InfoWindow();
+      marker.addListener('click', () => {
+        var sTotalReferral = "";
+
+        var sContent = `<div class="infowindow">
+        <strong>${escapeHtml(m.label)}</strong><br/>
+        ${escapeHtml(m.ptype)}
+        ${m.totalReferral > 0 ? `<br/><br/><strong>Incoming Referrals:</strong><br/>Total: <strong>${escapeHtml(m.totalReferral)}</strong>` : ``}
+        ${m.vreferral_months > 0 && m.lookbackReferral ? `<br/>Last ${m.vreferral_months} Months: <strong>${escapeHtml(m.lookbackReferral)}</strong>` : ``}
+        </div>`;
+        info.setContent(sContent);
+        // info.setContent(`<div class="infowindow"><strong>${escapeHtml(m.label)}</strong><br/>${m.lat.toFixed(5)}, ${m.lng.toFixed(5)}</div>`);
+        info.open({ anchor: marker, map });
+      });
+
+    // Create a custom overlay for the label
+    class CustomLabel extends google.maps.OverlayView {
+      constructor(position, text) {
+        super();
+        this.position = position;
+        this.text = text;
+      }
+
+      onAdd() {
+        this.div = document.createElement("div");
+        this.div.style.position = "absolute";
+        this.div.style.whiteSpace = "nowrap";
+        this.div.style.background = "white";
+        this.div.style.border = "1px solid #333";
+        this.div.style.borderRadius = "4px";
+        this.div.style.padding = "2px 5px";
+        this.div.style.fontSize = "14px";
+        this.div.style.fontWeight = "bold";
+        this.div.style.color = "#ff0000"; // 🔴 Change text color
+        this.div.innerText = this.text;
+
+        const panes = this.getPanes();
+        panes.overlayImage.appendChild(this.div);
+      }
+
+      draw() {
+        const projection = this.getProjection();
+        const position = projection.fromLatLngToDivPixel(this.position);
+
+        // Position to the right of the marker
+        this.div.style.left = position.x + 15 + "px";
+        this.div.style.top = position.y - 10 + "px";
+      }
+
+      onRemove() {
+        if (this.div) {
+          this.div.remove();
+        }
+      }
+    }
+
+    const label = new CustomLabel(pos, m.label);
+    label.setMap(map);
+
+    bounds.extend(pos);
+  });
+
+  if (markers.length > 1) {
+    map.fitBounds(bounds);
+  } else {
+    map.setCenter(bounds.getCenter());
+    map.setZoom(14);
+  }
+}
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, ch => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+      }
+  </script>
+
+  <!-- Replace YOUR_API_KEY with your Google Maps JavaScript API key -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy6tghfgsdVL1jgiAsyJuA53_ybQOBHQw&callback=initMap">
+  </script>
+</body>
+
+</html>
