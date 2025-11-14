@@ -102,6 +102,29 @@ You are in **Workspace 3 of 3**:
 
 ---
 
+## System Components & Infrastructure
+
+**For complete system inventory**: See **SYSTEM-COMPONENTS.md**
+
+**Major permanent systems in this workspace:**
+- **6-Layer Backup System** - Defense-in-depth protecting 588 production Google Sheets
+  - GCS immutable backup (Layer 5) + GitHub + Time Machine + Drive
+  - RPO: 24 hours, RTO: 10-30 minutes
+  - See: `workspace-management/BACKUP-AND-DR-STRATEGY.md`
+
+- **Automated Claude Code Prompting** - Google Sheets → Prompt Queue → Automated execution
+  - See: `automation/AUTOMATED-CLAUDE-SETUP.md`
+
+- **Google Sheets Version Control** - 588 Apps Script projects with enhanced protection
+  - See: `Implementation Projects/google-sheets-version-control/`
+
+- **Pre-Commit Security Hooks** - PHI and credential scanning
+  - See: `workspace-management/SECURITY-GIT-INTEGRATION-GUIDE.md`
+
+**IMPORTANT:** When you build new permanent system components, update SYSTEM-COMPONENTS.md immediately (see file for instructions).
+
+---
+
 ## Directory Structure
 
 ```

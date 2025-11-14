@@ -641,6 +641,94 @@ if (workspace !== 'medical-patient-data' && containsPHI(content)) {
 
 ---
 
+## Data Protection Architecture
+
+### 6-Layer Backup System (medical-patient-data)
+
+**Purpose:** Defense-in-depth backup strategy protecting critical Apps Script code, clinical workflows, and system infrastructure.
+
+**Status:** ✅ Production (All 6 layers active since 2025-11-13)
+**Coverage:** 588 production Google Sheets Apps Script projects + workspace infrastructure
+**RPO:** 24 hours (GCS immutable backup)
+**RTO:** 10-30 minutes (catastrophic recovery)
+**Monthly Cost:** $2
+
+#### Architecture
+
+| Layer | Technology | RPO | RTO | Status | Purpose |
+|-------|-----------|-----|-----|--------|---------|
+| **1** | Google Drive | Real-time | Immediate | ✅ Active | Source of truth (Apps Script bound to Sheets) |
+| **2** | Local Git | Per commit | Instant | ✅ Active | Version control with enhanced hooks |
+| **3** | GitHub | Per push | Minutes | ✅ Active | Remote backup + branch protection |
+| **4** | Branch Protection | N/A | N/A | ✅ Active | Prevents force push/delete (immutable commits) |
+| **5** | GCS Immutable | 24 hours | 10-30 min | ✅ Active | Off-site versioned backup (30-day retention) |
+| **6** | Time Machine | Hourly | Hours | ✅ Active | Local machine backup |
+
+**Implementation Location:** `Implementation Projects/google-sheets-version-control/`
+
+**Complete Documentation:** `workspace-management/BACKUP-AND-DR-STRATEGY.md`
+
+**GitHub Actions:** `.github/workflows/backup-to-gcs.yml` (automated daily backups at 9 AM & 5 PM CST)
+
+#### Key Protection Features
+
+**Enhanced Git Hooks:**
+- Pre-commit: Blocks deletion of >10 sheets, verifies sheet count
+- Pre-push: Final verification before GitHub
+- Prevents unintentional .gitignore changes
+
+**GitHub Security:**
+- Branch protection rules prevent force push
+- Service account: `github-backup-uploader@ssd-sheets-backup-2025.iam.gserviceaccount.com`
+- Secret: `GCS_SERVICE_ACCOUNT_KEY` (GitHub Actions authentication)
+
+**GCS Immutable Storage:**
+- Bucket: `gs://ssd-sheets-backup-immutable/daily-backups/`
+- 30-day retention lock (cannot be deleted)
+- Automatic versioning (restore any historical version)
+- SHA256 checksum verification
+
+#### Recovery Procedures
+
+Six documented recovery scenarios with step-by-step commands:
+
+1. **Single workspace lost** → Clone from GitHub (30 min RTO)
+2. **All local workspaces lost** → Multi-repo clone + rebuild (2-4 hours RTO)
+3. **GitHub compromised** → Restore from GCS backup (1-4 hours RTO)
+4. **Google Drive failure** → Restore from Time Machine (1-2 hours RTO)
+5. **Complete catastrophic failure** → GCS immutable backup (8-24 hours RTO)
+6. **Accidental mass deletion** → Git reset + pre-commit hook prevention
+
+**See:** `workspace-management/BACKUP-AND-DR-STRATEGY.md` for complete procedures
+
+#### Integration with MCP Architecture
+
+**backup-dr-mcp** provides automated orchestration:
+- `create_backup()` - On-demand backups with compression
+- `restore_backup()` - Conflict detection, dry-run preview
+- `verify_backup()` - Checksum validation
+- `schedule_backup()` - Cron-based automation
+- `cleanup_old_backups()` - Retention policy enforcement
+
+**Monitoring:**
+- Daily health checks: `Implementation Projects/google-sheets-version-control/scripts/daily-health-check.sh`
+- GitHub Actions notifications on backup failures
+- backup-dr-mcp provides `get_backup_status()` with statistics
+
+#### Cost Analysis
+
+| Component | Monthly | Annual |
+|-----------|---------|--------|
+| GitHub (free tier) | $0 | $0 |
+| GCS backup | $2 | $24 |
+| Google Drive (existing) | $0 | $0 |
+| Time Machine (one-time ~$150) | N/A | Amortized |
+| **Total** | **$2** | **$24** |
+
+**ROI:** Prevents catastrophic data loss for 588 production sheets serving medical practice operations.
+
+---
+
 ## Migration from Single Workspace
 
 ### Before (Single Workspace)
