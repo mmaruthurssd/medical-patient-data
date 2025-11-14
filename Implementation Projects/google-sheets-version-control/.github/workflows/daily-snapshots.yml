@@ -11,9 +11,6 @@ on:
 jobs:
   snapshot-production:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Implementation Projects/google-sheets-version-control
     permissions:
       contents: write  # For pushing commits
       issues: write    # For creating failure notifications
@@ -27,9 +24,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: ''
 
       - name: Install dependencies
+        working-directory: Implementation Projects/google-sheets-version-control
         run: npm ci
 
       - name: Set up service account credentials
@@ -45,6 +42,7 @@ jobs:
       - name: Run production snapshot (Batch 1/3)
         id: batch1
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -54,6 +52,7 @@ jobs:
       - name: Run production snapshot (Batch 2/3)
         id: batch2
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -63,6 +62,7 @@ jobs:
       - name: Run production snapshot (Batch 3/3)
         id: batch3
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -70,6 +70,7 @@ jobs:
         run: npm run snapshot
 
       - name: Run staging snapshot
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
         run: npm run snapshot:staging
@@ -98,6 +99,7 @@ jobs:
 
       - name: Log snapshot run to Google Sheet
         if: always()
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
