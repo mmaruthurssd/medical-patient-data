@@ -60,15 +60,20 @@ jobs:
 
           # Create compressed backup with critical directories
           tar -czf "$BACKUP_FILE" \
-            production-sheets/ \
-            config/ \
-            scripts/ \
-            docs/ \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='*.log' \
+            --exclude='.DS_Store' \
+            "Implementation Projects/" \
+            workspace-management/ \
+            automation/ \
+            google-workspace-oauth-setup/ \
             .github/ \
-            .git/ \
-            PROJECT-OVERVIEW.md \
             README.md \
-            .gitattributes
+            START_HERE.md \
+            WORKSPACE_GUIDE.md \
+            WORKFLOW_PLAYBOOK.md \
+            EVENT_LOG.md
 
           # Calculate checksum
           sha256sum "$BACKUP_FILE" > "${BACKUP_FILE}.sha256"
