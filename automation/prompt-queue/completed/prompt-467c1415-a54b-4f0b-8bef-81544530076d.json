@@ -1,8 +1,0 @@
-{
-  "id": "467c1415-a54b-4f0b-8bef-81544530076d",
-  "created": "2025-11-13T16:01:02.000Z",
-  "priority": "normal",
-  "type": "test",
-  "prompt": "Hello! Please respond with: 'Automation server is working correctly. Test ID: 467c1415-a54b-4f0b-8bef-81544530076d'",
-  "status": "pending"
-}
