@@ -1829,18 +1829,25 @@ Troubleshooting optimization with auto-learning
 **Use:** Tracking issues, knowledge bases, preventing debt
 
 #### workspace-index
-Workspace indexing, documentation consistency validation, drift detection, and **Phase 4: Autonomous documentation management**
+Workspace indexing, documentation consistency validation, drift detection, **Phase 4: Autonomous documentation management**, and **Phase 5: Proactive component detection**
 **Tools (Phases 1-3):** generate_project_index, update_indexes_for_paths, check_index_freshness, validate_workspace_documentation, track_documentation_drift, update_workspace_docs_for_reality
-**Tools (Phase 4 - In Development):** analyze_documentation_health, execute_documentation_operation
-**Phase 4 Capabilities (New - 2025-11-04):**
+**Tools (Phase 4):** analyze_documentation_health, generate_documentation_health_report, preview_consolidation, execute_consolidation, rollback_consolidation, validate_cross_references, update_cross_references
+**Tools (Phase 5 - NEW 2025-11-14):** detect_system_components, validate_component_documentation, suggest_component_documentation
+**Phase 4 Capabilities (Deployed 2025-11-04):**
 - **Supersession Detection:** Identifies docs replaced by frameworks or newer comprehensive docs with confidence scoring
 - **Redundancy Detection:** Finds overlapping documentation (>60% overlap) and suggests consolidation
 - **Autonomous Operations:** Archive, consolidate, or create replacement docs based on confidence (≥0.85 auto-execute, <0.85 require approval)
 - **Learning System:** Integrates with workspace-brain to improve confidence scoring over time, adjusts weights based on outcomes
 - **Safety:** First-time patterns require approval, all operations create backups, dry-run preview available, rollback capability, complete audit trail
 - **MCP Integration:** Post-operation hooks (project-management wrap_up), scheduled weekly scans, git pre-commit validation (optional)
-**Use:** Project organization, file discovery, documentation consistency, **autonomous documentation lifecycle management**
-**Status:** Phases 1-3 ✅ DEPLOYED | Phase 4 ⏳ IN DEVELOPMENT (Week 1: Implementation started 2025-11-04)
+**Phase 5 Capabilities (NEW 2025-11-14):**
+- **Component Detection:** Scans workspace for system components (automation, infrastructure, integration, protection, monitoring) using pattern matching
+- **Documentation Validation:** Verifies components are documented in required locations (SYSTEM-COMPONENTS.md, WORKSPACE_ARCHITECTURE.md, START_HERE.md)
+- **Auto-Suggestion:** Generates documentation entries for undocumented components with AI-powered metadata extraction
+- **Proactive Alerts:** Detects undocumented components >7 days old, validates production systems before archival
+- **Integration:** Enhanced validate_workspace_documentation() includes 'system_components' check, auto-triggers on workspace initialization
+**Use:** Project organization, file discovery, documentation consistency, **autonomous documentation lifecycle management**, **system component tracking**
+**Status:** Phases 1-3 ✅ DEPLOYED | Phase 4 ✅ DEPLOYED (2025-11-04) | Phase 5 ✅ DEPLOYED (2025-11-14)
 **Template-First Pattern:** Workspace-index is now developed as drop-in ready template following **MCP-DEVELOPMENT-STANDARD.md** (template-first, auto-configuration, transferable to future workspaces)
 
 #### checklist-manager-mcp

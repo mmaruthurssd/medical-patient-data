@@ -176,6 +176,15 @@ last_updated: 2025-11-14
 
 **See:** WORKSPACE_ARCHITECTURE.md → "Complete MCP Server Listings"
 
+**Proactive Documentation Enforcement (NEW 2025-11-14):**
+The **workspace-index MCP Phase 5** now automatically detects undocumented system components and validates documentation coverage. When you create new infrastructure, automation, or integration systems, workspace-index will:
+- Auto-detect the component after 7 days if not documented
+- Validate it appears in required locations (this file, WORKSPACE_ARCHITECTURE.md, START_HERE.md if critical)
+- Generate suggested documentation entries with AI-powered metadata extraction
+- Alert during workspace initialization if components are missing from documentation
+
+**Run manual check:** `validate_workspace_documentation({ checks: ['system_components'] })`
+
 ### Template System
 **Location:** `operations-workspace/templates-and-patterns/`
 **Standard:** Template-first development (MANDATORY for MCPs)

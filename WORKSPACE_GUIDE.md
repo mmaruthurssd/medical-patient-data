@@ -604,7 +604,7 @@ When creating new resource: (1) Create it, (2) IMMEDIATELY update Part 2 Quick L
 | Resource | Trigger Keywords | Path | Type |
 |----------|------------------|------|------|
 | **[KEY]** Automated Claude Prompting (AI-First) | "automation server", "google sheets automation", "scheduled prompts", "automated prompts", "claude --print", "prompt queue", "background automation", "automated execution", "claude automation", "apps script triggers", "AI-first workflow", "tell claude to add prompt", "never manually edit sheet" | /automation/AI-FIRST-WORKFLOW.md | System (Production - AI-First) |
-| **[KEY]** Workflow Playbook | "create sheet", "send email", "send chat", "create form", "how we do", "available credentials", "service account", "automation account", "workflow pattern", "established procedure", "standard process" | /WORKFLOW_PLAYBOOK.md | System (Living Knowledge Base) |
+| **[KEY]** Workflow Playbook | "create sheet", "send email", "send chat", "create form", "generate images", "AI images", "stable diffusion", "mockups", "image generation", "how we do", "available credentials", "service account", "automation account", "workflow pattern", "established procedure", "standard process" | /WORKFLOW_PLAYBOOK.md | System (Living Knowledge Base) |
 | **[KEY]** MCP Development Standard | "create MCP", "develop tool", "template-first", "drop-in ready", "transferable", "workspace-agnostic", "TEMPLATE-INFO.json", "auto-detect", "MCP configuration checklist" | /templates-and-patterns/MCP-DEVELOPMENT-STANDARD.md | Standard (MANDATORY) |
 | **[KEY]** Template Management | "install templates", "test templates", "version templates", "bump version", "validate template", "install all MCPs", "unified installer" | /docs/TEMPLATE_MANAGEMENT.md | Guide |
 | **[KEY]** Autonomous Deployment Framework | "deploy component", "issue classification", "autonomous deployment", "dual environment", "production-only", "confidence scoring", "broken/missing/improvement", "standard development pattern" | /development/frameworks/autonomous-deployment/README.md | Framework |
@@ -671,7 +671,7 @@ When creating new resource: (1) Create it, (2) IMMEDIATELY update Part 2 Quick L
 - **arc-decision** - Architecture decisions (Skills/MCP/Subagents/Hybrids)
 - **communications** - Email and Google Chat with staging/approval
 - **learning-optimizer** - Troubleshooting optimization with auto-learning
-- **workspace-index** - Workspace indexing, documentation validation/drift detection, **Phase 4: Autonomous documentation management** (supersession detection, consolidation, archival with confidence-based autonomy)
+- **workspace-index** - Workspace indexing, documentation validation/drift detection, **Phase 4: Autonomous documentation management** (supersession detection, consolidation, archival), **Phase 5: Proactive component detection** (auto-detects undocumented system components, validates documentation coverage, generates suggestions)
 - **checklist-manager-mcp** - Checklist tracking, validation, dependency enforcement
 - **test-generator-mcp** - Automated test generation for TypeScript/JavaScript
 - **backup-dr-mcp** - Backup automation, disaster recovery, HIPAA compliance
