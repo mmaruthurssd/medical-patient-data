@@ -11,6 +11,9 @@ on:
 jobs:
   snapshot-production:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Implementation Projects/google-sheets-version-control
     permissions:
       contents: write  # For pushing commits
       issues: write    # For creating failure notifications
@@ -24,7 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -82,11 +84,13 @@ jobs:
 
       - name: Commit and push snapshots
         if: steps.check_changes.outputs.changes == 'true'
+        working-directory: .
         run: |
           git config user.name "SSD Snapshot Bot"
           git config user.email "automation@ssdspc.com"
-          git add production-sheets/ config/
-          [ -d staging-sheets ] && git add staging-sheets/ || true
+          git add "Implementation Projects/google-sheets-version-control/production-sheets/"
+          git add "Implementation Projects/google-sheets-version-control/config/"
+          [ -d "Implementation Projects/google-sheets-version-control/staging-sheets" ] && git add "Implementation Projects/google-sheets-version-control/staging-sheets/" || true
           git commit -m "chore: automated snapshot $(date '+%Y-%m-%d %H:%M:%S')"
           git pull --rebase origin main
           git push
