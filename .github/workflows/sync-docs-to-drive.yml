@@ -20,9 +20,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
+        working-directory: Implementation Projects/google-sheets-version-control
         run: npm install googleapis
 
       - name: Sync documentation to Google Drive
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
           GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
         run: node scripts/sync-docs-to-drive.js
