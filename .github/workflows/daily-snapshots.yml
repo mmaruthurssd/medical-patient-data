@@ -20,21 +20,19 @@ jobs:
         with:
           fetch-depth: 0 # Full history for commits
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
+      # Skip setup-node - use pre-installed Node.js on runner (avoids cache lookup issue)
+      - name: Verify Node.js version
+        run: node --version && npm --version
 
       - name: Install dependencies
+        working-directory: Implementation Projects/google-sheets-version-control
         run: npm ci
 
-      - name: Set up clasp credentials
+      - name: Set up service account credentials
         run: |
-          mkdir -p ~/.config/clasp
-          echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
-          echo '${{ secrets.CLASP_CREDENTIALS }}' > .clasprc.json
-          chmod 600 ~/.clasprc.json .clasprc.json
+          mkdir -p ~/service-account-keys
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT }}' > ~/service-account-keys/google-sheets-vc.json
+          chmod 600 ~/service-account-keys/google-sheets-vc.json
 
       - name: Record workflow start time
         id: start_time
@@ -43,7 +41,9 @@ jobs:
       - name: Run production snapshot (Batch 1/3)
         id: batch1
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
           BATCH_OFFSET: 0
         run: npm run snapshot
@@ -51,7 +51,9 @@ jobs:
       - name: Run production snapshot (Batch 2/3)
         id: batch2
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
           BATCH_OFFSET: 135
         run: npm run snapshot
@@ -59,12 +61,17 @@ jobs:
       - name: Run production snapshot (Batch 3/3)
         id: batch3
         continue-on-error: true
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
           BATCH_OFFSET: 270
         run: npm run snapshot
 
       - name: Run staging snapshot
+        working-directory: Implementation Projects/google-sheets-version-control
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
         run: npm run snapshot:staging
 
       - name: Check for changes
@@ -78,18 +85,22 @@ jobs:
 
       - name: Commit and push snapshots
         if: steps.check_changes.outputs.changes == 'true'
+        working-directory: .
         run: |
           git config user.name "SSD Snapshot Bot"
           git config user.email "automation@ssdspc.com"
-          git add production-sheets/ config/
-          [ -d staging-sheets ] && git add staging-sheets/ || true
+          git add "Implementation Projects/google-sheets-version-control/production-sheets/"
+          git add "Implementation Projects/google-sheets-version-control/config/"
+          [ -d "Implementation Projects/google-sheets-version-control/staging-sheets" ] && git add "Implementation Projects/google-sheets-version-control/staging-sheets/" || true
           git commit -m "chore: automated snapshot $(date '+%Y-%m-%d %H:%M:%S')"
           git pull --rebase origin main
           git push
 
       - name: Log snapshot run to Google Sheet
         if: always()
+        working-directory: Implementation Projects/google-sheets-version-control
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
         run: |
           # Calculate duration in minutes
