@@ -96,3 +96,4 @@ archive/medical-records/
 !.ai-planning/project-state.json
 !.ai-planning/orchestration-config.json
 Implementation Projects/google-sheets-version-control/GITHUB-SECRETS-READY.md
+google-workspace-oauth-setup/token.json
