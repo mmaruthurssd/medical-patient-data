@@ -1,1 +1,1 @@
-workspace-management/shared-docs/WORKSPACE_GUIDE.md
+../operations-workspace/WORKSPACE_GUIDE.md

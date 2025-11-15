@@ -1,1 +1,1 @@
-workspace-management/shared-docs/WORKSPACE_ARCHITECTURE.md
+../operations-workspace/WORKSPACE_ARCHITECTURE.md
