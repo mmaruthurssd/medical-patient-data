@@ -20,10 +20,9 @@ jobs:
         with:
           fetch-depth: 0 # Full history for commits
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3.8.1
-        with:
-          node-version: '18'
+      # Skip setup-node - use pre-installed Node.js on runner (avoids cache lookup issue)
+      - name: Verify Node.js version
+        run: node --version && npm --version
 
       - name: Install dependencies
         working-directory: Implementation Projects/google-sheets-version-control
