@@ -120,6 +120,106 @@ This repository contains Apps Script code for SSD medical practice management. W
 3. Audit for unauthorized access
 4. Update affected systems
 
+## Credential Rotation Policy
+
+### HIPAA Compliance Requirement
+
+Regular credential rotation is **mandatory** for HIPAA compliance. All credentials with access to PHI or practice systems must be rotated according to the schedule below.
+
+### Rotation Schedules
+
+**Critical Credentials (Annual)**:
+- Google Cloud service account keys
+- OAuth 2.0 client credentials
+- SSH deploy keys
+- Warning: 30 days before due
+- Critical alert: 7 days before due
+
+**High-Priority Credentials (Quarterly)**:
+- GitHub Personal Access Tokens
+- API keys
+- Warning: 14 days before due
+- Critical alert: 3 days before due
+
+**High-Risk Credentials (Monthly)**:
+- Temporary access tokens
+- Development credentials
+- Warning: 7 days before due
+- Critical alert: 2 days before due
+
+### Credential Tracking System
+
+All credentials are tracked in the automated credential rotation system:
+
+**Check Credential Status**:
+```bash
+cd security/credentials
+node credential-manager.js status
+```
+
+**Check Upcoming Rotations**:
+```bash
+node credential-manager.js check-rotations
+```
+
+**Record Completed Rotation**:
+```bash
+node credential-manager.js rotate <credential-id>
+```
+
+**Generate Compliance Audit Report**:
+```bash
+node credential-manager.js audit-report
+```
+
+### Tracked Credentials
+
+The following credentials are automatically tracked:
+
+1. **GCP Service Account** (`gcp-service-account-001`)
+   - Primary service account for Google Sheets/Drive/Apps Script API
+   - GitHub Secret: `GCP_SERVICE_ACCOUNT`
+   - Rotation: Annual
+
+2. **GCS Backup Service Account** (`gcs-service-account-001`)
+   - Service account for Cloud Storage backups
+   - GitHub Secret: `GCS_SERVICE_ACCOUNT_KEY`
+   - Rotation: Annual
+
+3. **GitHub Personal Access Token** (`github-pat-001`)
+   - Repository and workflow access
+   - Rotation: Quarterly
+
+4. **GitHub Deploy Key** (`github-deploy-key-001`)
+   - SSH key for repository access
+   - Rotation: Annual
+
+5. **Google OAuth Client** (`google-oauth-client-001`)
+   - OAuth 2.0 authentication
+   - Rotation: Annual
+
+### Compliance Requirements
+
+- **Audit Trail**: All rotations logged in `security/credentials/rotation-audit-log.json`
+- **Retention**: 7 years (HIPAA requirement)
+- **Documentation**: Rotation procedures in `docs/CREDENTIAL-ROTATION-GUIDE.md`
+- **Alerting**: Automated warnings for upcoming rotations
+- **Encryption**: All credentials encrypted at rest and in transit
+
+### Rotation Procedures
+
+Detailed step-by-step procedures for each credential type are available in:
+- `docs/CREDENTIAL-ROTATION-GUIDE.md`
+
+Quick reference:
+1. Review pre-rotation checklist
+2. Create new credential
+3. Test new credential in staging
+4. Update production systems
+5. Verify successful rotation
+6. Delete old credential
+7. Record rotation in tracking system
+
 ## Security Best Practices
 
 ### Before Committing
@@ -204,9 +304,9 @@ This security policy is reviewed:
 - When requirements change
 - When team members join/leave
 
-**Last Updated**: 2025-10-16
-**Next Review**: 2026-01-16
-**Version**: 1.0
+**Last Updated**: 2025-11-16
+**Next Review**: 2026-02-16
+**Version**: 1.1 (Added Credential Rotation Policy)
 
 ---
 

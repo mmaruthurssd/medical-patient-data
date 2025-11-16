@@ -104,8 +104,18 @@ cd ssd-google-sheets-staging-production
 - 🔒 **No PHI stored** - Code only, never data
 - 🔒 **No credentials** - Use environment variables
 - 🔒 **Protected branches** - Requires approval
+- 🔒 **Credential rotation** - HIPAA-compliant automated tracking
 
-See [SECURITY.md](SECURITY.md) for detailed security policies.
+### Credential Management
+
+Check credential rotation status:
+
+```bash
+npm run credentials:status
+npm run credentials:check
+```
+
+See [SECURITY.md](SECURITY.md) for detailed security policies and [CREDENTIAL-ROTATION-GUIDE.md](docs/CREDENTIAL-ROTATION-GUIDE.md) for rotation procedures.
 
 ## Progress
 

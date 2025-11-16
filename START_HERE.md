@@ -59,10 +59,15 @@ tags: [initialization, workspace-orientation, PHI-allowed]
 - ✅ Store results in Google Drive (under BAA)
 
 **Next steps for initialization**:
-1. Read `workspace-management/AI-WORKSPACE-INITIALIZATION.md`
-2. Read `workspace-management/HIPAA-COMPLIANCE-BOUNDARIES.md`
-3. Read `workspace-management/AI-GUIDELINES-BY-WORKSPACE.md`
-4. Check `EVENT_LOG.md` for recent changes
+1. Read **[DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md)** for complete navigation
+2. Read `workspace-management/AI-WORKSPACE-INITIALIZATION.md`
+3. Read `workspace-management/HIPAA-COMPLIANCE-BOUNDARIES.md`
+4. Read `workspace-management/AI-GUIDELINES-BY-WORKSPACE.md`
+5. Check `EVENT_LOG.md` for recent changes
+
+**For troubleshooting**:
+- Backups: **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)**
+- All troubleshooting: **[docs/troubleshooting/](docs/troubleshooting/)**
 
 ---
 
@@ -85,6 +90,11 @@ tags: [initialization, workspace-orientation, PHI-allowed]
 ---
 
 ## Key Resources
+
+**Documentation Indexes**:
+- **[DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md)** - Master navigation to ALL documentation
+- **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)** - All backup system documentation
+- **[SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md)** - Complete system inventory
 
 **Documentation** (via symlink to operations-workspace):
 - `workspace-management/` - All shared documentation

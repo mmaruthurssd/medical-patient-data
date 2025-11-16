@@ -11,7 +11,13 @@
     "registry:update": "node scripts/registry/update-registry.js",
     "registry:validate": "node scripts/registry/validate-registry.js",
     "create-dev": "node scripts/create-dev-sheet.js",
-    "test": "node scripts/test-connection.js"
+    "test": "node scripts/test-connection.js",
+    "credentials:status": "node security/credentials/credential-manager.js status",
+    "credentials:check": "node security/credentials/credential-manager.js check-rotations",
+    "credentials:rotate": "node security/credentials/credential-manager.js rotate",
+    "credentials:audit": "node security/credentials/credential-manager.js audit-report",
+    "credentials:alerts": "node security/credentials/credential-manager.js alerts",
+    "health-check": "bash scripts/workspace-health-check.sh"
   },
   "keywords": [
     "google-sheets",
