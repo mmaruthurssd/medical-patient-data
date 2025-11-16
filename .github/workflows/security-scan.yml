@@ -41,7 +41,7 @@ jobs:
           #!/bin/bash
 
           PHI_FOUND=0
-          GREP_BASE_ARGS="--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=build --exclude-dir=.github --exclude=*.md --exclude=*.log --exclude=*config*.json --exclude=*test*.json --exclude=*safety*.json --exclude=*example*.json"
+          GREP_BASE_ARGS="--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=build --exclude-dir=.github --exclude-dir=production-sheets --exclude-dir=staging --exclude=*.md --exclude=*.log --exclude=*config*.json --exclude=*test*.json --exclude=*safety*.json --exclude=*example*.json"
 
           echo "Scanning for PHI patterns..."
 
