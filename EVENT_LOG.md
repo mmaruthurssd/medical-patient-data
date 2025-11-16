@@ -2,7 +2,7 @@
 type: log
 workspace: medical-patient-data
 tags: [changelog, decisions, events]
-last_updated: 2025-11-15
+last_updated: 2025-11-16
 ---
 
 # Event Log - medical-patient-data
@@ -10,6 +10,71 @@ last_updated: 2025-11-15
 **Purpose**: Chronological record of significant changes, decisions, and events in this workspace
 
 **Update Frequency**: Add entries for major changes, architectural decisions, or significant milestones
+
+---
+
+## 2025-11-16
+
+### Central Configuration Guide Created
+**Type**: Documentation
+**Author**: AI Assistant (Claude Code)
+**Impact**: High
+**Status**: ✅ Complete
+
+**Changes**:
+- ✅ Created `CONFIGURATION-GUIDE.md` - Comprehensive configuration documentation
+- ✅ Updated `SECURITY_BEST_PRACTICES.md` with configuration security section
+- ✅ Documented all configuration locations across three-workspace ecosystem
+- ✅ Created configuration templates and validation procedures
+- ✅ Documented service account management and rotation procedures
+
+**Scope**:
+The configuration guide covers the entire three-workspace ecosystem:
+1. **medical-patient-data**: Service accounts, MCP configs, GitHub secrets
+2. **operations-workspace**: Configuration examples, security policies
+3. **mcp-infrastructure**: MCP development configurations
+
+**Key Sections**:
+- Configuration architecture and hierarchy
+- Service account configuration (primary: `ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com`)
+- MCP server configuration (~/.claude.json patterns)
+- Environment variables (.env file management)
+- Google Cloud configuration (project: workspace-automation-ssdspc)
+- GitHub Actions secrets (GCS_SERVICE_ACCOUNT_KEY, GCP_SERVICE_ACCOUNT)
+- Configuration templates (.env.example, workflow templates)
+- Configuration validation (security scanning, pre-commit checks)
+- Update procedures (key rotation, API enablement, MCP registration)
+- Troubleshooting (authentication failures, API errors, secret management)
+
+**Security Enhancements**:
+- Three-level configuration security model (Public, Confidential, PHI-Adjacent)
+- Absolute path requirements (no relative paths)
+- Environment variable security patterns
+- MCP configuration security best practices
+- GitHub Actions secret management
+- Common vulnerability patterns and fixes
+
+**Related Files**:
+- `CONFIGURATION-GUIDE.md` (new) - Central configuration reference
+- `SECURITY_BEST_PRACTICES.md` (updated) - Added configuration security section
+- `infrastructure/google-cloud-service-account.md` (referenced) - Service account details
+- `.gitignore` (reviewed) - Ensures all sensitive configs excluded
+
+**Rationale**:
+- Configuration scattered across multiple locations and workspaces
+- No central guide for service account management
+- Environment variable patterns inconsistent
+- GitHub secrets documentation incomplete
+- MCP registration procedures undocumented
+- Security requirements for configuration not clearly defined
+
+**Next Steps**:
+- [x] Create CONFIGURATION-GUIDE.md
+- [x] Update SECURITY_BEST_PRACTICES.md
+- [x] Update EVENT_LOG.md
+- [ ] Create health check validation for configuration files
+- [ ] Add configuration validation to workspace startup
+- [ ] Consider creating configuration management MCP
 
 ---
 
@@ -211,6 +276,6 @@ When this file exceeds 1000 lines:
 
 ---
 
-**Last Updated**: 2025-11-15
-**Total Events**: 5
-**Active Projects**: 2 (Google Sheets Version Control, OAuth Setup)
+**Last Updated**: 2025-11-16
+**Total Events**: 6
+**Active Projects**: 1 (Google Sheets Version Control - OAuth Setup resolved)

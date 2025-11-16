@@ -3,7 +3,7 @@ type: guide
 workspace: medical-patient-data
 tags: [security, HIPAA, PHI, compliance, credentials]
 criticality: high
-last_updated: 2025-11-15
+last_updated: 2025-11-16
 ---
 
 # Security Best Practices - PHI & HIPAA Compliance
@@ -107,13 +107,18 @@ These services do NOT have Business Associate Agreements and CANNOT process PHI:
 
 ### Service Account Keys
 
-**Primary Service Account**: `automation@ssdspc.com`
+**Primary Service Account**: `ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com`
 
-**Storage**:
+**Storage Locations**:
 ```
+Primary:
 configuration/
   └── service-accounts/
-      └── automation-ssdspc-com-key.json  (gitignored)
+      └── service-account.json  (gitignored)
+
+Legacy (alternative):
+google-workspace-oauth-setup/
+  └── service-account.json  (gitignored, may be symlink)
 ```
 
 **Usage**:
@@ -121,15 +126,27 @@ configuration/
 // ✅ CORRECT: Use environment variable
 const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 
+// ✅ CORRECT: Load from path in environment variable
+const auth = new google.auth.GoogleAuth({
+  keyFile: process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
+  scopes: ['https://www.googleapis.com/auth/drive']
+});
+
 // ❌ WRONG: Hardcoded path
-const serviceAccount = require('./automation-ssdspc-com-key.json');
+const serviceAccount = require('./service-account.json');
+
+// ❌ WRONG: Relative path
+const serviceAccount = require('../configuration/service-account.json');
 ```
 
 **Security**:
 - Never commit to git (in `.gitignore`)
 - Encrypt at rest (use OS keychain or vault)
-- Rotate every 90 days
+- Rotate annually (or every 90 days for high-risk)
 - Limit permissions (principle of least privilege)
+- Always use absolute paths in configuration
+- Store only one active key per service account
+- Delete old keys after rotation verified
 
 ### OAuth Tokens
 
@@ -256,6 +273,188 @@ async function processPatientData(sheetId) {
 - Store in Google Drive (under BAA)
 - Encrypt logs at rest
 - Restrict access to authorized personnel only
+
+---
+
+## 🔧 Configuration Security
+
+### Configuration File Protection
+
+**Configuration Hierarchy** (See CONFIGURATION-GUIDE.md for details):
+```
+Level 1: Public (committed to git)
+  - Workflow files, package.json, documentation
+
+Level 2: Confidential (gitignored, no PHI)
+  - Service account keys, API keys, .env files
+
+Level 3: PHI-Adjacent (special handling)
+  - Drive folder IDs, Sheet IDs, audit configs
+```
+
+### Environment Variables Security
+
+**Safe Patterns:**
+```bash
+# ✅ CORRECT: Environment variable references
+GOOGLE_SERVICE_ACCOUNT_KEY_PATH=/absolute/path/to/key.json
+
+# ✅ CORRECT: Non-sensitive IDs in .env.example
+DRIVE_FOLDER_ID=your-folder-id-here
+
+# ❌ WRONG: Actual credentials in .env
+GOOGLE_API_KEY=AIzaSyD-actual-key-here
+
+# ❌ WRONG: Relative paths
+GOOGLE_SERVICE_ACCOUNT_KEY_PATH=../config/key.json
+```
+
+**Rules:**
+- Always use absolute paths for credential files
+- Never commit `.env` files (use `.env.example` as template)
+- Set sensitive environment variables outside git (shell, MCP config, GitHub Secrets)
+- Validate environment variables before use
+- Document all required variables in README
+
+### MCP Configuration Security
+
+**~/.claude.json Security:**
+```json
+{
+  "mcpServers": {
+    "google-workspace-materials": {
+      "command": "node",
+      "args": ["/absolute/path/to/build/index.js"],
+      "env": {
+        // ✅ CORRECT: Path to credentials, not credentials themselves
+        "GOOGLE_SERVICE_ACCOUNT_KEY_PATH": "/absolute/path/to/key.json",
+        // ✅ CORRECT: Non-sensitive folder IDs
+        "DRIVE_ROOT_FOLDER_ID": "folder-id",
+        // ❌ WRONG: Never put actual key content here
+        "GOOGLE_API_KEY": "actual-key-content"
+      }
+    }
+  }
+}
+```
+
+**Security Checklist:**
+- Use absolute paths (not relative)
+- Store credential paths (not credentials)
+- Restart Claude Code after credential changes
+- Verify MCP cannot access files outside intended scope
+- Review MCP permissions regularly
+
+### GitHub Actions Secrets Security
+
+**Secret Management:**
+```yaml
+# ✅ CORRECT: Reference GitHub secret
+credentials_json: ${{ secrets.GCS_SERVICE_ACCOUNT_KEY }}
+
+# ✅ CORRECT: Temporary file (deleted after workflow)
+run: |
+  echo "${{ secrets.SERVICE_ACCOUNT }}" > /tmp/key.json
+  # Use /tmp/key.json
+  rm /tmp/key.json
+
+# ❌ WRONG: Echo secret to logs
+run: |
+  echo "Key: ${{ secrets.SERVICE_ACCOUNT }}"
+
+# ❌ WRONG: Commit secret to repository
+run: |
+  echo "${{ secrets.API_KEY }}" > api-key.txt
+  git add api-key.txt
+```
+
+**Rules:**
+- Never echo secrets to workflow logs
+- Use secrets only in workflow steps (not in logs or artifacts)
+- Rotate secrets annually or after team changes
+- Audit secret access in repository settings
+- Document which workflows use which secrets
+
+### Configuration Validation Requirements
+
+**Before Committing:**
+```bash
+# 1. Scan for credentials
+mcp__security-compliance-mcp__scan_for_credentials({
+  target: ".",
+  mode: "directory",
+  minConfidence: 0.7,
+  exclude: ["node_modules", ".git"]
+})
+
+# 2. Scan for PHI
+mcp__security-compliance-mcp__scan_for_phi({
+  target: ".",
+  mode: "directory",
+  sensitivity: "high",
+  exclude: ["node_modules", ".git"]
+})
+
+# 3. Check .gitignore coverage
+git status  # Should NOT show .env or service-account.json
+
+# 4. Review staged files
+git diff --staged
+```
+
+**Configuration Change Checklist:**
+- [ ] New credentials stored in gitignored location
+- [ ] Paths updated to absolute (not relative)
+- [ ] .env.example updated (without actual values)
+- [ ] Documentation updated (CONFIGURATION-GUIDE.md)
+- [ ] No secrets in git history
+- [ ] GitHub secrets updated if needed
+- [ ] Test integration after change
+
+### Common Configuration Vulnerabilities
+
+**1. Committed Credentials:**
+```bash
+# ❌ DANGER: Service account key in git
+git add configuration/service-account.json  # NEVER DO THIS
+
+# ✅ SAFE: Verify gitignore coverage
+cat .gitignore | grep "service-account"
+git ls-files | grep -i "service-account"  # Should return nothing
+```
+
+**2. Relative Paths:**
+```javascript
+// ❌ WRONG: Breaks when working directory changes
+keyFile: './config/key.json'
+keyFile: '../service-account.json'
+
+// ✅ CORRECT: Absolute paths always work
+keyFile: '/Users/mmaruthurnew/Desktop/medical-patient-data/configuration/service-accounts/service-account.json'
+keyFile: process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH  // Set to absolute path
+```
+
+**3. Hardcoded Secrets:**
+```javascript
+// ❌ WRONG: Hardcoded in code
+const apiKey = 'AIzaSyD-actual-key';
+const projectId = 'my-project-123';
+
+// ✅ CORRECT: From environment
+const apiKey = process.env.GOOGLE_API_KEY;
+const projectId = process.env.GCP_PROJECT_ID;
+```
+
+**4. Secrets in Logs:**
+```javascript
+// ❌ WRONG: Logging credentials
+console.log('Service account:', serviceAccount);
+logger.info('API key:', process.env.API_KEY);
+
+// ✅ CORRECT: Redacted logging
+console.log('Service account loaded:', !!serviceAccount);
+logger.info('API key configured:', !!process.env.API_KEY);
+```
 
 ---
 
@@ -543,7 +742,12 @@ mcp__configuration-manager-mcp__manage_secrets({
 
 ---
 
-**Last Updated**: 2025-11-15
-**Next Review**: 2025-12-15 (monthly)
+**Last Updated**: 2025-11-16
+**Next Review**: 2025-12-16 (monthly)
 **Compliance Status**: ✅ Active (Google BAA in place)
 **Critical**: This is a living document. Update as security practices evolve.
+
+**Recent Updates:**
+- 2025-11-16: Added comprehensive configuration security section covering environment variables, MCP configuration, GitHub secrets, and common vulnerabilities
+- 2025-11-16: Updated service account documentation to reflect actual service account email and file locations
+- 2025-11-16: Cross-referenced CONFIGURATION-GUIDE.md for detailed configuration management
