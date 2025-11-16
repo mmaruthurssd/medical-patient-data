@@ -1,0 +1,347 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-16",
+  "description": "Safety validation rules to prevent PHI leakage from staging to production",
+
+  "phiDetectionRules": {
+    "enabled": true,
+    "blockOnDetection": true,
+    "alertRecipients": ["practice-manager@ssdspc.com"],
+
+    "patterns": {
+      "patientNames": {
+        "enabled": true,
+        "severity": "critical",
+        "description": "Detect real patient names in code or comments",
+        "regex": [
+          "(?i)(patient|name|fullname|firstname|lastname)\\s*[:=]\\s*['\"](?!test|sample|example|fake|john doe|jane doe|patient \\d+)",
+          "(?i)MRN\\s*[:=]\\s*['\"]\\d{6,}"
+        ],
+        "whitelist": [
+          "testPatient",
+          "sampleName",
+          "exampleUser",
+          "Patient 001",
+          "Fake Patient"
+        ]
+      },
+
+      "medicalRecordNumbers": {
+        "enabled": true,
+        "severity": "critical",
+        "description": "Detect real MRN patterns",
+        "regex": [
+          "(?i)mrn['\"]?\\s*[:=]\\s*['\"]?\\d{6,}",
+          "(?i)medical.?record.?number['\"]?\\s*[:=]\\s*['\"]?\\d{6,}"
+        ],
+        "whitelist": [
+          "999999",
+          "000000",
+          "111111",
+          "TEST-MRN"
+        ]
+      },
+
+      "socialSecurityNumbers": {
+        "enabled": true,
+        "severity": "critical",
+        "description": "Detect SSN patterns",
+        "regex": [
+          "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+          "(?i)ssn['\"]?\\s*[:=]\\s*['\"]?\\d{9}",
+          "(?i)social.?security['\"]?\\s*[:=]"
+        ],
+        "whitelist": [
+          "000-00-0000",
+          "999-99-9999",
+          "111-11-1111"
+        ]
+      },
+
+      "dateOfBirth": {
+        "enabled": true,
+        "severity": "high",
+        "description": "Detect specific birth dates (not date patterns in general)",
+        "regex": [
+          "(?i)(dob|date.?of.?birth|birthdate)['\"]?\\s*[:=]\\s*['\"]?\\d{1,2}/\\d{1,2}/(19|20)\\d{2}",
+          "(?i)(dob|date.?of.?birth)['\"]?\\s*[:=]\\s*new Date\\((19|20)\\d{2}"
+        ],
+        "whitelist": [
+          "01/01/1990",
+          "12/31/2000",
+          "01/01/1970"
+        ]
+      },
+
+      "phoneNumbers": {
+        "enabled": true,
+        "severity": "medium",
+        "description": "Detect phone numbers in specific formats",
+        "regex": [
+          "(?i)(phone|mobile|cell)['\"]?\\s*[:=]\\s*['\"]?\\(\\d{3}\\)\\s*\\d{3}-\\d{4}",
+          "(?i)(phone|mobile|cell)['\"]?\\s*[:=]\\s*['\"]?\\d{3}-\\d{3}-\\d{4}"
+        ],
+        "whitelist": [
+          "555-555-5555",
+          "(555) 555-5555",
+          "000-000-0000"
+        ]
+      },
+
+      "addresses": {
+        "enabled": true,
+        "severity": "medium",
+        "description": "Detect specific addresses",
+        "regex": [
+          "(?i)(address|street)['\"]?\\s*[:=]\\s*['\"]\\d+\\s+[A-Z][a-z]+\\s+(St|Ave|Rd|Dr|Blvd|Ln|Way|Court)",
+          "(?i)zipcode['\"]?\\s*[:=]\\s*['\"]?\\d{5}(?!-?00000|-?99999)"
+        ],
+        "whitelist": [
+          "123 Main St",
+          "456 Test Ave",
+          "00000",
+          "99999"
+        ]
+      },
+
+      "emails": {
+        "enabled": true,
+        "severity": "medium",
+        "description": "Detect email addresses that might be real",
+        "regex": [
+          "(?i)(email|emailaddress)['\"]?\\s*[:=]\\s*['\"][a-z0-9._%+-]+@(?!test\\.com|example\\.com|fake\\.com|sample\\.com)"
+        ],
+        "whitelist": [
+          "test@test.com",
+          "example@example.com",
+          "patient@fake.com",
+          "user@sample.com"
+        ]
+      }
+    }
+  },
+
+  "productionDataReferences": {
+    "enabled": true,
+    "blockOnDetection": true,
+    "description": "Prevent hardcoded production IDs or references",
+
+    "forbiddenPatterns": [
+      {
+        "pattern": "(?i)PROD[_-]",
+        "description": "Production prefix in identifiers",
+        "severity": "critical"
+      },
+      {
+        "pattern": "(?i)production['\"]?\\s*[:=]\\s*true",
+        "description": "Production flag set to true",
+        "severity": "critical"
+      },
+      {
+        "pattern": "spreadsheetId['\"]?\\s*[:=]\\s*['\"][^'\"]+(?<!DEV3|TEST|STAGING)",
+        "description": "Spreadsheet ID without DEV3/TEST/STAGING marker",
+        "severity": "high"
+      },
+      {
+        "pattern": "(?i)database['\"]?\\s*[:=]\\s*['\"]prod",
+        "description": "Production database reference",
+        "severity": "critical"
+      }
+    ]
+  },
+
+  "codeQualityChecks": {
+    "enabled": true,
+    "blockOnDetection": false,
+    "warnOnly": true,
+
+    "checks": [
+      {
+        "name": "noConsoleLog",
+        "pattern": "console\\.log\\(",
+        "severity": "low",
+        "description": "Remove debug console.log statements"
+      },
+      {
+        "name": "noHardcodedCredentials",
+        "pattern": "(?i)(password|apikey|secret|token)['\"]?\\s*[:=]\\s*['\"][^'\"]+['\"]",
+        "severity": "high",
+        "description": "No hardcoded credentials allowed"
+      },
+      {
+        "name": "noTodoComments",
+        "pattern": "(?i)//\\s*TODO:|/\\*\\s*TODO:",
+        "severity": "low",
+        "description": "Resolve TODO comments before deployment"
+      },
+      {
+        "name": "noDebuggerStatements",
+        "pattern": "\\bdebugger;",
+        "severity": "medium",
+        "description": "Remove debugger statements"
+      }
+    ]
+  },
+
+  "deploymentValidation": {
+    "enabled": true,
+    "requireManualApproval": true,
+    "requireTestsPassing": true,
+    "requireBackup": true,
+
+    "preDeploymentChecks": [
+      {
+        "name": "phiScan",
+        "script": "check-phi-leakage.js",
+        "required": true,
+        "timeout": 300,
+        "description": "Scan for PHI in staging code"
+      },
+      {
+        "name": "codeQuality",
+        "script": "validate-code-quality.js",
+        "required": false,
+        "timeout": 180,
+        "description": "Check code quality metrics"
+      },
+      {
+        "name": "productionBackup",
+        "script": "backup-production.sh",
+        "required": true,
+        "timeout": 600,
+        "description": "Create production snapshot before deploy"
+      },
+      {
+        "name": "stagingTests",
+        "script": "run-staging-tests.js",
+        "required": true,
+        "timeout": 900,
+        "description": "Run automated tests on staging"
+      }
+    ],
+
+    "postDeploymentChecks": [
+      {
+        "name": "verifyDeployment",
+        "script": "verify-production-deployment.js",
+        "required": true,
+        "timeout": 300,
+        "description": "Verify production deployment succeeded"
+      },
+      {
+        "name": "smokeTests",
+        "script": "run-smoke-tests.js",
+        "required": true,
+        "timeout": 600,
+        "description": "Run smoke tests on production"
+      }
+    ]
+  },
+
+  "alerting": {
+    "enabled": true,
+    "channels": {
+      "email": {
+        "enabled": true,
+        "recipients": ["practice-manager@ssdspc.com", "dev-team@ssdspc.com"]
+      },
+      "googleSheet": {
+        "enabled": true,
+        "sheetId": "1KpUhrEtW7-uHHS6GIngiXws0v2aM2wBC5ppyDBnRKxc",
+        "tabName": "Safety Alerts"
+      },
+      "slack": {
+        "enabled": false,
+        "webhook": "https://hooks.slack.com/services/..."
+      }
+    },
+
+    "alertLevels": {
+      "critical": {
+        "blockDeployment": true,
+        "notifyImmediately": true,
+        "requireAcknowledgement": true
+      },
+      "high": {
+        "blockDeployment": true,
+        "notifyImmediately": true,
+        "requireAcknowledgement": false
+      },
+      "medium": {
+        "blockDeployment": false,
+        "notifyImmediately": false,
+        "requireAcknowledgement": false
+      },
+      "low": {
+        "blockDeployment": false,
+        "notifyImmediately": false,
+        "requireAcknowledgement": false
+      }
+    }
+  },
+
+  "rollbackPolicy": {
+    "enabled": true,
+    "autoRollbackOnFailure": true,
+    "retentionPeriod": 90,
+    "maxRollbackPoints": 30,
+
+    "triggers": [
+      {
+        "condition": "deploymentFailed",
+        "action": "autoRollback",
+        "description": "Automatically rollback if deployment fails"
+      },
+      {
+        "condition": "phiDetectedPostDeploy",
+        "action": "immediateRollback",
+        "description": "Emergency rollback if PHI detected after deployment"
+      },
+      {
+        "condition": "criticalErrorRate",
+        "threshold": 0.05,
+        "action": "alertAndHold",
+        "description": "Alert if error rate > 5% after deployment"
+      }
+    ]
+  },
+
+  "auditLogging": {
+    "enabled": true,
+    "logAllChecks": true,
+    "logAllDeployments": true,
+    "logRetentionDays": 365,
+
+    "logDestinations": [
+      {
+        "type": "googleSheet",
+        "sheetId": "1KpUhrEtW7-uHHS6GIngiXws0v2aM2wBC5ppyDBnRKxc",
+        "tabName": "Audit Log"
+      },
+      {
+        "type": "file",
+        "path": "logs/safety-checks.log",
+        "rotation": "daily"
+      }
+    ]
+  },
+
+  "testDataValidation": {
+    "enabled": true,
+    "description": "Ensure staging uses only synthetic test data",
+
+    "syntheticDataMarkers": [
+      "TEST-",
+      "FAKE-",
+      "SAMPLE-",
+      "DEMO-",
+      "SYNTHETIC-"
+    ],
+
+    "requiredHeaders": [
+      "// STAGING ENVIRONMENT - TEST DATA ONLY",
+      "// NO PHI - SYNTHETIC DATA",
+      "// DEV3 TESTING"
+    ]
+  }
+}

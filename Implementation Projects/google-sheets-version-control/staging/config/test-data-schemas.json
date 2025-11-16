@@ -1,0 +1,600 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-16",
+  "description": "Schemas for generating synthetic test data for staging environment",
+
+  "globalSettings": {
+    "locale": "en_US",
+    "timezone": "America/Chicago",
+    "dateFormat": "MM/DD/YYYY",
+    "seed": 12345,
+    "batchSize": 100
+  },
+
+  "schemas": {
+    "patient": {
+      "description": "Synthetic patient records for testing",
+      "prefix": "TEST-",
+      "fields": {
+        "mrn": {
+          "type": "sequential",
+          "format": "TEST-MRN-{000000}",
+          "start": 1,
+          "description": "Fake medical record number"
+        },
+        "firstName": {
+          "type": "faker",
+          "method": "name.firstName",
+          "description": "Generated first name"
+        },
+        "lastName": {
+          "type": "faker",
+          "method": "name.lastName",
+          "description": "Generated last name"
+        },
+        "fullName": {
+          "type": "computed",
+          "formula": "{lastName}, {firstName}",
+          "description": "Full name in Last, First format"
+        },
+        "dateOfBirth": {
+          "type": "faker",
+          "method": "date.birthdate",
+          "args": { "min": 18, "max": 90, "mode": "age" },
+          "format": "MM/DD/YYYY",
+          "description": "Generated DOB (18-90 years old)"
+        },
+        "age": {
+          "type": "computed",
+          "formula": "CALCULATE_AGE({dateOfBirth})",
+          "description": "Computed from DOB"
+        },
+        "gender": {
+          "type": "random",
+          "options": ["Male", "Female", "Other"],
+          "weights": [0.49, 0.49, 0.02],
+          "description": "Random gender"
+        },
+        "ssn": {
+          "type": "pattern",
+          "format": "999-99-{0000}",
+          "description": "Fake SSN starting with 999-99"
+        },
+        "phone": {
+          "type": "pattern",
+          "format": "555-{000}-{0000}",
+          "description": "Fake phone with 555 area code"
+        },
+        "email": {
+          "type": "template",
+          "format": "{firstName}.{lastName}@test-patient.fake",
+          "lowercase": true,
+          "description": "Fake email address"
+        },
+        "address": {
+          "type": "faker",
+          "method": "location.streetAddress",
+          "description": "Generated street address"
+        },
+        "city": {
+          "type": "faker",
+          "method": "location.city",
+          "description": "Generated city"
+        },
+        "state": {
+          "type": "faker",
+          "method": "location.state",
+          "args": { "abbreviated": true },
+          "description": "Random US state"
+        },
+        "zipCode": {
+          "type": "faker",
+          "method": "location.zipCode",
+          "format": "#####",
+          "description": "5-digit ZIP code"
+        },
+        "insuranceId": {
+          "type": "pattern",
+          "format": "TEST-INS-{00000000}",
+          "description": "Fake insurance ID"
+        },
+        "insuranceProvider": {
+          "type": "random",
+          "options": [
+            "Test Blue Cross",
+            "Sample Medicare",
+            "Demo United Healthcare",
+            "Fake Aetna",
+            "Test Cigna"
+          ],
+          "description": "Fake insurance provider"
+        },
+        "primaryCareProvider": {
+          "type": "reference",
+          "schema": "provider",
+          "description": "Links to provider schema"
+        },
+        "allergies": {
+          "type": "array",
+          "itemType": "random",
+          "options": [
+            "Penicillin",
+            "Latex",
+            "Peanuts",
+            "Shellfish",
+            "None Known"
+          ],
+          "minItems": 0,
+          "maxItems": 3,
+          "description": "Random allergies list"
+        },
+        "medications": {
+          "type": "array",
+          "itemType": "random",
+          "options": [
+            "Lisinopril 10mg",
+            "Metformin 500mg",
+            "Atorvastatin 20mg",
+            "Levothyroxine 50mcg",
+            "Aspirin 81mg"
+          ],
+          "minItems": 0,
+          "maxItems": 5,
+          "description": "Random medication list"
+        },
+        "diagnosisCodes": {
+          "type": "array",
+          "itemType": "pattern",
+          "format": "Z{00}.{0}",
+          "minItems": 0,
+          "maxItems": 3,
+          "description": "Fake ICD-10 codes (Z codes are status codes)"
+        },
+        "lastVisitDate": {
+          "type": "faker",
+          "method": "date.recent",
+          "args": { "days": 365 },
+          "format": "MM/DD/YYYY",
+          "description": "Random date within last year"
+        },
+        "nextAppointmentDate": {
+          "type": "faker",
+          "method": "date.soon",
+          "args": { "days": 90 },
+          "format": "MM/DD/YYYY",
+          "description": "Random date within next 90 days"
+        }
+      }
+    },
+
+    "provider": {
+      "description": "Synthetic provider/doctor records",
+      "prefix": "TEST-PROV-",
+      "fields": {
+        "npi": {
+          "type": "pattern",
+          "format": "999{0000000}",
+          "description": "Fake NPI starting with 999"
+        },
+        "firstName": {
+          "type": "faker",
+          "method": "name.firstName",
+          "description": "Generated first name"
+        },
+        "lastName": {
+          "type": "faker",
+          "method": "name.lastName",
+          "description": "Generated last name"
+        },
+        "title": {
+          "type": "random",
+          "options": ["MD", "DO", "PA", "NP", "RN"],
+          "weights": [0.4, 0.2, 0.15, 0.15, 0.1],
+          "description": "Medical title"
+        },
+        "fullName": {
+          "type": "computed",
+          "formula": "Dr. {firstName} {lastName}, {title}",
+          "description": "Full name with title"
+        },
+        "specialty": {
+          "type": "random",
+          "options": [
+            "Family Medicine",
+            "Internal Medicine",
+            "Cardiology",
+            "Endocrinology",
+            "Orthopedics",
+            "Dermatology"
+          ],
+          "description": "Medical specialty"
+        },
+        "phone": {
+          "type": "pattern",
+          "format": "555-{100}-{0000}",
+          "description": "Fake office phone"
+        },
+        "email": {
+          "type": "template",
+          "format": "{firstName}.{lastName}@test-clinic.fake",
+          "lowercase": true,
+          "description": "Fake email"
+        },
+        "licenseNumber": {
+          "type": "pattern",
+          "format": "TEST-LIC-{00000}",
+          "description": "Fake medical license"
+        },
+        "dea": {
+          "type": "pattern",
+          "format": "XT{0000000}",
+          "description": "Fake DEA number (XT prefix)"
+        }
+      }
+    },
+
+    "appointment": {
+      "description": "Synthetic appointment records",
+      "prefix": "TEST-APPT-",
+      "fields": {
+        "appointmentId": {
+          "type": "sequential",
+          "format": "TEST-APPT-{000000}",
+          "start": 1,
+          "description": "Fake appointment ID"
+        },
+        "patientMrn": {
+          "type": "reference",
+          "schema": "patient",
+          "field": "mrn",
+          "description": "Links to patient"
+        },
+        "providerNpi": {
+          "type": "reference",
+          "schema": "provider",
+          "field": "npi",
+          "description": "Links to provider"
+        },
+        "appointmentDate": {
+          "type": "faker",
+          "method": "date.soon",
+          "args": { "days": 60 },
+          "format": "MM/DD/YYYY",
+          "description": "Appointment date"
+        },
+        "appointmentTime": {
+          "type": "random",
+          "options": [
+            "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM",
+            "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+            "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+            "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"
+          ],
+          "description": "Appointment time slot"
+        },
+        "duration": {
+          "type": "random",
+          "options": [15, 30, 45, 60],
+          "weights": [0.1, 0.5, 0.3, 0.1],
+          "description": "Duration in minutes"
+        },
+        "appointmentType": {
+          "type": "random",
+          "options": [
+            "Annual Physical",
+            "Follow-up",
+            "Sick Visit",
+            "Consultation",
+            "Procedure"
+          ],
+          "description": "Type of appointment"
+        },
+        "status": {
+          "type": "random",
+          "options": ["Scheduled", "Confirmed", "Checked-in", "Completed", "Cancelled"],
+          "weights": [0.3, 0.3, 0.1, 0.2, 0.1],
+          "description": "Appointment status"
+        },
+        "notes": {
+          "type": "faker",
+          "method": "lorem.sentence",
+          "description": "Random appointment notes"
+        }
+      }
+    },
+
+    "billing": {
+      "description": "Synthetic billing/claim records",
+      "prefix": "TEST-CLAIM-",
+      "fields": {
+        "claimId": {
+          "type": "sequential",
+          "format": "TEST-CLAIM-{000000}",
+          "start": 1,
+          "description": "Fake claim ID"
+        },
+        "patientMrn": {
+          "type": "reference",
+          "schema": "patient",
+          "field": "mrn",
+          "description": "Links to patient"
+        },
+        "serviceDate": {
+          "type": "faker",
+          "method": "date.recent",
+          "args": { "days": 180 },
+          "format": "MM/DD/YYYY",
+          "description": "Date of service"
+        },
+        "cptCode": {
+          "type": "random",
+          "options": ["99213", "99214", "99215", "99381", "99382", "99396"],
+          "description": "Common CPT codes"
+        },
+        "icdCode": {
+          "type": "pattern",
+          "format": "Z{00}.{0}",
+          "description": "Fake ICD-10 code"
+        },
+        "chargeAmount": {
+          "type": "random",
+          "min": 50,
+          "max": 500,
+          "decimals": 2,
+          "description": "Charge amount in dollars"
+        },
+        "paidAmount": {
+          "type": "computed",
+          "formula": "{chargeAmount} * RANDOM(0.7, 0.95)",
+          "decimals": 2,
+          "description": "Amount paid (70-95% of charge)"
+        },
+        "patientResponsibility": {
+          "type": "computed",
+          "formula": "{chargeAmount} - {paidAmount}",
+          "decimals": 2,
+          "description": "Patient balance"
+        },
+        "claimStatus": {
+          "type": "random",
+          "options": ["Submitted", "Pending", "Paid", "Denied", "Appeal"],
+          "weights": [0.1, 0.2, 0.5, 0.15, 0.05],
+          "description": "Claim status"
+        }
+      }
+    },
+
+    "lab": {
+      "description": "Synthetic lab results",
+      "prefix": "TEST-LAB-",
+      "fields": {
+        "labId": {
+          "type": "sequential",
+          "format": "TEST-LAB-{000000}",
+          "start": 1,
+          "description": "Fake lab order ID"
+        },
+        "patientMrn": {
+          "type": "reference",
+          "schema": "patient",
+          "field": "mrn",
+          "description": "Links to patient"
+        },
+        "orderDate": {
+          "type": "faker",
+          "method": "date.recent",
+          "args": { "days": 90 },
+          "format": "MM/DD/YYYY",
+          "description": "Lab order date"
+        },
+        "testName": {
+          "type": "random",
+          "options": [
+            "Complete Blood Count (CBC)",
+            "Basic Metabolic Panel (BMP)",
+            "Lipid Panel",
+            "Hemoglobin A1C",
+            "TSH",
+            "Vitamin D"
+          ],
+          "description": "Lab test name"
+        },
+        "result": {
+          "type": "random",
+          "min": 50,
+          "max": 200,
+          "decimals": 1,
+          "description": "Numeric result"
+        },
+        "unit": {
+          "type": "random",
+          "options": ["mg/dL", "mmol/L", "%", "ng/mL", "mIU/L"],
+          "description": "Result unit"
+        },
+        "referenceRange": {
+          "type": "static",
+          "value": "70-100",
+          "description": "Normal range"
+        },
+        "status": {
+          "type": "random",
+          "options": ["Ordered", "In Progress", "Completed", "Cancelled"],
+          "weights": [0.1, 0.2, 0.65, 0.05],
+          "description": "Lab status"
+        }
+      }
+    },
+
+    "prescription": {
+      "description": "Synthetic prescription records",
+      "prefix": "TEST-RX-",
+      "fields": {
+        "rxNumber": {
+          "type": "sequential",
+          "format": "TEST-RX-{000000}",
+          "start": 1,
+          "description": "Fake prescription number"
+        },
+        "patientMrn": {
+          "type": "reference",
+          "schema": "patient",
+          "field": "mrn",
+          "description": "Links to patient"
+        },
+        "providerNpi": {
+          "type": "reference",
+          "schema": "provider",
+          "field": "npi",
+          "description": "Prescribing provider"
+        },
+        "medicationName": {
+          "type": "random",
+          "options": [
+            "Lisinopril",
+            "Metformin",
+            "Atorvastatin",
+            "Amlodipine",
+            "Omeprazole"
+          ],
+          "description": "Generic medication name"
+        },
+        "strength": {
+          "type": "random",
+          "options": ["10mg", "20mg", "40mg", "50mg", "100mg"],
+          "description": "Medication strength"
+        },
+        "quantity": {
+          "type": "random",
+          "options": [30, 60, 90],
+          "weights": [0.5, 0.3, 0.2],
+          "description": "Quantity dispensed"
+        },
+        "refills": {
+          "type": "random",
+          "options": [0, 1, 2, 3, 5],
+          "weights": [0.1, 0.2, 0.3, 0.3, 0.1],
+          "description": "Number of refills"
+        },
+        "prescribedDate": {
+          "type": "faker",
+          "method": "date.recent",
+          "args": { "days": 365 },
+          "format": "MM/DD/YYYY",
+          "description": "Date prescribed"
+        },
+        "expirationDate": {
+          "type": "faker",
+          "method": "date.soon",
+          "args": { "days": 365 },
+          "format": "MM/DD/YYYY",
+          "description": "Prescription expiration"
+        }
+      }
+    }
+  },
+
+  "relationships": {
+    "description": "Define relationships between schemas",
+    "enabled": true,
+
+    "links": [
+      {
+        "from": "appointment.patientMrn",
+        "to": "patient.mrn",
+        "type": "manyToOne"
+      },
+      {
+        "from": "appointment.providerNpi",
+        "to": "provider.npi",
+        "type": "manyToOne"
+      },
+      {
+        "from": "billing.patientMrn",
+        "to": "patient.mrn",
+        "type": "manyToOne"
+      },
+      {
+        "from": "lab.patientMrn",
+        "to": "patient.mrn",
+        "type": "manyToOne"
+      },
+      {
+        "from": "prescription.patientMrn",
+        "to": "patient.mrn",
+        "type": "manyToOne"
+      },
+      {
+        "from": "prescription.providerNpi",
+        "to": "provider.npi",
+        "type": "manyToOne"
+      },
+      {
+        "from": "patient.primaryCareProvider",
+        "to": "provider.npi",
+        "type": "manyToOne"
+      }
+    ]
+  },
+
+  "presets": {
+    "description": "Pre-configured test data sets",
+
+    "small": {
+      "description": "Small dataset for quick testing",
+      "patient": 10,
+      "provider": 3,
+      "appointment": 20,
+      "billing": 15,
+      "lab": 10,
+      "prescription": 12
+    },
+
+    "medium": {
+      "description": "Medium dataset for typical testing",
+      "patient": 100,
+      "provider": 10,
+      "appointment": 200,
+      "billing": 150,
+      "lab": 100,
+      "prescription": 120
+    },
+
+    "large": {
+      "description": "Large dataset for stress testing",
+      "patient": 1000,
+      "provider": 25,
+      "appointment": 2000,
+      "billing": 1500,
+      "lab": 1000,
+      "prescription": 1200
+    },
+
+    "realistic": {
+      "description": "Realistic proportions for production-like testing",
+      "patient": 500,
+      "provider": 15,
+      "appointment": 1000,
+      "billing": 750,
+      "lab": 500,
+      "prescription": 600
+    }
+  },
+
+  "exportFormats": {
+    "json": {
+      "enabled": true,
+      "indent": 2,
+      "encoding": "utf-8"
+    },
+    "csv": {
+      "enabled": true,
+      "delimiter": ",",
+      "includeHeaders": true
+    },
+    "googleSheets": {
+      "enabled": true,
+      "createNewSheet": true,
+      "sheetNamePrefix": "TEST-DATA-"
+    }
+  }
+}
