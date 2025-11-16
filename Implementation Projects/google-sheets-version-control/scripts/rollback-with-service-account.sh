@@ -45,7 +45,7 @@ if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
   echo "⚠️  GOOGLE_APPLICATION_CREDENTIALS not set"
   echo ""
   echo "Setting it now from default location..."
-  export GOOGLE_APPLICATION_CREDENTIALS="/Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup/service-account.json"
+  export GOOGLE_APPLICATION_CREDENTIALS="/Users/mmaruthurnew/Desktop/medical-patient-data/configuration/service-accounts/service-account.json"
 
   if [ ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
     echo "❌ Service account file not found!"

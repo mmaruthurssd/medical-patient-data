@@ -91,10 +91,10 @@ echo ""
 
 # Layer 5: Google Cloud Storage
 echo -e "${BLUE}=== Layer 5: Google Cloud Storage (Immutable Backup) ===${NC}"
-if [ -f "/Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup/service-account.json" ]; then
+if [ -f "/Users/mmaruthurnew/Desktop/medical-patient-data/configuration/service-accounts/service-account.json" ]; then
     echo -e "  ${GREEN}✓${NC} Service account credentials exist"
 
-    export GOOGLE_APPLICATION_CREDENTIALS="/Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup/service-account.json"
+    export GOOGLE_APPLICATION_CREDENTIALS="/Users/mmaruthurnew/Desktop/medical-patient-data/configuration/service-accounts/service-account.json"
 
     if gsutil ls gs://ssd-sheets-backup-immutable/ &>/dev/null; then
         echo -e "  ${GREEN}✓${NC} GCS bucket accessible"

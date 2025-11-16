@@ -12,7 +12,7 @@ const util = require('util');
 const execPromise = util.promisify(exec);
 
 // Load service account credentials
-const SERVICE_ACCOUNT_PATH = '/Users/mmaruthurnew/Desktop/medical-patient-data/google-workspace-oauth-setup/service-account.json';
+const SERVICE_ACCOUNT_PATH = '/Users/mmaruthurnew/Desktop/medical-patient-data/configuration/service-accounts/service-account.json';
 const serviceAccount = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_PATH, 'utf8'));
 
 // Initialize JWT client with domain-wide delegation

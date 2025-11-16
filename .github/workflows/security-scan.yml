@@ -1,0 +1,218 @@
+name: Security Scan (PHI & Credentials)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write  # To create issues for violations
+      pull-requests: write  # To comment on PRs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for accurate diffs
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install security scanning dependencies
+        run: |
+          npm install -g gitleaks
+          # Note: PHI scanning will use built-in patterns
+
+      - name: Scan for credentials with Gitleaks
+        id: gitleaks
+        continue-on-error: true
+        run: |
+          echo "🔍 Scanning for exposed credentials..."
+          gitleaks detect \
+            --source . \
+            --verbose \
+            --report-format json \
+            --report-path gitleaks-report.json \
+            --no-git \
+            --exit-code 1
+
+      - name: Scan for PHI patterns
+        id: phi-scan
+        continue-on-error: true
+        run: |
+          echo "🔍 Scanning for Protected Health Information (PHI)..."
+
+          # Create PHI detection script
+          cat > scan-phi.sh << 'EOFSCRIPT'
+          #!/bin/bash
+
+          PHI_FOUND=0
+
+          # Patterns for PHI detection (18 HIPAA identifiers)
+          declare -A PHI_PATTERNS=(
+            ["SSN"]="[0-9]{3}-[0-9]{2}-[0-9]{4}"
+            ["MRN"]="(MRN|Medical Record|Patient ID)[\s:]*[A-Z0-9-]{5,15}"
+            ["DOB"]="(DOB|Date of Birth|Birth Date)[\s:]*[0-9]{1,2}[/-][0-9]{1,2}[/-][0-9]{2,4}"
+            ["PHONE"]="(\([0-9]{3}\)|[0-9]{3})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}"
+            ["EMAIL_PHI"]="(patient|medical|health).*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+          )
+
+          echo "Scanning for PHI patterns..."
+          for pattern_name in "${!PHI_PATTERNS[@]}"; do
+            pattern="${PHI_PATTERNS[$pattern_name]}"
+            matches=$(grep -rE "$pattern" . \
+              --exclude-dir=node_modules \
+              --exclude-dir=.git \
+              --exclude-dir=dist \
+              --exclude-dir=build \
+              --exclude="*.md" \
+              --exclude="*.log" \
+              2>/dev/null || true)
+
+            if [ -n "$matches" ]; then
+              echo "⚠️  PHI Pattern Found: $pattern_name"
+              echo "$matches" | head -5
+              PHI_FOUND=1
+            fi
+          done
+
+          if [ $PHI_FOUND -eq 1 ]; then
+            echo "❌ PHI patterns detected!"
+            exit 1
+          else
+            echo "✅ No PHI patterns detected"
+            exit 0
+          fi
+          EOFSCRIPT
+
+          chmod +x scan-phi.sh
+          ./scan-phi.sh
+
+      - name: Check gitignore coverage
+        id: gitignore-check
+        run: |
+          echo "🔍 Verifying sensitive files are gitignored..."
+
+          # Check if critical patterns are in .gitignore
+          MISSING_PATTERNS=()
+
+          REQUIRED_PATTERNS=(
+            "configuration/"
+            "*.key"
+            "*.pem"
+            "service-account*.json"
+            ".env"
+            "*.phi"
+          )
+
+          for pattern in "${REQUIRED_PATTERNS[@]}"; do
+            if ! grep -q "$pattern" .gitignore; then
+              MISSING_PATTERNS+=("$pattern")
+            fi
+          done
+
+          if [ ${#MISSING_PATTERNS[@]} -gt 0 ]; then
+            echo "⚠️  Missing .gitignore patterns:"
+            printf '  - %s\n' "${MISSING_PATTERNS[@]}"
+            echo "missing_patterns=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ All required patterns in .gitignore"
+            echo "missing_patterns=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summarize scan results
+        if: always()
+        run: |
+          echo "======================================================================"
+          echo "  SECURITY SCAN SUMMARY"
+          echo "======================================================================"
+          echo ""
+
+          if [ "${{ steps.gitleaks.outcome }}" == "failure" ]; then
+            echo "❌ CREDENTIAL SCAN: FAILED"
+            echo "   → Exposed credentials detected by Gitleaks"
+            echo "   → Review gitleaks-report.json for details"
+          else
+            echo "✅ CREDENTIAL SCAN: PASSED"
+          fi
+
+          if [ "${{ steps.phi-scan.outcome }}" == "failure" ]; then
+            echo "❌ PHI SCAN: FAILED"
+            echo "   → Protected Health Information detected"
+            echo "   → Review scan output above for locations"
+          else
+            echo "✅ PHI SCAN: PASSED"
+          fi
+
+          if [ "${{ steps.gitignore-check.outputs.missing_patterns }}" == "true" ]; then
+            echo "⚠️  GITIGNORE: INCOMPLETE"
+            echo "   → Some security patterns missing from .gitignore"
+          else
+            echo "✅ GITIGNORE: COMPLETE"
+          fi
+
+          echo ""
+          echo "======================================================================"
+
+      - name: Upload Gitleaks report
+        if: always() && steps.gitleaks.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+          retention-days: 30
+
+      - name: Comment on PR with scan results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const credentialScan = '${{ steps.gitleaks.outcome }}';
+            const phiScan = '${{ steps.phi-scan.outcome }}';
+            const gitignoreCheck = '${{ steps.gitignore-check.outputs.missing_patterns }}';
+
+            let status = '✅ PASSED';
+            let details = [];
+
+            if (credentialScan === 'failure') {
+              status = '❌ FAILED';
+              details.push('🔐 **Credential Scan**: ❌ Exposed credentials detected');
+            } else {
+              details.push('🔐 **Credential Scan**: ✅ No credentials detected');
+            }
+
+            if (phiScan === 'failure') {
+              status = '❌ FAILED';
+              details.push('🏥 **PHI Scan**: ❌ Protected Health Information detected');
+            } else {
+              details.push('🏥 **PHI Scan**: ✅ No PHI detected');
+            }
+
+            if (gitignoreCheck === 'true') {
+              details.push('⚠️ **Gitignore**: Missing security patterns');
+            } else {
+              details.push('📋 **Gitignore**: ✅ All patterns present');
+            }
+
+            const comment = `## 🔒 Security Scan Results: ${status}\n\n${details.join('\n')}\n\n---\n*Automated HIPAA compliance check*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Fail workflow if violations found
+        if: steps.gitleaks.outcome == 'failure' || steps.phi-scan.outcome == 'failure'
+        run: |
+          echo "❌ Security scan failed! Violations must be resolved before merging."
+          exit 1
