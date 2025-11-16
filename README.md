@@ -1,6 +1,8 @@
 # medical-patient-data Workspace
 
-**Quick Navigation**: [START_HERE.md](START_HERE.md) | [WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md) | [EVENT_LOG.md](EVENT_LOG.md)
+**Quick Navigation**: [START_HERE.md](START_HERE.md) | [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) | [EVENT_LOG.md](EVENT_LOG.md)
+
+**Critical Guides**: [BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md) | [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md) | [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md)
 
 ---
 
@@ -208,11 +210,20 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 
 ## 📝 Documentation Index
 
+**Master Index**: [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) - Complete navigation to ALL documentation
+
+### Critical Operational Guides
+- **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)** ⭐ - All backup system documentation
+- **[docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md](docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md)** ⭐ - Master backup troubleshooting (all 6 layers)
+- [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md) - HIPAA compliance
+- [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) - Git operation safety
+- [WORKSPACE-BACKUP-ARCHITECTURE.md](WORKSPACE-BACKUP-ARCHITECTURE.md) - 6-layer backup system design
+
 ### Workspace-Specific
 - [START_HERE.md](START_HERE.md) - First-time orientation
 - [EVENT_LOG.md](EVENT_LOG.md) - Recent changes
-- [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md) - HIPAA compliance
-- [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) - Git operation safety
+- [SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md) - Complete system inventory
+- [CONFIGURATION-GUIDE.md](CONFIGURATION-GUIDE.md) - Configuration reference
 
 ### Cross-Workspace (via workspace-management/)
 - [WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md) - Standards and constitution
@@ -222,12 +233,21 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 
 ### Workflows & Reference
 - [WORKFLOW_PLAYBOOK.md](WORKFLOW_PLAYBOOK.md) - How we do things
-- [SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md) - Component index
+- [DOCUMENTATION-MAINTENANCE-CHECKLIST.md](DOCUMENTATION-MAINTENANCE-CHECKLIST.md) - Three-pathway update checklist
+- [docs/troubleshooting/](docs/troubleshooting/) - All troubleshooting guides
 - [workspace-management/AI-QUICK-REFERENCE.md](workspace-management/AI-QUICK-REFERENCE.md)
 
 ---
 
 ## 🆘 Troubleshooting
+
+**Master Troubleshooting Index**: [docs/troubleshooting/](docs/troubleshooting/)
+
+### Backup System Issues
+**Start here**: [BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)
+- **All 6 layers**: [docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md](docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md)
+- **Google Sheets**: [live-practice-management-system/.../TROUBLESHOOTING.md](live-practice-management-system/live-practice-management-system/2-Application%20Layer%20(Google%20Sheets)/Google-Sheets-Backup-System/TROUBLESHOOTING.md)
+- **GitHub Actions**: Check workflow runs: `gh run list --workflow=workspace-backup-gcs.yml --limit 5`
 
 ### OAuth/Domain-Wide Delegation Issues
 - Check service account: `automation@ssdspc.com`
@@ -245,6 +265,10 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 2. Follow [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) recovery steps
 3. Use `git reset` to undo commit
 4. Scan with `mcp__security-compliance-mcp__scan_for_phi`
+
+### Workspace Setup Issues
+- [docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md](docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md)
+- [docs/troubleshooting/WORKSPACE-SYNC-ISSUES.md](docs/troubleshooting/WORKSPACE-SYNC-ISSUES.md)
 
 ---
 
