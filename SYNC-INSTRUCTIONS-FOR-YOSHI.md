@@ -63,10 +63,10 @@ The workspaces use shared documentation via symlinks:
 # Navigate to your workspace directory
 cd ~/Desktop  # or your preferred location
 
-# Clone each repository (get URLs from team)
-git clone <medical-patient-data-url>
-git clone <operations-workspace-url>
-git clone <mcp-infrastructure-url>
+# Clone each repository
+git clone https://github.com/mmaruthurssd/medical-patient-data.git
+git clone https://github.com/mmaruthurssd/operations-workspace.git
+git clone https://github.com/mmaruthurssd/mcp-infrastructure.git
 ```
 
 ### Step 2: Verify Git Status
