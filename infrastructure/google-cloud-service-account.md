@@ -8,8 +8,9 @@ tags: [google-cloud, service-account, automation, infrastructure, system-compone
 **Component Type:** Infrastructure / Automation Account
 **Service Account Email:** `ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com`
 **Google Cloud Project:** `workspace-automation-ssdspc`
+**Client ID (OAuth):** `101331968393537100233`
 **Created:** 2024 (exact date TBD)
-**Last Updated:** 2025-11-15
+**Last Updated:** 2025-11-16
 
 ---
 
@@ -27,8 +28,23 @@ This service account is the **primary automation identity** for all Google Works
 ```
 Email: ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com
 Project ID: workspace-automation-ssdspc
+Client ID (OAuth): 101331968393537100233
 Project Number: [TBD - check Google Cloud Console]
 ```
+
+### OAuth Domain-Wide Delegation
+```
+Client ID: 101331968393537100233
+Scopes: https://www.googleapis.com/auth/script.scriptapp,
+        https://www.googleapis.com/auth/script.projects,
+        https://www.googleapis.com/auth/drive,
+        https://www.googleapis.com/auth/spreadsheets
+
+Admin Console: https://admin.google.com/ac/owl/domainwidedelegation
+```
+
+**For complete OAuth documentation, see:**
+📘 `/Users/mmaruthurnew/Desktop/operations-workspace/workspace-management/shared-docs/OAUTH-DOMAIN-WIDE-DELEGATION.md`
 
 ### Credentials Location
 ```
