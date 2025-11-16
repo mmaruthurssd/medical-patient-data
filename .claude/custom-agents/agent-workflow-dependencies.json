@@ -1,0 +1,513 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-15",
+  "description": "Tracks dependencies between custom agents and their workflow/documentation/configuration sources. Enables automatic detection of outdated agents when source materials are updated.",
+  "agents": {
+    "google-workspace-automation": {
+      "version": "1.0.0",
+      "lastUpdated": "2025-11-15",
+      "agentFile": "/.claude/custom-agents/google-workspace-automation.md",
+      "purpose": "Execute Google Workspace operations (Drive, Docs, Slides) from natural language commands",
+      "dependencies": {
+        "workflows": [
+          {
+            "file": "/infrastructure/google-drive-automation-workflows.md",
+            "version": "unknown",
+            "note": "Version not specified in source file - recommend adding",
+            "workflows": [
+              "Workflow 1: Create Folder Structure",
+              "Workflow 2: Search for Files and Folders",
+              "Workflow 3: Upload Files to Drive",
+              "Workflow 4: Export Files to PDF",
+              "Workflow 5: Share Folders with Service Account",
+              "Workflow 6: List Shared Drives",
+              "Workflow 7: Copy Files",
+              "Workflow 8: Rename Files/Folders",
+              "Workflow 9: Move Files Between Folders",
+              "Workflow 10: Delete/Trash Files",
+              "Workflow 11: List Files in Folder",
+              "Workflow 12: Get File Metadata"
+            ],
+            "sections": [
+              "Common Patterns Library",
+              "Common Issues & Quick Fixes",
+              "Best Practices",
+              "Error Handling"
+            ],
+            "criticality": "HIGH",
+            "note": "Agent directly references all 12 workflows in lines 179-196"
+          }
+        ],
+        "documentation": [
+          {
+            "file": "/infrastructure/google-cloud-service-account.md",
+            "sections": [
+              "Service Account Details",
+              "API Scopes & Permissions",
+              "Authentication Methods",
+              "Shared Drive Folders"
+            ],
+            "criticality": "HIGH",
+            "note": "Service account credentials are core to agent functionality"
+          },
+          {
+            "file": "/infrastructure/google-workspace-quick-reference.md",
+            "sections": [
+              "Google Drive Operations"
+            ],
+            "criticality": "MEDIUM",
+            "note": "Referenced for Drive operations quick reference"
+          }
+        ],
+        "configuration": [
+          {
+            "file": "/development/mcp-servers/google-workspace-materials-project/.env",
+            "variables": [
+              "DRIVE_ROOT_FOLDER_ID",
+              "DRIVE_TEMPLATES_FOLDER_ID",
+              "DRIVE_GENERATED_FOLDER_ID",
+              "DRIVE_ARCHIVE_FOLDER_ID",
+              "DRIVE_CONFIG_FOLDER_ID",
+              "GOOGLE_SERVICE_ACCOUNT_KEY_PATH"
+            ],
+            "criticality": "HIGH",
+            "note": "Agent uses these folder IDs in examples and pre-configured context (lines 151-160)"
+          }
+        ],
+        "serviceAccounts": [
+          {
+            "email": "ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com",
+            "keyPath": "/google-workspace-oauth-setup/service-account.json",
+            "criticality": "CRITICAL",
+            "note": "Core authentication mechanism for all Drive operations"
+          }
+        ]
+      }
+    },
+    "documentation-health": {
+      "version": "1.0.0",
+      "lastUpdated": "2025-11-15",
+      "agentFile": "/.claude/custom-agents/documentation-health.md",
+      "purpose": "Validate documentation integrity, detect broken links, identify stale content, and maintain documentation quality",
+      "dependencies": {
+        "workflows": [],
+        "documentation": [
+          {
+            "file": "/WORKSPACE_GUIDE.md",
+            "sections": [
+              "Quick Lookup Table"
+            ],
+            "criticality": "HIGH",
+            "note": "Agent validates Quick Lookup Table entries and checks for missing entries (lines 281-306)"
+          },
+          {
+            "file": "/WORKSPACE_ARCHITECTURE.md",
+            "sections": [
+              "all"
+            ],
+            "criticality": "HIGH",
+            "note": "Core architecture documentation that agent validates"
+          },
+          {
+            "file": "/infrastructure/google-drive-automation-workflows.md",
+            "sections": [
+              "all"
+            ],
+            "criticality": "MEDIUM",
+            "note": "Validates links and cross-references in workflow documentation"
+          },
+          {
+            "file": "/infrastructure/google-cloud-service-account.md",
+            "sections": [
+              "all"
+            ],
+            "criticality": "MEDIUM",
+            "note": "Validates infrastructure documentation"
+          }
+        ],
+        "configuration": [],
+        "validationRules": [
+          {
+            "rule": "broken-internal-links",
+            "pattern": "\\[([^\\]]+)\\]\\((?!http|#)([^)]+)\\)",
+            "severity": "CRITICAL"
+          },
+          {
+            "rule": "outdated-dates",
+            "pattern": "Last Updated:?\\s*(\\d{4}-\\d{2}-\\d{2})",
+            "threshold": "90 days",
+            "severity": "HIGH"
+          },
+          {
+            "rule": "invalid-folder-ids",
+            "pattern": "folder[/_-]?id[:\\s]*([A-Za-z0-9_-]{28,})",
+            "severity": "MEDIUM"
+          }
+        ]
+      }
+    },
+    "medical-compliance": {
+      "version": "1.0.0",
+      "lastUpdated": "2025-11-15",
+      "agentFile": "/.claude/custom-agents/medical-compliance.md",
+      "purpose": "Scan for PHI leaks, ensure HIPAA compliance, validate data handling practices, and audit folder access controls",
+      "dependencies": {
+        "workflows": [],
+        "documentation": [
+          {
+            "file": "/infrastructure/google-cloud-service-account.md",
+            "sections": [
+              "Service Account Details",
+              "Shared Drive Folders",
+              "Access Restrictions"
+            ],
+            "criticality": "CRITICAL",
+            "note": "Validates service account NEVER accesses PHI-containing folders (lines 167-172, 190-194)"
+          }
+        ],
+        "configuration": [
+          {
+            "file": "/development/mcp-servers/google-workspace-materials-project/.env",
+            "variables": [
+              "GOOGLE_SERVICE_ACCOUNT_KEY_PATH"
+            ],
+            "criticality": "CRITICAL",
+            "note": "Service account must only access 'No PHI' designated folders"
+          }
+        ],
+        "serviceAccounts": [
+          {
+            "email": "ssd-automation-service-account@workspace-automation-ssdspc.iam.gserviceaccount.com",
+            "accessRestrictions": "MUST NEVER access PHI-containing folders",
+            "allowedDrives": [
+              {
+                "name": "AI Development - No PHI",
+                "driveId": "0AFSsMrTVhqWuUk9PVA",
+                "purpose": "Safe collaboration space for templates and automation"
+              }
+            ],
+            "criticality": "CRITICAL",
+            "note": "Agent enforces strict access controls (lines 167-172)"
+          }
+        ],
+        "externalReferences": [
+          {
+            "name": "HIPAA Safe Harbor Method",
+            "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html",
+            "regulation": "45 CFR § 164.514(b)(2)",
+            "criticality": "CRITICAL",
+            "note": "18 PHI identifiers must be removed (lines 196-217)"
+          },
+          {
+            "name": "HIPAA Privacy Rule",
+            "regulation": "45 CFR Part 160 and Part 164, Subparts A and E",
+            "criticality": "CRITICAL"
+          },
+          {
+            "name": "HIPAA Security Rule",
+            "regulation": "45 CFR Part 164, Subpart C",
+            "criticality": "CRITICAL"
+          },
+          {
+            "name": "HIPAA Breach Notification Rule",
+            "regulation": "45 CFR §§ 164.400-414",
+            "criticality": "CRITICAL"
+          }
+        ],
+        "phiPatterns": [
+          "Names",
+          "Geographic subdivisions smaller than state",
+          "Dates (except year) related to individual",
+          "Telephone numbers",
+          "Fax numbers",
+          "Email addresses",
+          "Social Security numbers",
+          "Medical record numbers",
+          "Health plan beneficiary numbers",
+          "Account numbers",
+          "Certificate/license numbers",
+          "Vehicle identifiers and serial numbers",
+          "Device identifiers and serial numbers",
+          "Web URLs",
+          "Internet Protocol (IP) addresses",
+          "Biometric identifiers",
+          "Full-face photographs",
+          "Any other unique identifying number, characteristic, or code"
+        ]
+      }
+    },
+    "project-setup": {
+      "version": "1.0.0",
+      "lastUpdated": "2025-11-15",
+      "agentFile": "/.claude/custom-agents/project-setup.md",
+      "purpose": "Automate creation of standardized project structures (8-folder, 4-folder, MCP server) with Google Drive folders and configuration",
+      "dependencies": {
+        "workflows": [
+          {
+            "file": "/infrastructure/google-drive-automation-workflows.md",
+            "version": "unknown",
+            "workflows": [
+              "Workflow 1: Create Folder Structure",
+              "Workflow 5: Share Folders with Service Account"
+            ],
+            "criticality": "HIGH",
+            "note": "Uses Workflow 1 to create Drive folders during project setup (lines 630-689)"
+          }
+        ],
+        "documentation": [
+          {
+            "file": "/infrastructure/google-cloud-service-account.md",
+            "sections": [
+              "Service Account Details",
+              "Authentication Methods"
+            ],
+            "criticality": "HIGH",
+            "note": "Uses service account to create and share Drive folders"
+          },
+          {
+            "file": "/WORKSPACE_GUIDE.md",
+            "sections": [
+              "Quick Lookup Table"
+            ],
+            "criticality": "MEDIUM",
+            "note": "Agent updates Quick Lookup Table with new project entries (lines 996-1003)"
+          }
+        ],
+        "templates": [
+          {
+            "location": "/development/mcp-servers/google-workspace-materials-project/",
+            "type": "MCP server template",
+            "criticality": "HIGH",
+            "note": "Primary reference MCP structure for new MCP projects (lines 1142-1154)"
+          },
+          {
+            "location": "/templates-and-patterns/project-structure-templates/",
+            "type": "8-folder and 4-folder templates",
+            "criticality": "HIGH",
+            "note": "Contains standardized project structure templates"
+          },
+          {
+            "location": "/templates-and-patterns/mcp-server-templates/",
+            "type": "MCP template patterns",
+            "criticality": "HIGH",
+            "note": "MCP-specific templates for template-first pattern (lines 264-288)"
+          }
+        ],
+        "configuration": [
+          {
+            "file": "/google-workspace-oauth-setup/service-account.json",
+            "criticality": "HIGH",
+            "note": "Service account used for Drive folder creation (lines 106-114)"
+          },
+          {
+            "file": "/google-workspace-oauth-setup/credentials.json",
+            "criticality": "MEDIUM",
+            "note": "OAuth credentials for user-based Drive operations"
+          },
+          {
+            "file": "/google-workspace-oauth-setup/token.json",
+            "criticality": "MEDIUM",
+            "note": "OAuth token for authenticated Drive access"
+          }
+        ],
+        "boilerplateFiles": [
+          {
+            "file": "README.md",
+            "template": "lines 346-416",
+            "variables": [
+              "PROJECT_NAME",
+              "PROJECT_TYPE",
+              "DATE",
+              "DESCRIPTION",
+              "STRUCTURE_TYPE",
+              "DRIVE_FOLDER_URL"
+            ]
+          },
+          {
+            "file": ".gitignore",
+            "template": "lines 420-480",
+            "note": "Standard gitignore for Node.js/Python projects"
+          },
+          {
+            "file": "package.json",
+            "template": "lines 485-526",
+            "variables": [
+              "PROJECT_NAME",
+              "DESCRIPTION",
+              "PROJECT_KEYWORDS",
+              "AUTHOR"
+            ]
+          },
+          {
+            "file": "tsconfig.json",
+            "template": "lines 530-558",
+            "note": "TypeScript configuration for MCP projects"
+          },
+          {
+            "file": ".env.example",
+            "template": "lines 561-598",
+            "variables": [
+              "PROJECT_NAME",
+              "DATE",
+              "DRIVE_PROJECT_FOLDER_ID",
+              "DRIVE_DOCS_FOLDER_ID",
+              "DRIVE_TEMPLATES_FOLDER_ID",
+              "DRIVE_OUTPUT_FOLDER_ID"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "changeDetection": {
+    "checksum": {
+      "enabled": false,
+      "note": "Future enhancement: Could use file hashes (SHA-256) to detect changes automatically. Would require storing checksums in this file after each validation."
+    },
+    "manualTrigger": {
+      "enabled": true,
+      "instructions": "When updating workflows or documentation, manually check this file and update affected agents. Use 'checkAgentDependencies' workflow."
+    },
+    "gitHooks": {
+      "enabled": false,
+      "note": "Future enhancement: Could add pre-commit hook to detect changes to dependency files and warn about agent updates needed"
+    }
+  },
+  "updateProcedure": {
+    "steps": [
+      "1. Identify which workflow/documentation file was changed",
+      "2. Check this file to find dependent agents (search for file path in 'dependencies' sections)",
+      "3. Review each affected agent specification for outdated references",
+      "4. For each outdated reference:",
+      "   a. Document the specific changes needed",
+      "   b. Estimate impact (HIGH/MEDIUM/LOW)",
+      "   c. Prioritize updates based on agent usage frequency",
+      "5. Present update plan to user with:",
+      "   - List of affected agents",
+      "   - Specific sections that need updating",
+      "   - Recommended update priority",
+      "6. After user approval, update agent specs with corrected references",
+      "7. Update agent 'lastUpdated' field in this file",
+      "8. Update agent 'lastUpdated' field in agent spec file",
+      "9. Document changes in agent version history section",
+      "10. Create git commit with clear message about agent maintenance"
+    ],
+    "exampleWorkflow": {
+      "scenario": "Workflow 1 in google-drive-automation-workflows.md was updated",
+      "affectedAgents": [
+        "google-workspace-automation",
+        "project-setup"
+      ],
+      "actions": [
+        "Review google-workspace-automation.md lines 179-196 (workflow references)",
+        "Review project-setup.md lines 630-689 (Drive folder creation)",
+        "Check for outdated workflow steps or parameters",
+        "Update agent examples if workflow signature changed",
+        "Update agent error handling if new errors possible",
+        "Increment agent version if changes are significant",
+        "Update this dependency file with new workflow version"
+      ]
+    }
+  },
+  "validationRules": {
+    "agentMustReference": [
+      {
+        "rule": "If agent uses workflows, it must list them in dependencies.workflows",
+        "severity": "HIGH"
+      },
+      {
+        "rule": "If agent uses configuration files, it must list them in dependencies.configuration",
+        "severity": "HIGH"
+      },
+      {
+        "rule": "If agent uses service accounts, it must list them in dependencies.serviceAccounts",
+        "severity": "CRITICAL"
+      }
+    ],
+    "consistencyChecks": [
+      {
+        "check": "Agent version in this file matches version in agent spec file",
+        "frequency": "monthly"
+      },
+      {
+        "check": "All referenced files in dependencies actually exist",
+        "frequency": "weekly"
+      },
+      {
+        "check": "Agent lastUpdated date is not older than dependency lastUpdated date",
+        "frequency": "monthly"
+      }
+    ]
+  },
+  "futureEnhancements": [
+    {
+      "enhancement": "Add version tracking to workflow files",
+      "benefit": "Precise change detection for workflow updates",
+      "effort": "MEDIUM",
+      "priority": "HIGH"
+    },
+    {
+      "enhancement": "Automated dependency analysis tool",
+      "benefit": "Scan agent files to auto-generate dependency map",
+      "effort": "HIGH",
+      "priority": "MEDIUM"
+    },
+    {
+      "enhancement": "Pre-commit hook for dependency validation",
+      "benefit": "Warn about agent updates needed before committing changes",
+      "effort": "MEDIUM",
+      "priority": "MEDIUM"
+    },
+    {
+      "enhancement": "Dependency impact visualization",
+      "benefit": "Visual graph showing agent-workflow relationships",
+      "effort": "HIGH",
+      "priority": "LOW"
+    },
+    {
+      "enhancement": "Agent test coverage for dependencies",
+      "benefit": "Detect broken references automatically",
+      "effort": "HIGH",
+      "priority": "HIGH"
+    }
+  ],
+  "usageInstructions": {
+    "forDevelopers": [
+      "Before updating any workflow file:",
+      "1. Search this file for the workflow file path",
+      "2. Note all agents that depend on it",
+      "3. After making changes, update those agents",
+      "4. Update lastUpdated dates for affected agents"
+    ],
+    "forAgentMaintenance": [
+      "Monthly agent health check:",
+      "1. Compare agent lastUpdated vs dependency lastUpdated",
+      "2. Review agents with stale dates (>90 days)",
+      "3. Check if workflows have changed since agent last updated",
+      "4. Update agent specs if dependencies changed"
+    ],
+    "forNewAgents": [
+      "When creating new agent:",
+      "1. Add entry to this file's agents section",
+      "2. Document all workflow dependencies",
+      "3. Document all configuration dependencies",
+      "4. Document all service account dependencies",
+      "5. Set criticality levels for each dependency"
+    ]
+  },
+  "maintenanceSchedule": {
+    "weekly": [
+      "Run validation to check all referenced files exist"
+    ],
+    "monthly": [
+      "Review agents with stale lastUpdated dates",
+      "Check for new undocumented dependencies",
+      "Validate service account access restrictions"
+    ],
+    "quarterly": [
+      "Full dependency audit",
+      "Update this file structure if needed",
+      "Review and prioritize future enhancements"
+    ]
+  }
+}

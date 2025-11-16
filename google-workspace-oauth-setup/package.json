@@ -1,0 +1,15 @@
+{
+  "name": "google-workspace-oauth-setup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-delegation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^166.0.0"
+  }
+}
