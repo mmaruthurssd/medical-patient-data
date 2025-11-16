@@ -31,8 +31,8 @@ jobs:
       - name: Set up clasp credentials
         run: |
           mkdir -p ~/.config/clasp
-          echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
-          echo '${{ secrets.CLASP_CREDENTIALS }}' > .clasprc.json
+          echo '${{ secrets.CLASP_CREDENTIALS_B64 }}' | base64 -d > ~/.clasprc.json
+          echo '${{ secrets.CLASP_CREDENTIALS_B64 }}' | base64 -d > .clasprc.json
           chmod 600 ~/.clasprc.json .clasprc.json
 
       - name: Set up service account credentials
