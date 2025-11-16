@@ -29,22 +29,10 @@ jobs:
         run: npm ci
 
       - name: Set up clasp credentials
-        run: |
-          mkdir -p ~/.config/clasp
-          echo '${{ secrets.CLASP_CREDENTIALS_B64 }}' | base64 -d > ~/.clasprc.json
-          echo '${{ secrets.CLASP_CREDENTIALS_B64 }}' | base64 -d > .clasprc.json
-          chmod 600 ~/.clasprc.json .clasprc.json
-
-          # Debug: Validate JSON structure
-          echo "=== Validating .clasprc.json structure ==="
-          if [ -f ~/.clasprc.json ]; then
-            echo "File exists, size: $(wc -c < ~/.clasprc.json) bytes"
-            echo "Has 'tokens' key: $(jq 'has("tokens")' ~/.clasprc.json)"
-            echo "Has 'tokens.default' key: $(jq 'has("tokens") and .tokens | has("default")' ~/.clasprc.json)"
-            echo "Keys in tokens.default: $(jq -r '.tokens.default | keys | join(", ")' ~/.clasprc.json 2>&1 || echo "ERROR")"
-          else
-            echo "ERROR: ~/.clasprc.json does not exist!"
-          fi
+        working-directory: Implementation Projects/google-sheets-version-control
+        env:
+          CLASP_CREDENTIALS_B64: ${{ secrets.CLASP_CREDENTIALS_B64 }}
+        run: node scripts/write-clasp-credentials.js
 
       - name: Set up service account credentials
         run: |
