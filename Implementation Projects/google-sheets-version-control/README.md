@@ -21,24 +21,25 @@ This repository manages the **Application Layer** of the SSD medical practice ma
 ## Repository Structure
 
 ```
-ssd-google-sheets-staging-production/
+google-sheets-version-control/
 ├── production-sheets/          # LIVE production code (snapshots)
-│   └── [Sheet folders TBD]
+│   └── [237 production sheets]
 │
-├── staging-sheets/             # DEVELOPMENT workspace
-│   └── [DEV sheet folders TBD]
-│
-├── shared-libraries/           # Reusable code across sheets
-│   └── [Common libraries TBD]
+├── staging/                    # DEVELOPMENT workspace
+│   └── [DEV sheet folders]
 │
 ├── scripts/                    # Deployment automation
-│   └── [Scripts TBD]
+│   └── [Deployment scripts]
 │
 ├── docs/                       # Documentation
-│   └── [Guides TBD]
+│   ├── reports/                # Implementation summaries and audit reports
+│   ├── guides/                 # Setup and configuration guides
+│   └── deployment/             # Deployment procedures
+│
+├── config/                     # Configuration files
 │
 └── .github/                    # GitHub configuration
-    └── workflows/              # GitHub Actions (future)
+    └── workflows/              # GitHub Actions
 ```
 
 ## Quick Start
@@ -94,9 +95,27 @@ cd ssd-google-sheets-staging-production
 
 ## Documentation
 
-- **Planning**: See `medical-practice-workspace/projects-in-development/organization-planning/02-GITHUB-ORGANIZATION-PLAN.md`
-- **Registry**: See `medical-practice-workspace/github-organization-registry/`
-- **Application Layer**: See `medical-practice-workspace/live-practice-management-system/2-Application Layer/`
+### Project Documentation (docs/)
+
+- **Reports** (`docs/reports/`):
+  - Implementation summaries and completion reports
+  - Audit reports and parity analysis
+  - System health and verification reports
+
+- **Guides** (`docs/guides/`):
+  - Setup and configuration instructions
+  - How-to guides for common tasks
+  - Troubleshooting and remediation procedures
+
+- **Deployment** (`docs/deployment/`):
+  - Production deployment procedures
+  - Transition guides and checklists
+  - Quick deploy references
+
+### Related Workspace Documentation
+
+- **Implementation Projects**: See `../README.md` for all implementation projects
+- **Workspace Guide**: See workspace root for overall system architecture
 
 ## Security
 

@@ -6,6 +6,57 @@
 
 ---
 
+## 📋 Documentation Navigation Strategy
+
+This workspace uses a **three-index navigation architecture** to ensure all documentation is discoverable:
+
+### The Three Index Files
+
+1. **[DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md)** (THIS FILE)
+   - **Purpose**: Master navigation hub for ALL workspace documentation
+   - **When to use**: Looking for any documentation, guides, or troubleshooting resources
+   - **Coverage**: Complete catalog organized by topic with scenario-based finding guides
+   - **For AI**: Read early in initialization to understand complete documentation structure
+
+2. **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)**
+   - **Purpose**: Specialized index for all backup system documentation (6 layers)
+   - **When to use**: Working with backups, troubleshooting backup issues, disaster recovery
+   - **Coverage**: All backup layers, Google Sheets snapshots, emergency procedures, historical issues
+   - **For AI**: Essential reference when dealing with any backup-related tasks
+
+3. **[SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md)**
+   - **Purpose**: Complete inventory of all system components with quick reference
+   - **When to use**: Understanding system architecture, finding component documentation
+   - **Coverage**: Infrastructure, automation, development systems, integrations with status and quick commands
+   - **For AI**: Read to understand what systems exist and where to find implementation details
+
+### How They Work Together
+
+- **DOCUMENTATION-INDEX.md** = "How do I find information about X?"
+- **BACKUP-DOCUMENTATION-INDEX.md** = "Everything about backups in one place"
+- **SYSTEM-COMPONENTS.md** = "What systems exist and how do they work?"
+
+All three indexes cross-reference each other and are kept in sync through the [DOCUMENTATION-MAINTENANCE-CHECKLIST.md](DOCUMENTATION-MAINTENANCE-CHECKLIST.md).
+
+### New Documentation Structure
+
+As of 2025-11-16, documentation is organized in two locations:
+
+**Root Directory** (frequently accessed operational guides):
+- README.md, START_HERE.md, DOCUMENTATION-INDEX.md
+- BACKUP-DOCUMENTATION-INDEX.md, SYSTEM-COMPONENTS.md
+- GIT-SAFETY-CHECKLIST.md, docs/guides/security-best-practices.md
+- Other frequently used operational guides
+
+**docs/ Directory** (organized by topic):
+- `docs/troubleshooting/` - All troubleshooting guides
+- `docs/` - Specialized documentation (HIPAA, templates, workflows, etc.)
+- Future topic-based subdirectories as needed
+
+This structure balances **quick access** (root) with **logical organization** (docs/).
+
+---
+
 ## 🚀 Quick Start Navigation
 
 ### For Brand New Users (Human or AI)
@@ -45,9 +96,9 @@
 | Document | Purpose | When to Read |
 |----------|---------|--------------|
 | **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)** | All backup documentation | When dealing with backups |
-| **[GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md)** | Git operation safety | Before EVERY commit |
-| **[SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md)** | HIPAA compliance, PHI handling | When handling PHI |
-| **[WORKSPACE-BACKUP-ARCHITECTURE.md](WORKSPACE-BACKUP-ARCHITECTURE.md)** | 6-layer backup system design | Understanding backup strategy |
+| **[docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md)** | Git operation safety | Before EVERY commit |
+| **[docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)** | HIPAA compliance, PHI handling | When handling PHI |
+| **[docs/architecture/workspace-backup-architecture.md](docs/architecture/workspace-backup-architecture.md)** | 6-layer backup system design | Understanding backup strategy |
 
 ### Architecture & Standards
 
@@ -57,6 +108,8 @@
 | **[WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md)** | Workspace standards, constitution | Following best practices |
 | **[MCP_ECOSYSTEM.md](MCP_ECOSYSTEM.md)** | Complete MCP catalog | Using MCPs |
 | **[WORKFLOW_PLAYBOOK.md](WORKFLOW_PLAYBOOK.md)** | How we do things | Standard procedures |
+| **[docs/reference/configuration-guide.md](docs/reference/configuration-guide.md)** | Complete configuration reference | Setting up systems |
+| **[docs/reference/health-check-quick-reference.md](docs/reference/health-check-quick-reference.md)** | System health monitoring | Checking system status |
 
 ---
 
@@ -101,15 +154,14 @@ git status && git log --oneline -5
 ### Security & Compliance
 
 **Primary Guides**:
-- **[SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md)** - HIPAA compliance, credential management
-- **[GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md)** - Pre-commit safety checklist
-- **[GIT-SAFETY-ENFORCEMENT.md](GIT-SAFETY-ENFORCEMENT.md)** - Automated safety enforcement
-- **[SAFE-PRODUCTION-TESTING-GUIDE.md](SAFE-PRODUCTION-TESTING-GUIDE.md)** - Testing without breaking production
+- **[docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)** - HIPAA compliance, credential management
+- **[docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md)** - Pre-commit safety checklist
+- **[docs/guides/git-safety-enforcement.md](docs/guides/git-safety-enforcement.md)** - Automated safety enforcement
+- **[docs/guides/safe-production-testing-guide.md](docs/guides/safe-production-testing-guide.md)** - Testing without breaking production
+- **[docs/guides/testing-guide.md](docs/guides/testing-guide.md)** - Comprehensive testing guide
 
 **PHI Handling**:
 - **[START_HERE.md](START_HERE.md)** - PHI rules and AI responsibilities
-- **[docs/HIPAA-COMPLIANCE-GUIDE.md](docs/HIPAA-COMPLIANCE-GUIDE.md)** - Full HIPAA guide
-- **[docs/PHI-GUARD-README.md](docs/PHI-GUARD-README.md)** - Automated PHI detection
 
 **Tools**:
 ```bash
@@ -124,6 +176,7 @@ mcp__security-compliance-mcp__scan_for_phi
 
 **MCP Development**:
 - **[MCP_ECOSYSTEM.md](MCP_ECOSYSTEM.md)** - Complete catalog of 28+ MCPs
+- **[docs/MCP-DEPLOYMENT-GUIDE.md](docs/MCP-DEPLOYMENT-GUIDE.md)** - MCP deployment procedures
 - **[templates-and-patterns/MCP-DEVELOPMENT-STANDARD.md](templates-and-patterns/MCP-DEVELOPMENT-STANDARD.md)** - MANDATORY development standard
 - **[templates-and-patterns/mcp-server-templates/](templates-and-patterns/mcp-server-templates/)** - 24 drop-in templates
 
@@ -131,14 +184,15 @@ mcp__security-compliance-mcp__scan_for_phi
 - **[WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md)** - Workspace constitution and standards
 - **[STANDARDS_ENFORCEMENT_SYSTEM.md](STANDARDS_ENFORCEMENT_SYSTEM.md)** - Quality enforcement
 - **[docs/TEMPLATE_MANAGEMENT.md](docs/TEMPLATE_MANAGEMENT.md)** - Template versioning
+- **[docs/PLATFORM_CONTENT_GUIDE.md](docs/PLATFORM_CONTENT_GUIDE.md)** - Platform content standards
 
 ---
 
 ### Configuration & Setup
 
 **Primary Guides**:
-- **[CONFIGURATION-GUIDE.md](CONFIGURATION-GUIDE.md)** - Complete configuration reference
-- **[HEALTH-CHECK-QUICK-REFERENCE.md](HEALTH-CHECK-QUICK-REFERENCE.md)** - System health monitoring
+- **[docs/reference/configuration-guide.md](docs/reference/configuration-guide.md)** - Complete configuration reference
+- **[docs/reference/health-check-quick-reference.md](docs/reference/health-check-quick-reference.md)** - System health monitoring
 
 **Workspace Setup**:
 - **[docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md](docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md)** - Setup troubleshooting
@@ -146,7 +200,6 @@ mcp__security-compliance-mcp__scan_for_phi
 
 **Google Workspace**:
 - **[google-workspace-oauth-setup/](google-workspace-oauth-setup/)** - OAuth and service account setup
-- **[docs/LEARNING-OPTIMIZER-SETUP.md](docs/LEARNING-OPTIMIZER-SETUP.md)** - Learning optimizer configuration
 
 ---
 
@@ -166,19 +219,37 @@ mcp__security-compliance-mcp__scan_for_phi
 
 ---
 
+### Implementation Projects
+
+**Overview**: **[Implementation Projects/README.md](Implementation%20Projects/README.md)** - All active and completed projects
+
+**Google Sheets Version Control** (Production Ready):
+- **[README.md](Implementation%20Projects/google-sheets-version-control/README.md)** - Project overview
+- **Reports**: `Implementation Projects/google-sheets-version-control/docs/reports/`
+  - Implementation summaries, audit reports, completion summaries
+- **Guides**: `Implementation Projects/google-sheets-version-control/docs/guides/`
+  - Setup instructions, how-to guides, troubleshooting
+- **Deployment**: `Implementation Projects/google-sheets-version-control/docs/deployment/`
+  - Deployment procedures, transition guides, quick deploy references
+
+**Workspace Management Consolidation** (Ready to Start):
+- **[README.md](Implementation%20Projects/workspace-management-consolidation/README.md)** - Project plan
+- **[PROJECT-PLAN.md](Implementation%20Projects/workspace-management-consolidation/PROJECT-PLAN.md)** - Detailed implementation plan
+
+---
+
 ### Specialized Documentation
 
 **Team Onboarding**:
-- **[docs/TEAM-ONBOARDING.md](docs/TEAM-ONBOARDING.md)** - New team member guide
 - **[SYNC-INSTRUCTIONS-FOR-YOSHI.md](SYNC-INSTRUCTIONS-FOR-YOSHI.md)** - AI-to-AI workspace sync
 
-**System Visualization**:
-- **[docs/SYSTEM-VISUALIZATION.md](docs/SYSTEM-VISUALIZATION.md)** - Architecture diagrams
-- **[WORKSPACE-BACKUP-ARCHITECTURE.md](WORKSPACE-BACKUP-ARCHITECTURE.md)** - Backup system diagrams
+**System Architecture**:
+- **[docs/architecture/workspace-backup-architecture.md](docs/architecture/workspace-backup-architecture.md)** - Backup system diagrams and architecture
+- **[WORKSPACE_ARCHITECTURE.md](WORKSPACE_ARCHITECTURE.md)** - Complete technical architecture
 
-**Compliance**:
-- **[docs/HIPAA-COMPLIANCE-GUIDE.md](docs/HIPAA-COMPLIANCE-GUIDE.md)** - Full HIPAA compliance guide
-- **[docs/HIPAA-COMPLIANCE-DATA-BOUNDARY.md](docs/HIPAA-COMPLIANCE-DATA-BOUNDARY.md)** - Data boundary definitions
+**Workflows & Maintenance**:
+- **[docs/WORKFLOW-MAINTENANCE-CHECKLIST.md](docs/WORKFLOW-MAINTENANCE-CHECKLIST.md)** - Workflow maintenance procedures
+- **[docs/WORKSPACE-HEALTH-CHECK.md](docs/WORKSPACE-HEALTH-CHECK.md)** - System health check procedures
 
 ---
 
@@ -193,12 +264,18 @@ mcp__security-compliance-mcp__scan_for_phi
 ### "I need to understand how the system works"
 1. Go to **[SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md)** for complete inventory
 2. Go to **[WORKSPACE_ARCHITECTURE.md](WORKSPACE_ARCHITECTURE.md)** for technical details
-3. Check component-specific README files in project directories
+3. Check project-specific documentation in `Implementation Projects/[project-name]/`
 
 ### "I need to follow a standard procedure"
 1. Go to **[WORKFLOW_PLAYBOOK.md](WORKFLOW_PLAYBOOK.md)** for workflows
 2. Check **[WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md)** for standards
 3. Review checklists in relevant troubleshooting guides
+
+### "I need to work on an implementation project"
+1. Go to **[Implementation Projects/README.md](Implementation%20Projects/README.md)** for project overview
+2. Read project-specific README: `Implementation Projects/[project-name]/README.md`
+3. Check project documentation: `Implementation Projects/[project-name]/docs/`
+4. Review reports, guides, or deployment procedures as needed
 
 ### "I encountered an error"
 1. Search **[docs/troubleshooting/](docs/troubleshooting/)** for similar symptoms
@@ -208,7 +285,7 @@ mcp__security-compliance-mcp__scan_for_phi
 
 ### "I'm working with PHI"
 1. **STOP** - Verify you're Gemini (not Claude Code)
-2. Read **[SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md)**
+2. Read **[docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)**
 3. Initialize audit logging
 4. Follow PHI handling rules in **[START_HERE.md](START_HERE.md)**
 
@@ -230,25 +307,32 @@ medical-patient-data/
 ├── BACKUP-DOCUMENTATION-INDEX.md       # All backup docs
 ├── SYSTEM-COMPONENTS.md                # System inventory
 ├── EVENT_LOG.md                        # Recent changes
-├── WORKSPACE-BACKUP-ARCHITECTURE.md    # Backup system design
-├── CONFIGURATION-GUIDE.md              # Configuration reference
-├── SECURITY_BEST_PRACTICES.md          # Security & HIPAA
-├── GIT-SAFETY-CHECKLIST.md             # Git safety
-└── [other operational guides]
 ```
 
 ### docs/ Directory (Organized by Topic)
 ```
 docs/
-├── troubleshooting/
-│   ├── BACKUP-SYSTEM-TROUBLESHOOTING.md   ⭐ Master backup guide
-│   ├── WORKSPACE-SETUP-ISSUES.md
-│   └── WORKSPACE-SYNC-ISSUES.md
-├── HIPAA-COMPLIANCE-GUIDE.md
-├── PHI-GUARD-README.md
-├── TEAM-ONBOARDING.md
-├── SYSTEM-VISUALIZATION.md
-└── [other specialized docs]
+├── troubleshooting/                       # All troubleshooting guides
+│   ├── BACKUP-SYSTEM-TROUBLESHOOTING.md   ⭐ Master backup guide (all 6 layers)
+│   ├── WORKSPACE-SETUP-ISSUES.md          # Initial setup problems
+│   └── WORKSPACE-SYNC-ISSUES.md           # Cross-workspace sync issues
+├── guides/                                # Operational guides
+│   ├── git-safety-checklist.md            # Pre-commit safety
+│   ├── git-safety-enforcement.md          # Automated safety
+│   ├── safe-production-testing-guide.md   # Testing procedures
+│   ├── security-best-practices.md         # HIPAA & security
+│   └── testing-guide.md                   # Comprehensive testing
+├── reference/                             # Reference documentation
+│   ├── configuration-guide.md             # System configuration
+│   └── health-check-quick-reference.md    # Health monitoring
+├── architecture/                          # Architecture documents
+│   └── workspace-backup-architecture.md   # Backup system design
+├── GIT-COMMIT-SAFETY-CHECKLIST.md        # Legacy location (to be moved)
+├── MCP-DEPLOYMENT-GUIDE.md               # MCP deployment
+├── PLATFORM_CONTENT_GUIDE.md             # Content standards
+├── TEMPLATE_MANAGEMENT.md                # Template versioning
+├── WORKFLOW-MAINTENANCE-CHECKLIST.md     # Workflow maintenance
+└── WORKSPACE-HEALTH-CHECK.md             # Health check procedures
 ```
 
 ### Symlinked Documentation (Shared Across Workspaces)
@@ -261,15 +345,32 @@ Symlinks to operations-workspace:
 └── STANDARDS_ENFORCEMENT_SYSTEM.md
 ```
 
-### System-Specific Documentation
+### Implementation Projects Documentation
 ```
-Project directories contain:
-├── Implementation Projects/
-│   └── google-sheets-version-control/
-│       ├── TROUBLESHOOTING.md          # Google Sheets specific
-│       ├── IMPLEMENTATION-SUMMARY.md
-│       └── docs/
-└── [other project directories with README.md files]
+Implementation Projects/
+├── README.md                           # Projects overview & standards
+├── google-sheets-version-control/
+│   ├── README.md                       # Project overview
+│   └── docs/
+│       ├── reports/                    # Implementation summaries & audits
+│       │   ├── IMPLEMENTATION-SUMMARY.md
+│       │   ├── DEV3-DEV4-COMPLETE-SUMMARY.md
+│       │   ├── PARITY-AUDIT-REPORT.md
+│       │   ├── AUTONOMOUS-DEPLOYMENT-SUMMARY.md
+│       │   └── [other summaries]
+│       ├── guides/                     # Setup & configuration
+│       │   ├── HOW-TO-ADD-237-SHEETS.md
+│       │   ├── API-ENABLEMENT-INSTRUCTIONS.md
+│       │   └── [other guides]
+│       └── deployment/                 # Deployment procedures
+│           ├── PRODUCTION-DEPLOYMENT-TRANSITION.md
+│           ├── QUICK-DEPLOY-ALVARO.md
+│           └── WEBHOOK-DEPLOYMENT-GUIDE.md
+├── workspace-management-consolidation/
+│   ├── README.md
+│   └── PROJECT-PLAN.md
+└── ai-task-tracker/
+    └── [project files]
 ```
 
 ---
@@ -414,7 +515,7 @@ When adding any new documentation, system component, or resource, you **MUST** u
 **Questions about**:
 - **Workspace setup**: [docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md](docs/troubleshooting/WORKSPACE-SETUP-ISSUES.md)
 - **Backups**: [BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)
-- **Security**: [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md)
+- **Security**: [docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)
 - **MCPs**: [MCP_ECOSYSTEM.md](MCP_ECOSYSTEM.md)
 - **Standards**: [WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md)
 

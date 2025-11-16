@@ -2,7 +2,7 @@
 
 **Quick Navigation**: [START_HERE.md](START_HERE.md) | [DOCUMENTATION-INDEX.md](DOCUMENTATION-INDEX.md) | [EVENT_LOG.md](EVENT_LOG.md)
 
-**Critical Guides**: [BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md) | [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md) | [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md)
+**Critical Guides**: [BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md) | [Security Best Practices](docs/guides/security-best-practices.md) | [Git Safety Checklist](docs/guides/git-safety-checklist.md)
 
 ---
 
@@ -35,9 +35,16 @@
 ```
 medical-patient-data/
 ├── Implementation Projects/           # Active development projects
-│   ├── google-sheets-version-control/
-│   ├── google-workspace-automation-infrastructure/
-│   └── patient-workflow-automation/
+│   ├── README.md                      # Implementation projects overview
+│   ├── google-sheets-version-control/ # Apps Script version control (production)
+│   │   ├── docs/                      # Project documentation
+│   │   │   ├── reports/               # Implementation summaries & audits
+│   │   │   ├── guides/                # Setup & configuration guides
+│   │   │   └── deployment/            # Deployment procedures
+│   │   ├── production-sheets/         # 237 production sheets
+│   │   └── scripts/                   # Automation scripts
+│   ├── workspace-management-consolidation/  # Documentation organization
+│   └── ai-task-tracker/               # AI task tracking
 │
 ├── workspace-management/              # Cross-workspace documentation
 │   ├── HIPAA-COMPLIANCE-BOUNDARIES.md
@@ -137,20 +144,28 @@ cat .ai-planning/project-state.json
 
 ## 📊 Active Projects
 
+See **[Implementation Projects/README.md](Implementation%20Projects/README.md)** for complete project details and documentation standards.
+
 ### 1. Google Sheets Version Control
-**Status**: Active
+**Status**: Production Ready
 **Location**: `Implementation Projects/google-sheets-version-control/`
-**Purpose**: Automated snapshot system for 400+ Apps Script projects
+**Purpose**: Version control, deployment automation, and safety mechanisms for ~237 production Google Sheets
+**Documentation**:
+- Project overview: `google-sheets-version-control/README.md`
+- Reports: `google-sheets-version-control/docs/reports/`
+- Guides: `google-sheets-version-control/docs/guides/`
+- Deployment: `google-sheets-version-control/docs/deployment/`
 
-### 2. Google Workspace Automation Infrastructure
-**Status**: Setup in progress
-**Location**: `google-workspace-oauth-setup/`
-**Purpose**: OAuth authentication and domain-wide delegation
+### 2. Workspace Management Consolidation
+**Status**: Ready to Start
+**Location**: `Implementation Projects/workspace-management-consolidation/`
+**Purpose**: Streamline workspace documentation, eliminate redundancy, create clear hierarchy
+**Documentation**: See `workspace-management-consolidation/README.md` and `PROJECT-PLAN.md`
 
-### 3. Patient Workflow Automation
-**Status**: Planning
-**Location**: `Implementation Projects/patient-workflow-automation/`
-**Purpose**: Clinical automation workflows (future Gemini integration)
+### 3. AI Task Tracker
+**Status**: Active Development
+**Location**: `Implementation Projects/ai-task-tracker/`
+**Purpose**: AI-powered task tracking and workflow automation
 
 ---
 
@@ -161,13 +176,13 @@ cat .ai-planning/project-state.json
 - ✅ `.gitignore` configured to block PHI files
 - ✅ Google BAA covers Gemini API and Drive
 - ✅ Audit logging for all PHI operations
-- 📖 Full guide: [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md)
+- 📖 Full guide: [docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)
 
 ### Git Safety
-- ⚠️ **ALWAYS** read [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) before git operations
+- ⚠️ **ALWAYS** read [docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md) before git operations
 - 🔒 Pre-commit hooks prevent large files, secrets, PHI
 - 🔄 Automated backups via GitHub workflows
-- 📖 Full guide: [GIT-SAFETY-ENFORCEMENT.md](GIT-SAFETY-ENFORCEMENT.md)
+- 📖 Full guide: [docs/guides/git-safety-enforcement.md](docs/guides/git-safety-enforcement.md)
 
 ### Credentials Management
 - Service account key: `configuration/service-accounts/`
@@ -215,15 +230,15 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 ### Critical Operational Guides
 - **[BACKUP-DOCUMENTATION-INDEX.md](BACKUP-DOCUMENTATION-INDEX.md)** ⭐ - All backup system documentation
 - **[docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md](docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md)** ⭐ - Master backup troubleshooting (all 6 layers)
-- [SECURITY_BEST_PRACTICES.md](SECURITY_BEST_PRACTICES.md) - HIPAA compliance
-- [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) - Git operation safety
-- [WORKSPACE-BACKUP-ARCHITECTURE.md](WORKSPACE-BACKUP-ARCHITECTURE.md) - 6-layer backup system design
+- [docs/guides/security-best-practices.md](docs/guides/security-best-practices.md) - HIPAA compliance
+- [docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md) - Git operation safety
+- [docs/architecture/workspace-backup-architecture.md](docs/architecture/workspace-backup-architecture.md) - 6-layer backup system design
 
 ### Workspace-Specific
 - [START_HERE.md](START_HERE.md) - First-time orientation
 - [EVENT_LOG.md](EVENT_LOG.md) - Recent changes
 - [SYSTEM-COMPONENTS.md](SYSTEM-COMPONENTS.md) - Complete system inventory
-- [CONFIGURATION-GUIDE.md](CONFIGURATION-GUIDE.md) - Configuration reference
+- [docs/reference/configuration-guide.md](docs/reference/configuration-guide.md) - Configuration reference
 
 ### Cross-Workspace (via workspace-management/)
 - [WORKSPACE_GUIDE.md](WORKSPACE_GUIDE.md) - Standards and constitution
@@ -262,7 +277,7 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 
 ### PHI Accidentally Committed
 1. **STOP** - Don't push to GitHub
-2. Follow [GIT-SAFETY-CHECKLIST.md](GIT-SAFETY-CHECKLIST.md) recovery steps
+2. Follow [docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md) recovery steps
 3. Use `git reset` to undo commit
 4. Scan with `mcp__security-compliance-mcp__scan_for_phi`
 
@@ -304,6 +319,6 @@ All MCPs registered via `~/.claude.json` from `mcp-infrastructure/`:
 
 ---
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2025-11-16
 **Workspace Version**: 3.0 (Three-Workspace Architecture)
 **HIPAA Compliance**: Active (Google BAA in place)
