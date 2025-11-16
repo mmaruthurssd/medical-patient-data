@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+
+  <p style="font-size:12px;">
+    <?= message ?>
+  </p>
+
+  <? if (providerStats.length > 0) { ?>
+  <h4><u><span>Provider Metrics</span></u></h4>
+  <div>
+    <!-- Only top & bottom border for the table + 12px font -->
+    <table
+      style="width:40%; border-collapse:collapse; border-top:1px solid grey; border-bottom:1px solid grey; font-size:12px;">
+      <thead>
+        <tr style="text-align:center;">
+          <? providerHeaders.forEach(element => { ?>
+          <th style="border-bottom:1px solid grey; padding:5px;">
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? providerStats.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td style="border-bottom:1px solid grey; padding:5px;">
+            <?= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+
+        <? providerStatsAvg3.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td style="border-bottom:1px solid grey; padding:5px;">
+            <?= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <? } ?>
+
+
+  <? if (benchmarksStats.length > 0) { ?>
+  <h4><u><span>Benchmarks Metrics</span></u></h4>
+  <div>
+    <table
+      style="width:40%; border-collapse:collapse; border-top:1px solid grey; border-bottom:1px solid grey; font-size:12px;">
+      <thead>
+        <tr style="text-align:center;">
+          <? benchmarksHeaders.forEach(element => { ?>
+          <th style="border-bottom:1px solid grey; padding:5px;">
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? benchmarksStats.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td style="border-bottom:1px solid grey; padding:5px;">
+            <?= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <? } ?>
+
+</body>
+
+</html>

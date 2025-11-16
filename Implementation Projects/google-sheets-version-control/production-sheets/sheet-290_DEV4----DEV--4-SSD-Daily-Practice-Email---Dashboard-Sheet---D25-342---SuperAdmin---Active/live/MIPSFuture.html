@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <style>
+    table,
+    th,
+    td {
+
+      border-collapse: collapse;
+
+    }
+
+    tr {
+      border-bottom: 1px solid black;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h3>UPCOMING MIPS VISITS WITH FUTURE APPT</h3>
+
+  <? if(sheet1Data.length>0) { ?>
+
+  <h4>Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention (
+    <?= sheet1Count ?>)
+  </h4>
+
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet1Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+  <? } ?>
+
+
+
+
+
+  <!-- <? if(sheet2Data.length>0) { ?>
+
+  <h4>Melanoma: Continuity of Care - Recall System (
+    <?= sheet2Count ?>)
+  </h4>
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet2Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+
+  <? } ?> -->
+
+
+
+
+
+
+
+
+  <? if(sheet3Data.length>0) { ?>
+
+  <h4>Clinical Response to Systemic Medications (
+    <?= sheet3Count ?>)
+  </h4>
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet3Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+  <? } ?>
+
+
+
+
+  <? if(sheet4Data.length>0) { ?>
+
+  <h4>Immunizations for Adolescents (
+    <?= sheet4Count ?>)
+  </h4>
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet4Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+  <? } ?>
+
+
+
+
+  <? if(sheet5Data.length>0) { ?>
+
+  <h4>Dermatitis: Improvement in Patient-Reported Itch Severity (
+    <?= sheet5Count ?>)
+  </h4>
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet5Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+  <? } ?>
+
+
+
+
+
+  <? if(sheet6Data.length>0) { ?>
+
+  <h4>Psoriasis: Improvement in Patient-Reported Itch Severity (
+    <?= sheet6Count ?>)
+  </h4>
+
+  <div>
+    <table style="width:60%;">
+      <thead>
+        <tr style="text-align:center;">
+          <? sheetHeaders.forEach(element => { ?>
+          <th>
+            <?= element ?>
+          </th>
+          <? }) ?>
+        </tr>
+      </thead>
+      <tbody>
+        <? sheet6Data.forEach(row => { ?>
+        <tr style="text-align:center;">
+          <? row.forEach(element => { ?>
+          <td>
+            <?!= element ?>
+          </td>
+          <? }) ?>
+        </tr>
+        <? }) ?>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+
+  <? } ?>
+
+
+
+</body>
+
+</html>

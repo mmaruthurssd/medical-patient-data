@@ -1,0 +1,13 @@
+{
+  "timeZone": "Asia/Karachi",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "vertexAIconfigLib",
+      "libraryId": "1hj_U34JdZAQjQ_7ykp0E4R40gBui7CPb7CccBIzhFVaas111-xhoRvgp",
+      "version": "0",
+      "developmentMode": true
+    }]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

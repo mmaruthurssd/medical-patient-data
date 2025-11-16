@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <style>
+    table,
+    th,
+    td {
+
+      border-collapse: collapse;
+
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div>
+    <p>Below is a preview  of your paycheck for the current pay period.  This is NOT your final paycheck.  Whatever hours you log before the last day of the pay period will be added to your paycheck.  Please reply to the email with any errors that you see.  Thanks!</p><br>
+
+  <div style="max-width: 500px; text-align: center; ">
+
+
+    <!-- <div>
+      <img src="cid:logo" alt="SSD logo" width="450" height="150">
+    </div>
+    <br>
+    <br> -->
+
+    <div>
+      <table align='center' style="width:100%;">
+        <thead>
+
+        </thead>
+        <tbody>
+          <!-- font-weight:bold #2276bc -->
+
+          <? invoiceHeaders.forEach(element => { ?>
+          <tr style="align:center;">
+            <td style="font-weight:bold; color:#2077bf;">
+              <?= element[0] ?>
+            </td>
+            <td style="font-weight:bold;">
+              <?= element[1] ?>
+            </td>
+          </tr>
+          <? }) ?>
+
+
+
+
+        </tbody>
+      </table>
+    </div>
+    <br>
+
+
+
+    <div>
+      <table align='center' style="width:100%;">
+        <thead>
+          <tr>
+            <th style="background-color:#2276bc; font-weight:bold; color:#FFFFFF; text-align:left;">Gross Pay</th>
+            <th style="background-color:#2276bc; font-weight:bold; color:#ffcf01; text-align:right;">
+              <?= invoiceTotal ?>
+            </th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <!-- font-weight:bold #2276bc -->
+
+          <? allDetails.forEach((element, index) => { ?>
+          <?!=rowColor[index] ?>
+          <td style="text-align:left;">
+            <?= element[0] ?>
+          </td>
+          <td style="text-align:right;">
+            <?= element[1] ?>
+          </td>
+          </tr>
+
+          <? }) ?>
+
+
+        </tbody>
+      </table>
+    </div>
+    <br>
+
+
+
+
+
+
+
+
+    <? if(travelDates.length>0) { ?>
+    <h4 style="color:#FFAE42"><u>Travel Details</u></h4>
+
+
+
+
+    <div>
+      <table align='center' style="width:100%;">
+        <thead>
+          <tr>
+            <th style="background-color:#2276bc; font-weight:bold; color:#FFFFFF; text-align:left;"></th>
+            <th style="background-color:#2276bc; font-weight:bold; color:#ffcf01; text-align:right;"></th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <!-- font-weight:bold #2276bc -->
+
+          <? providerTravelCounts.forEach((element, index) => { ?>
+          <?!=rowColor[index] ?>
+          <td style="text-align:left;">
+            <?= element[0] ?>
+          </td>
+          <td style="text-align:right;">
+            <?= element[1] ?>
+          </td>
+          </tr>
+
+          <? }) ?>
+
+
+        </tbody>
+      </table>
+    </div>
+    <br>
+
+
+
+
+
+
+
+
+    <div>
+      <table align='center' style="width:100%;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #96D4D4; border-collapse: collapse;" scope='col'>Week</th>
+            <th style="border: 1px solid #96D4D4; border-collapse: collapse;" scope='col'>Day</th>
+            <th style="border: 1px solid #96D4D4; border-collapse: collapse;" scope='col'>Date</th>
+            <th style="border: 1px solid #96D4D4; border-collapse: collapse;" scope='col'>Location</th>
+            <th style="border: 1px solid #96D4D4; border-collapse: collapse;" scope='col'>Amount</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <!-- font-weight:bold -->
+          <? travelDates.forEach((row, index) => { ?>
+          <tr style="text-align:center;">
+            <? row.forEach((element, i) => { ?>
+            <?!=travelColors[index][i] ?>
+            <?= element ?>
+            </td>
+            <? }) ?>
+          </tr>
+          <? }) ?>
+
+
+        </tbody>
+      </table>
+    </div>
+    <br>
+
+    <? } ?>
+
+
+  </div>
+  </div>
+</body>
+
+</html>
