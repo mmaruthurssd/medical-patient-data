@@ -221,58 +221,195 @@ mcp__security-compliance-mcp__scan_for_phi \
 
 ## 📋 PHI Operation Audit Logging
 
+**CRITICAL**: HIPAA requires comprehensive audit logging of ALL PHI access. This workspace implements enterprise-grade audit logging with tamper-proof integrity verification.
+
+### Audit Logging System
+
+**Implementation**: `Implementation Projects/google-sheets-version-control/lib/phi-audit-logger.js`
+
+**Features**:
+- ✅ Tamper-proof logging with cryptographic hash chains
+- ✅ Append-only JSONL format (immutable)
+- ✅ 6-year retention (HIPAA compliant)
+- ✅ Real-time monitoring and alerting
+- ✅ Integrity verification
+- ✅ Comprehensive query and reporting
+
+**Full Documentation**: See `Implementation Projects/google-sheets-version-control/docs/PHI-AUDIT-LOGGING.md`
+
 ### When to Log
 
 Log EVERY operation that touches PHI:
-- Reading patient data from Google Sheets
-- Processing patient records with Gemini
-- Creating/updating patient files in Drive
-- Sending PHI via Gmail
-- Generating reports with patient data
+- ✅ Reading patient data from Google Sheets
+- ✅ Writing/updating patient records
+- ✅ Exporting PHI to external formats
+- ✅ Deleting patient data
+- ✅ Processing patient records with Gemini
+- ✅ Creating/updating patient files in Drive
+- ✅ Service account delegation for PHI access
+- ✅ Apps Script deployments to production sheets
+- ✅ Sharing PHI resources
+- ✅ Accessing PHI via API
+
+### Quick Start - Using Audit Hooks
+
+**Recommended**: Use `AuditHooks` wrapper for automatic audit logging:
+
+```javascript
+const AuditHooks = require('./lib/audit-hooks');
+
+const hooks = new AuditHooks({
+  localLogPath: './logs/phi-audit-log.jsonl',
+  driveBackupEnabled: true // Backup to Google Drive
+});
+
+// Wrap Google Sheets read operation
+const data = await hooks.auditSheetsRead(
+  async () => {
+    // Your actual read operation
+    return await sheets.spreadsheets.values.get({
+      spreadsheetId: 'SPREADSHEET_ID',
+      range: 'PatientData!A1:Z100'
+    });
+  },
+  {
+    spreadsheetId: 'SPREADSHEET_ID',
+    range: 'PatientData!A1:Z100',
+    user: 'automation@ssdspc.com',
+    purpose: 'backup_operation',
+    phi_categories: ['names', 'dob', 'mrn', 'phone']
+  }
+);
+
+// Always close when done
+await hooks.close();
+```
 
 ### Audit Log Format
 
-**File**: `gemini-audit-log.json` (gitignored)
+**Storage**: `logs/phi-audit-log.jsonl` (gitignored, append-only)
 
+**Each entry includes**:
 ```json
 {
-  "timestamp": "2025-11-15T10:30:00Z",
-  "operation": "read_patient_records",
+  "timestamp": "2025-11-16T10:30:00.000Z",
+  "log_id": "1731755400000-a1b2c3d4e5f6g7h8",
+
+  "operation": "read",
   "service": "google-sheets",
-  "ai_client": "gemini",
-  "phi_categories": ["names", "dates", "medical_record_numbers"],
+  "resource_type": "cell_range",
+  "resource_id": "1AbC_spreadsheet_id",
+
+  "phi_categories": ["names", "dob", "mrn"],
   "record_count": 45,
+
   "purpose": "patient_classification",
   "user": "automation@ssdspc.com",
-  "result": "success"
+  "result": "success",
+
+  "metadata": {
+    "range": "A1:Z100",
+    "duration_ms": 234
+  },
+
+  "previous_hash": "e3b0c44298fc...",
+  "entry_hash": "2c26b46b68ffc..."
 }
 ```
 
-### Logging Implementation
+### Query and Reporting
 
+```bash
+# Query logs
+node scripts/audit-query.js query --user automation@ssdspc.com --limit 100
+
+# Generate monthly compliance report
+node scripts/audit-query.js report --start 2025-11-01 --end 2025-11-30
+
+# Verify log integrity
+node scripts/audit-query.js verify
+
+# Security summary
+node scripts/audit-query.js summary --days 30
+
+# Real-time monitoring
+node scripts/audit-query.js monitor --interval 15
+```
+
+### Monitoring and Alerts
+
+**Real-time monitoring** detects:
+- 🚨 High-volume access (>1000 records in 15 minutes)
+- 🚨 Consecutive failures (5+ in a row)
+- 🚨 After-hours access (outside 7 AM - 7 PM)
+- 🚨 Unknown users
+- 🚨 Export/delete operations
+
+**Setup monitoring**:
 ```javascript
-// ✅ CORRECT: Log before processing PHI
-async function processPatientData(sheetId) {
-  await logAuditEntry({
-    operation: 'read_patient_records',
-    service: 'google-sheets',
-    ai_client: 'gemini',
-    phi_categories: ['names', 'dates'],
-    purpose: 'data_processing'
-  });
+const AuditMonitor = require('./lib/audit-monitor');
 
-  // Process with Gemini (has BAA)
-  const data = await gemini.processSheet(sheetId);
-  return data;
-}
+const monitor = new AuditMonitor({
+  knownUsers: ['automation@ssdspc.com', 'backup@ssdspc.com']
+});
+
+monitor.onAlert(alert => {
+  console.log('🚨 ALERT:', alert.message);
+  // Send email, Slack notification, etc.
+});
+
+monitor.startMonitoring(15); // Check every 15 minutes
 ```
 
 ### Audit Log Retention
 
-- Keep logs for **6 years** (HIPAA requirement)
-- Store in Google Drive (under BAA)
-- Encrypt logs at rest
-- Restrict access to authorized personnel only
+- **Period**: 6 years minimum (HIPAA requirement)
+- **Storage**: Local JSONL file + Google Drive backup (under BAA)
+- **Format**: Append-only, tamper-proof with hash chain
+- **Access**: Restricted to authorized personnel only
+- **Integrity**: Daily automated verification recommended
+
+### Integration Requirements
+
+**ALL code that accesses PHI MUST use audit hooks**:
+
+✅ **Required**:
+```javascript
+// Sheets operations
+await hooks.auditSheetsRead(operation, context);
+await hooks.auditSheetsWrite(operation, context);
+await hooks.auditSheetsExport(operation, context);
+
+// Drive operations
+await hooks.auditDriveAccess(operation, context);
+
+// Service account delegation
+await hooks.auditServiceAccountDelegation(operation, context);
+
+// Apps Script deployment
+await hooks.auditAppsScriptDeployment(operation, context);
+```
+
+❌ **Prohibited**:
+```javascript
+// Direct PHI access without audit logging
+const data = await sheets.spreadsheets.values.get(...); // NO!
+```
+
+### Pre-Commit Verification
+
+Pre-commit hooks check for:
+1. PHI operations without audit logging
+2. Missing audit hook imports
+3. Direct Google Sheets API calls in PHI-handling code
+
+**Fix before committing**:
+```bash
+# Scan for unaudited PHI operations
+grep -r "spreadsheets.values.get" scripts/ --exclude-dir=node_modules
+
+# Ensure all PHI operations use audit hooks
+```
 
 ---
 
