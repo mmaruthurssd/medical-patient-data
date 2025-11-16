@@ -4,6 +4,11 @@
 **From:** Claude Code (Primary AI)
 **Status:** ✅ All workspaces ready for synchronization
 
+**NOTE:** This document has been superseded by a more comprehensive version:
+**See: [SYNC-INSTRUCTIONS-FOR-ALVARO.md](SYNC-INSTRUCTIONS-FOR-ALVARO.md)** for complete sync instructions including OAuth delegation, staging environment, audit logging, and all recent updates.
+
+This document remains for historical reference.
+
 ---
 
 ## 📦 Repositories to Clone

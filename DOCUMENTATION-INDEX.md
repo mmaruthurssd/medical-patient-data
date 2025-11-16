@@ -100,6 +100,13 @@ This structure balances **quick access** (root) with **logical organization** (d
 | **[docs/guides/security-best-practices.md](docs/guides/security-best-practices.md)** | HIPAA compliance, PHI handling | When handling PHI |
 | **[docs/architecture/workspace-backup-architecture.md](docs/architecture/workspace-backup-architecture.md)** | 6-layer backup system design | Understanding backup strategy |
 
+### Team Collaboration & Sync
+
+| Document | Purpose | When to Read |
+|----------|---------|--------------|
+| **[SYNC-INSTRUCTIONS-FOR-ALVARO.md](SYNC-INSTRUCTIONS-FOR-ALVARO.md)** | Comprehensive sync guide for Alvaro (Yoshi) | When syncing Yoshi workspace |
+| **[SYNC-INSTRUCTIONS-FOR-YOSHI.md](SYNC-INSTRUCTIONS-FOR-YOSHI.md)** | Original sync instructions (historical) | Reference only |
+
 ### Architecture & Standards
 
 | Document | Purpose | When to Read |
