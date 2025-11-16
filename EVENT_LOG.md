@@ -15,6 +15,132 @@ last_updated: 2025-11-16
 
 ## 2025-11-16
 
+### Archive Directory Cleanup and Standardization
+**Type**: Infrastructure / Documentation
+**Author**: AI Assistant (Claude Code)
+**Impact**: Medium
+**Priority**: P2 (Medium)
+**Status**: ✅ Complete
+**Time Spent**: 1.5 hours
+
+**Implementation**:
+Reviewed and cleaned up archive directories across all three workspaces (medical-patient-data, operations-workspace, mcp-infrastructure) and established standardized archival policies.
+
+**Work Completed**:
+
+1. **Standardized Archive Structure Created**:
+   - Implemented year/month organization: `archive/YYYY/MM-month/category/`
+   - Categories: documentation, troubleshooting, workflows, code, configuration, projects
+   - Applied to medical-patient-data (fully reorganized)
+   - Documented for operations-workspace and mcp-infrastructure
+
+2. **Documentation Created**:
+   - ✅ `archive/README.md` - Complete archive overview with structure, policies, and search methods
+   - ✅ `archive/ARCHIVAL-POLICY.md` - Comprehensive 10-section policy document covering:
+     - Archival criteria and procedures
+     - Archive vs delete decision framework
+     - Metadata requirements
+     - Retention policies (6 months to 2 years by type)
+     - Compression guidelines and schedules
+     - Search and retrieval procedures
+     - Restoration procedures
+     - Quarterly review and cleanup process
+   - ✅ `archive/ARCHIVE-INDEX.md` - Searchable catalog with keywords, dates, and details
+   - ✅ `archive/2025/11-november/metadata.json` - Structured metadata for all archived items
+   - ✅ `archive/2025/11-november/README.md` - Month-level overview
+
+3. **Archive Reorganization (medical-patient-data)**:
+   - Moved `documentation-tracking/` → `2025/11-november/documentation/`
+   - Moved `troubleshooting/smart-file-organizer/` → `2025/11-november/troubleshooting/`
+   - Moved `workflows/` → `2025/11-november/workflows/`
+   - Created metadata entries for all 4 archived items
+
+4. **Cross-Workspace Consistency**:
+   - Copied archival policies to operations-workspace and mcp-infrastructure
+   - Created workspace-specific archive indexes
+   - Documented reorganization recommendations for legacy archives
+
+**Archive Statistics**:
+
+**medical-patient-data**:
+- Total size: 104KB
+- Total items: 4 directories, 9 files
+- Structure: ✅ Fully reorganized
+- Archives: Documentation (1), Troubleshooting (1), Workflows (2)
+
+**operations-workspace**:
+- Total size: ~33MB
+- Total files: ~3,454 files
+- Structure: ⚠️ Legacy (needs reorganization)
+- Archives: Completed projects, MCP development, historical artifacts, documentation
+
+**mcp-infrastructure**:
+- Total size: ~24MB
+- Total files: ~3,210 files
+- Structure: ⚠️ Partially organized (workflows dated, projects need month subdivision)
+- Archives: workspace-index-mcp-server-project, completed workflows
+
+**Archival Policies Established**:
+
+1. **Retention Periods**:
+   - Documentation: 2 years
+   - Troubleshooting: 1 year
+   - Workflows: 6 months
+   - Code: 1 year
+   - Configuration: 1 year
+   - Projects: 2 years
+
+2. **Compression Schedule**:
+   - Documentation: After 6 months
+   - Troubleshooting: After 3 months
+   - Workflows: After 1 month
+   - Code: After 6 months
+
+3. **Metadata Requirements**:
+   - Required: filename, category, archived date, original location, reason, retention period
+   - Recommended: keywords, size, related items, compression status, notes
+
+4. **Review Schedule**:
+   - Quarterly reviews (January, April, July, October)
+   - Annual policy review (November)
+
+**Key Archived Items**:
+
+1. **smart-file-organizer/** (56KB, Troubleshooting)
+   - Root cause analysis, fix plan, and fix summary
+   - Bug fix with 99.5% reliability
+   - 3,402 duplicates cleaned in mcp-infrastructure
+   - Retention: 2026-11-15
+
+2. **documentation-tracking/** (24KB, Documentation)
+   - Git Safety System documentation requirements
+   - Superseded by new DOCUMENTATION-CHECKLIST.md process
+   - Retention: 2027-11-15
+
+3. **Workflows** (24KB, 2 completed workflows)
+   - fix-workspace-backup-gcs (GCS bucket setup)
+   - fullstart-documentation-update
+   - Retention: 2026-05-16
+
+**Benefits**:
+- 📁 Consistent archive structure across all workspaces
+- 🔍 Searchable catalog with keywords and dates
+- 📋 Clear policies for archival, retention, and deletion
+- 🗜️ Compression schedule to manage storage
+- 🔄 Quarterly review process for cleanup
+- 📊 Metadata tracking for all archived items
+- 🔐 Audit trail compliance
+
+**Next Steps**:
+- Reorganize operations-workspace legacy archives (33MB)
+- Reorganize mcp-infrastructure implementation-projects by month
+- Implement first compression cycle (December 2025)
+- Conduct first quarterly review (January 2026)
+
+---
+
+## 2025-11-16
+
 ### Comprehensive Testing Documentation Created
 **Type**: Documentation / Quality Assurance
 **Author**: AI Assistant (Claude Code)

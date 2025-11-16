@@ -1,0 +1,98 @@
+{
+  "month": "11-november",
+  "year": "2025",
+  "created": "2025-11-16",
+  "lastUpdated": "2025-11-16",
+  "totalItems": 9,
+  "totalSize": "104KB",
+  "items": [
+    {
+      "filename": "documentation-tracking",
+      "type": "directory",
+      "category": "documentation",
+      "archivedDate": "2025-11-15",
+      "archivedBy": "Claude",
+      "originalLocation": "documentation-tracking/",
+      "reason": "Documentation tracking files superseded by new DOCUMENTATION-CHECKLIST.md process",
+      "retentionUntil": "2027-11-15",
+      "keywords": ["documentation", "tracking", "git safety", "system components"],
+      "size": "24KB",
+      "compressed": false,
+      "relatedItems": [],
+      "notes": "Contains DOCUMENTATION-UPDATE-NEEDED.md and DOCUMENTATION-CHECKLIST.md for Git Safety Enforcement System"
+    },
+    {
+      "filename": "smart-file-organizer",
+      "type": "directory",
+      "category": "troubleshooting",
+      "archivedDate": "2025-11-15",
+      "archivedBy": "Claude",
+      "originalLocation": "troubleshooting/smart-file-organizer/",
+      "reason": "Smart File Organizer fix completed, tested, and deployed. Issue resolved.",
+      "retentionUntil": "2026-11-15",
+      "keywords": ["smart-file-organizer", "bug fix", "git corruption", "duplicates", "macOS Finder"],
+      "size": "56KB",
+      "compressed": false,
+      "relatedItems": [
+        "SMART-FILE-ORGANIZER-ANALYSIS.md",
+        "SMART-FILE-ORGANIZER-FIX-PLAN.md",
+        "SMART-FILE-ORGANIZER-FIX-SUMMARY.md"
+      ],
+      "notes": "Comprehensive fix with 99.5%+ reliability. All tests passed. Contains root cause analysis, implementation plan, and fix summary."
+    },
+    {
+      "filename": "2025-11-16-002216-fix-workspace-backup-gcs",
+      "type": "directory",
+      "category": "workflows",
+      "archivedDate": "2025-11-16",
+      "archivedBy": "Claude",
+      "originalLocation": "temp/workflows/2025-11-16-002216-fix-workspace-backup-gcs/",
+      "reason": "Workflow completed successfully. GCS bucket created and configured, backups working.",
+      "retentionUntil": "2026-05-16",
+      "keywords": ["workflow", "GCS", "backup", "workspace", "Google Cloud"],
+      "size": "12KB",
+      "compressed": false,
+      "workflowType": "task-executor",
+      "workflowStatus": "completed",
+      "totalTasks": 7,
+      "completedTasks": 7,
+      "duration": "8 minutes",
+      "relatedItems": ["state.json", "plan.md"],
+      "notes": "Successfully created gs://ssd-workspace-backups-immutable/ bucket with versioning, retention policy, and service account permissions. Workflow tested and verified."
+    },
+    {
+      "filename": "2025-11-16-235129-fullstart-documentation-update",
+      "type": "directory",
+      "category": "workflows",
+      "archivedDate": "2025-11-16",
+      "archivedBy": "Claude",
+      "originalLocation": "temp/workflows/2025-11-16-235129-fullstart-documentation-update/",
+      "reason": "Workflow completed. Documentation updates applied.",
+      "retentionUntil": "2026-05-16",
+      "keywords": ["workflow", "documentation", "updates"],
+      "size": "12KB",
+      "compressed": false,
+      "workflowType": "task-executor",
+      "workflowStatus": "completed",
+      "relatedItems": ["state.json", "plan.md"],
+      "notes": "Documentation update workflow for fullstart process."
+    }
+  ],
+  "statistics": {
+    "byCategory": {
+      "documentation": 1,
+      "troubleshooting": 1,
+      "workflows": 2
+    },
+    "byType": {
+      "directory": 4
+    },
+    "compressed": 0,
+    "uncompressed": 4
+  },
+  "compressionSchedule": {
+    "documentation-tracking": "2026-05-15",
+    "smart-file-organizer": "2026-02-15",
+    "workflows": "2025-12-16"
+  }
+}
