@@ -278,6 +278,72 @@ fi
 
 echo ""
 
+# 10. Background Process Health
+echo "─────────────────────────────────────────────────────────────────"
+echo "10. BACKGROUND PROCESS HEALTH"
+echo "─────────────────────────────────────────────────────────────────"
+
+# Count MCP server processes
+MCP_COUNT=$(ps aux | grep -E "node.*mcp.*dist/(index|server)\.js" | grep -v grep | wc -l | tr -d ' ')
+EXPECTED_MCP_COUNT=26  # Expected based on registered MCPs
+
+echo "   MCP Servers: $MCP_COUNT running"
+
+if [ "$MCP_COUNT" -eq "$EXPECTED_MCP_COUNT" ]; then
+    echo "✅ MCP process count correct ($MCP_COUNT/$EXPECTED_MCP_COUNT)"
+elif [ "$MCP_COUNT" -gt "$((EXPECTED_MCP_COUNT * 2))" ]; then
+    echo "❌ Excessive MCP processes detected ($MCP_COUNT/$EXPECTED_MCP_COUNT)"
+    echo "   This indicates duplicate instances - restart Claude Code"
+    HEALTH_ISSUES=$((HEALTH_ISSUES + 1))
+elif [ "$MCP_COUNT" -gt "$EXPECTED_MCP_COUNT" ]; then
+    echo "⚠️  More MCP processes than expected ($MCP_COUNT/$EXPECTED_MCP_COUNT)"
+    echo "   May have duplicate instances"
+    HEALTH_WARNINGS=$((HEALTH_WARNINGS + 1))
+else
+    echo "⚠️  Fewer MCP processes than expected ($MCP_COUNT/$EXPECTED_MCP_COUNT)"
+    echo "   Some MCPs may not be running"
+    HEALTH_WARNINGS=$((HEALTH_WARNINGS + 1))
+fi
+
+# Check for runaway processes (>80% CPU for 1+ minute)
+RUNAWAY=$(ps aux | grep -E "medical-patient-data|mcp-infrastructure" | grep -v grep | awk '$3 > 80 {print}')
+
+if [ -z "$RUNAWAY" ]; then
+    echo "✅ No runaway processes (>80% CPU)"
+else
+    echo "❌ Runaway processes detected:"
+    echo "$RUNAWAY" | while read line; do
+        PID=$(echo "$line" | awk '{print $2}')
+        CPU=$(echo "$line" | awk '{print $3}')
+        CMD=$(echo "$line" | awk '{for(i=11;i<=NF;i++) printf $i" "; print ""}' | cut -c1-60)
+        echo "   PID $PID @ ${CPU}% CPU: $CMD"
+    done
+    HEALTH_ISSUES=$((HEALTH_ISSUES + 1))
+fi
+
+# Check for processes running from unexpected locations
+UNEXPECTED=$(ps aux | grep "node.*google-workspace-oauth-setup" | grep -v grep)
+
+if [ -n "$UNEXPECTED" ]; then
+    echo "⚠️  Processes running from google-workspace-oauth-setup/"
+    HEALTH_WARNINGS=$((HEALTH_WARNINGS + 1))
+fi
+
+# Check for long-running MCP processes (>48 hours suggests restart needed)
+LONG_RUNNING_COUNT=$(ps -eo pid,etime,command | grep -E "mcp.*dist/(index|server)\.js" | grep -v grep | awk '$2 ~ /-/ {split($2,a,"-"); if(a[1] >= 2) print}' | wc -l | tr -d ' ')
+
+if [ "$LONG_RUNNING_COUNT" -gt 0 ]; then
+    echo "⚠️  $LONG_RUNNING_COUNT MCP process(es) running >48 hours"
+    echo "   Consider restarting Claude Code to refresh MCP servers"
+    HEALTH_WARNINGS=$((HEALTH_WARNINGS + 1))
+fi
+
+echo ""
+echo "   Detailed process check available at:"
+echo "   scripts/check-background-processes.sh"
+
+echo ""
+
 # Summary
 echo "════════════════════════════════════════════════════════════════"
 echo "  HEALTH CHECK SUMMARY"
