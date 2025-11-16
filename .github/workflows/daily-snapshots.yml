@@ -25,7 +25,7 @@ jobs:
         run: node --version && npm --version
 
       - name: Install dependencies
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         run: npm ci
 
       - name: Set up service account credentials
@@ -41,7 +41,7 @@ jobs:
       - name: Run production snapshot (Batch 1/3)
         id: batch1
         continue-on-error: true
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -51,7 +51,7 @@ jobs:
       - name: Run production snapshot (Batch 2/3)
         id: batch2
         continue-on-error: true
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -61,7 +61,7 @@ jobs:
       - name: Run production snapshot (Batch 3/3)
         id: batch3
         continue-on-error: true
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           BATCH_SIZE: 135
@@ -69,7 +69,7 @@ jobs:
         run: npm run snapshot
 
       - name: Run staging snapshot
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
         run: npm run snapshot:staging
@@ -89,16 +89,16 @@ jobs:
         run: |
           git config user.name "SSD Snapshot Bot"
           git config user.email "automation@ssdspc.com"
-          git add "Implementation Projects/google-sheets-version-control/production-sheets/"
-          git add "Implementation Projects/google-sheets-version-control/config/"
-          [ -d "Implementation Projects/google-sheets-version-control/staging-sheets" ] && git add "Implementation Projects/google-sheets-version-control/staging-sheets/" || true
+          git add "live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System/production-sheets/"
+          git add "live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System/config/"
+          [ -d "live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System/staging-sheets" ] && git add "live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System/staging-sheets/" || true
           git commit -m "chore: automated snapshot $(date '+%Y-%m-%d %H:%M:%S')"
           git pull --rebase origin main
           git push
 
       - name: Log snapshot run to Google Sheet
         if: always()
-        working-directory: Implementation Projects/google-sheets-version-control
+        working-directory: live-practice-management-system/live-practice-management-system/2-Application Layer (Google Sheets)/Google-Sheets-Backup-System
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /home/runner/service-account-keys/google-sheets-vc.json
           GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
