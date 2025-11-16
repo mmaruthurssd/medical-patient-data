@@ -97,3 +97,5 @@ archive/medical-records/
 !.ai-planning/orchestration-config.json
 Implementation Projects/google-sheets-version-control/GITHUB-SECRETS-READY.md
 google-workspace-oauth-setup/token.json
+# Google Sheets snapshot data (generated at runtime)
+Implementation Projects/google-sheets-version-control/production-sheets/
