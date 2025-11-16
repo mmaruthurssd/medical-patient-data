@@ -28,12 +28,6 @@ jobs:
         working-directory: Implementation Projects/google-sheets-version-control
         run: npm ci
 
-      - name: Set up clasp credentials
-        working-directory: Implementation Projects/google-sheets-version-control
-        env:
-          CLASP_CREDENTIALS_B64: ${{ secrets.CLASP_CREDENTIALS_B64 }}
-        run: node scripts/write-clasp-credentials.js
-
       - name: Set up service account credentials
         run: |
           mkdir -p ~/service-account-keys

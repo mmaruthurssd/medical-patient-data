@@ -14,17 +14,51 @@
  * Usage:
  *   node scripts/snapshot-all-production.js
  *   npm run snapshot
+ *
+ * Authentication:
+ *   Uses service account credentials via Apps Script API (no OAuth tokens needed)
+ *   Set GOOGLE_APPLICATION_CREDENTIALS environment variable to service account key path
  */
 
-const { exec } = require('child_process');
+const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
-
-const execAsync = util.promisify(exec);
+const os = require('os');
 
 const REGISTRY_PATH = path.join(__dirname, '../config/sheet-registry.json');
 const PRODUCTION_DIR = path.join(__dirname, '../production-sheets');
+
+/**
+ * Initialize Apps Script API client with service account
+ */
+async function initializeAppsScriptAPI() {
+  // Load service account credentials
+  let credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+  // Fallback to default location if not set
+  if (!credentialsPath) {
+    credentialsPath = path.join(os.homedir(), 'service-account-keys/google-sheets-vc.json');
+  }
+
+  if (!fs.existsSync(credentialsPath)) {
+    throw new Error(`Service account credentials not found at: ${credentialsPath}`);
+  }
+
+  const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: [
+      'https://www.googleapis.com/auth/script.projects.readonly',
+      'https://www.googleapis.com/auth/drive.readonly'
+    ],
+  });
+
+  const authClient = await auth.getClient();
+  const script = google.script({ version: 'v1', auth: authClient });
+
+  return script;
+}
 
 /**
  * Load sheet registry
@@ -51,14 +85,13 @@ function saveRegistry(registry) {
 }
 
 /**
- * Snapshot a single production sheet
+ * Snapshot a single production sheet using Apps Script API
  */
-async function snapshotSheet(sheet) {
+async function snapshotSheet(sheet, scriptAPI) {
   const folderName = `${sheet.id}_${sheet.name.replace(/[^a-zA-Z0-9]/g, '-')}`;
   const sheetPath = path.join(PRODUCTION_DIR, folderName);
   const livePath = path.join(sheetPath, 'live');
   const metadataPath = path.join(sheetPath, 'metadata');
-  const claspConfigPath = path.join(sheetPath, '.clasp.json');
 
   // Create directories
   if (!fs.existsSync(livePath)) {
@@ -68,29 +101,38 @@ async function snapshotSheet(sheet) {
     fs.mkdirSync(metadataPath, { recursive: true });
   }
 
-  // Create .clasp.json with production script ID
-  const claspConfig = {
-    scriptId: sheet.production.scriptId
-  };
-  fs.writeFileSync(claspConfigPath, JSON.stringify(claspConfig, null, 2));
-
   console.log(`📸 Snapshotting: ${sheet.name} (${sheet.id})`);
 
   try {
-    // Pull code from production Apps Script
-    // Copy .clasp.json to live directory for clasp
-    fs.copyFileSync(claspConfigPath, path.join(livePath, '.clasp.json'));
+    // Pull code from production Apps Script using Apps Script API
+    const response = await scriptAPI.projects.getContent({
+      scriptId: sheet.production.scriptId
+    });
 
-    const { stdout, stderr } = await execAsync(
-      `cd "${livePath}" && npx clasp pull`
-    );
-
-    // Remove temporary .clasp.json from live directory
-    fs.unlinkSync(path.join(livePath, '.clasp.json'));
-
-    if (stderr && !stderr.includes('Cloned') && !stderr.includes('Warning')) {
-      console.error(`  ⚠️  Warning: ${stderr}`);
+    if (!response.data.files || response.data.files.length === 0) {
+      throw new Error('No files found in script project');
     }
+
+    // Save each file to the live directory
+    for (const file of response.data.files) {
+      const fileName = file.name;
+      const fileContent = file.source || '';
+
+      // Determine file extension based on type
+      let extension = '';
+      if (file.type === 'SERVER_JS') {
+        extension = '.gs';
+      } else if (file.type === 'HTML') {
+        extension = '.html';
+      } else if (file.type === 'JSON') {
+        extension = '.json';
+      }
+
+      const filePath = path.join(livePath, fileName + extension);
+      fs.writeFileSync(filePath, fileContent, 'utf8');
+    }
+
+    console.log(`  ✅ Retrieved ${response.data.files.length} file(s)`);
 
     // Update last snapshot timestamp
     sheet.production.lastSnapshot = new Date().toISOString();
@@ -142,6 +184,11 @@ async function snapshotAllProduction() {
   console.log('🚀 Starting production snapshot process...\n');
   console.log(`⏰ ${new Date().toISOString()}\n`);
 
+  // Initialize Apps Script API client
+  console.log('🔑 Initializing Apps Script API with service account...');
+  const scriptAPI = await initializeAppsScriptAPI();
+  console.log('✅ Apps Script API initialized\n');
+
   const registry = loadRegistry();
 
   // Filter sheets that have production script IDs
@@ -179,7 +226,7 @@ async function snapshotAllProduction() {
 
   // Process each sheet
   for (const sheet of productionSheets) {
-    const result = await snapshotSheet(sheet);
+    const result = await snapshotSheet(sheet, scriptAPI);
 
     if (result.success) {
       results.success.push(result.sheet);
