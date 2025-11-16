@@ -14,7 +14,17 @@ token.json
 
 # Google Apps Script
 .clasp.json.backup
-**/credentials/
+credentials.json
+token.json
+
+# Credential files (but allow security/credentials/ tracking directory)
+**/service-account*.json
+**/.credentials/
+*-key.json
+!security/credentials/*.json
+!security/credentials/*.js
+!security/credentials/*.sh
+!security/credentials/README.md
 
 # macOS
 .DS_Store
