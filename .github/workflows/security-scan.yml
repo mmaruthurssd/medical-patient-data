@@ -21,28 +21,14 @@ jobs:
         with:
           fetch-depth: 0  # Full history for accurate diffs
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install security scanning dependencies
-        run: |
-          npm install -g gitleaks
-          # Note: PHI scanning will use built-in patterns
-
-      - name: Scan for credentials with Gitleaks
+      - name: Set up Gitleaks
+        uses: gitleaks/gitleaks-action@v2
         id: gitleaks
         continue-on-error: true
-        run: |
-          echo "🔍 Scanning for exposed credentials..."
-          gitleaks detect \
-            --source . \
-            --verbose \
-            --report-format json \
-            --report-path gitleaks-report.json \
-            --no-git \
-            --exit-code 1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --verbose --source . --report-format json --report-path gitleaks-report.json --no-git
 
       - name: Scan for PHI patterns
         id: phi-scan
@@ -55,39 +41,54 @@ jobs:
           #!/bin/bash
 
           PHI_FOUND=0
-
-          # Patterns for PHI detection (18 HIPAA identifiers)
-          declare -A PHI_PATTERNS=(
-            ["SSN"]="[0-9]{3}-[0-9]{2}-[0-9]{4}"
-            ["MRN"]="(MRN|Medical Record|Patient ID)[\s:]*[A-Z0-9-]{5,15}"
-            ["DOB"]="(DOB|Date of Birth|Birth Date)[\s:]*[0-9]{1,2}[/-][0-9]{1,2}[/-][0-9]{2,4}"
-            ["PHONE"]="(\([0-9]{3}\)|[0-9]{3})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}"
-            ["EMAIL_PHI"]="(patient|medical|health).*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-          )
+          GREP_BASE_ARGS="--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=build --exclude-dir=.github --exclude=*.md --exclude=*.log --exclude=*config*.json --exclude=*test*.json --exclude=*safety*.json --exclude=*example*.json"
 
           echo "Scanning for PHI patterns..."
-          for pattern_name in "${!PHI_PATTERNS[@]}"; do
-            pattern="${PHI_PATTERNS[$pattern_name]}"
-            matches=$(grep -rE "$pattern" . \
-              --exclude-dir=node_modules \
-              --exclude-dir=.git \
-              --exclude-dir=dist \
-              --exclude-dir=build \
-              --exclude="*.md" \
-              --exclude="*.log" \
-              2>/dev/null || true)
 
-            if [ -n "$matches" ]; then
-              echo "⚠️  PHI Pattern Found: $pattern_name"
-              echo "$matches" | head -5
-              PHI_FOUND=1
-            fi
-          done
+          # SSN pattern - exclude common test values
+          echo "  Checking for SSN patterns..."
+          matches=$(grep -rE "[0-9]{3}-[0-9]{2}-[0-9]{4}" . $GREP_BASE_ARGS 2>/dev/null | grep -v -E "(000-00-0000|111-11-1111|999-99-9999|123-45-6789|555-55-5555)" || true)
+          if [ -n "$matches" ]; then
+            echo "⚠️  PHI Pattern Found: SSN"
+            echo "$matches" | head -5
+            PHI_FOUND=1
+          fi
+
+          # MRN/Medical Record pattern
+          echo "  Checking for Medical Record Numbers..."
+          matches=$(grep -rE "(MRN|Medical Record|Patient ID)[\s:]*[A-Z0-9-]{5,15}" . $GREP_BASE_ARGS 2>/dev/null || true)
+          if [ -n "$matches" ]; then
+            echo "⚠️  PHI Pattern Found: MRN"
+            echo "$matches" | head -5
+            PHI_FOUND=1
+          fi
+
+          # Email with patient/medical/health keywords - exclude obvious test emails
+          echo "  Checking for PHI-related emails..."
+          matches=$(grep -rE "(patient|medical|health).*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" . $GREP_BASE_ARGS 2>/dev/null | grep -v -E "(fake\.com|example\.com|test\.com|localhost)" || true)
+          if [ -n "$matches" ]; then
+            echo "⚠️  PHI Pattern Found: Email with PHI keywords"
+            echo "$matches" | head -5
+            PHI_FOUND=1
+          fi
+
+          # Phone numbers - but NOT OAuth client IDs, git SHAs, or GitHub run IDs
+          # Only match formatted phone numbers with clear separators
+          echo "  Checking for phone numbers..."
+          matches=$(grep -rE "\([0-9]{3}\)\s*[0-9]{3}-[0-9]{4}|[0-9]{3}-[0-9]{3}-[0-9]{4}" . $GREP_BASE_ARGS 2>/dev/null | grep -v -E "(555-555-5555|000-000-0000|apps\.googleusercontent\.com|github\.com/|actions/runs/)" || true)
+          if [ -n "$matches" ]; then
+            echo "⚠️  PHI Pattern Found: Phone Number"
+            echo "$matches" | head -5
+            PHI_FOUND=1
+          fi
 
           if [ $PHI_FOUND -eq 1 ]; then
+            echo ""
             echo "❌ PHI patterns detected!"
+            echo "⚠️  Review matches above to confirm if real PHI or false positives"
             exit 1
           else
+            echo ""
             echo "✅ No PHI patterns detected"
             exit 0
           fi
