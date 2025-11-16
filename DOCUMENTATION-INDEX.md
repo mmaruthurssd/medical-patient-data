@@ -105,6 +105,7 @@ This structure balances **quick access** (root) with **logical organization** (d
 | Document | Purpose | When to Read |
 |----------|---------|--------------|
 | **[SYNC-INSTRUCTIONS-FOR-ALVARO.md](SYNC-INSTRUCTIONS-FOR-ALVARO.md)** | Comprehensive sync guide for Alvaro (Yoshi) | When syncing Yoshi workspace |
+| **[SYNC-QUICK-REFERENCE-ALVARO.md](SYNC-QUICK-REFERENCE-ALVARO.md)** | Quick reference checklist for Alvaro | Quick sync verification |
 | **[SYNC-INSTRUCTIONS-FOR-YOSHI.md](SYNC-INSTRUCTIONS-FOR-YOSHI.md)** | Original sync instructions (historical) | Reference only |
 
 ### Architecture & Standards
