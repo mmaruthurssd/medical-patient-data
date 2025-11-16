@@ -16,7 +16,7 @@
    - Quick reference commands
    - **READ THIS FIRST** when encountering backup issues
 
-2. **[Git Commit Safety Checklist](docs/GIT-COMMIT-SAFETY-CHECKLIST.md)**
+2. **[Git Commit Safety Checklist](docs/guides/git-safety-checklist.md)**
    - Pre-commit checklist to prevent PHI/secrets exposure
    - Post-commit verification steps
    - Recovery procedures
@@ -36,7 +36,7 @@
 
 **Documentation**:
 - Best practices: See "Layer 1" section in [Master Troubleshooting Guide](docs/troubleshooting/BACKUP-SYSTEM-TROUBLESHOOTING.md#layer-1-local-git-version-control)
-- Safety checklist: [docs/GIT-COMMIT-SAFETY-CHECKLIST.md](docs/GIT-COMMIT-SAFETY-CHECKLIST.md)
+- Safety checklist: [docs/guides/git-safety-checklist.md](docs/guides/git-safety-checklist.md)
 
 **Key Commands**:
 ```bash
