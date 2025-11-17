@@ -1,0 +1,241 @@
+{
+  "$schema": "keyword-dictionary-v1.0",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-16",
+  "description": "Keyword dictionary for AI task extraction filtering and classification",
+
+  "exclusionPatterns": {
+    "description": "Tasks matching these patterns should NOT be extracted (automated notifications, spam, etc.)",
+    "keywords": [
+      {
+        "pattern": "Google review",
+        "reason": "Automated notification from Google, not an actionable task",
+        "examples": ["Reply to new Google review", "View Google review"]
+      },
+      {
+        "pattern": "view new Klara message",
+        "reason": "Automated notification - viewing a message is not a task",
+        "examples": ["View new Klara message", "View new Klara conversation"]
+      },
+      {
+        "pattern": "read .* daily .* report",
+        "reason": "Automated notification of daily reports",
+        "examples": ["Read SkinDx Daily Biopsy Report"]
+      },
+      {
+        "pattern": "check .* for call time",
+        "reason": "Low-value reminder to check calendar",
+        "examples": ["Check Skool calendar for call time"]
+      },
+      {
+        "pattern": "log in to .* account",
+        "reason": "Automated prompt, not a meaningful task",
+        "examples": ["Log in to OncoLens account"]
+      },
+      {
+        "pattern": "monitor monthly network service",
+        "reason": "Recurring automated ticket, not a new task",
+        "examples": ["Monitor monthly network service"]
+      }
+    ],
+    "lowValuePhrases": [
+      "view new",
+      "check",
+      "review and submit",
+      "open",
+      "see",
+      "look at"
+    ]
+  },
+
+  "categoryKeywords": {
+    "description": "Keywords to help classify tasks into categories",
+    "categories": {
+      "Clinical/Patient Care": {
+        "keywords": [
+          "patient", "prior authorization", "prescription", "RX", "denial",
+          "appeal", "biopsy", "referral", "consent form", "patient education",
+          "discharge", "clinical", "medical", "treatment", "diagnosis"
+        ]
+      },
+      "Administrative": {
+        "keywords": [
+          "payroll", "invoice", "PTO", "coverage", "scheduling", "appointment",
+          "billing", "insurance", "office", "staff", "HR", "hiring", "candidates"
+        ]
+      },
+      "Technology/Systems": {
+        "keywords": [
+          "server", "MCP", "API", "script", "backup", "sync", "deployment",
+          "GitHub", "commit", "code", "build", "infrastructure", "network",
+          "update", "install", "configure", "automation", "database"
+        ]
+      },
+      "Training/Education": {
+        "keywords": [
+          "training", "webinar", "education", "learning", "course", "certification",
+          "workshop", "tutorial", "documentation", "guide", "onboarding"
+        ]
+      },
+      "Communication/Follow-up": {
+        "keywords": [
+          "email", "call", "meeting", "follow up", "contact", "notify",
+          "inform", "send", "reply", "respond", "update team", "coordinate"
+        ]
+      },
+      "Research/Analysis": {
+        "keywords": [
+          "research", "analyze", "audit", "review", "investigate", "evaluate",
+          "assess", "study", "examine", "report", "metrics", "data"
+        ]
+      },
+      "Compliance/Legal": {
+        "keywords": [
+          "compliance", "legal", "BAA", "HIPAA", "PHI", "security", "privacy",
+          "regulation", "policy", "audit", "certification", "agreement", "contract"
+        ]
+      }
+    }
+  },
+
+  "priorityIndicators": {
+    "description": "Keywords and patterns that indicate task priority",
+    "high": {
+      "keywords": [
+        "urgent", "ASAP", "critical", "immediately", "today", "deadline",
+        "time-sensitive", "emergency", "blocked", "broken", "down", "failing"
+      ],
+      "patterns": [
+        "due (today|tomorrow|this (morning|afternoon))",
+        "needs to be done (today|now|immediately)",
+        "patient waiting",
+        "system (down|broken|failing)"
+      ]
+    },
+    "medium": {
+      "keywords": [
+        "this week", "end of week", "by Friday", "soon", "upcoming",
+        "planned", "scheduled", "routine"
+      ],
+      "patterns": [
+        "due (this week|next week)",
+        "scheduled for",
+        "by end of"
+      ]
+    },
+    "low": {
+      "keywords": [
+        "eventually", "when possible", "low priority", "nice to have",
+        "future", "someday", "consider", "explore"
+      ],
+      "patterns": [
+        "when (you|we) have time",
+        "not urgent",
+        "low priority"
+      ]
+    }
+  },
+
+  "ownershipPatterns": {
+    "description": "Patterns to identify task owners and assignments",
+    "patterns": [
+      {
+        "pattern": "\\b([A-Z][a-z]+) needs to\\b",
+        "extractionType": "name_before_needs_to",
+        "examples": ["Sarah needs to follow up", "Mario needs to review"]
+      },
+      {
+        "pattern": "\\b([A-Z][a-z]+) will\\b",
+        "extractionType": "name_before_will",
+        "examples": ["Chris will send the document", "Luigi will handle deployment"]
+      },
+      {
+        "pattern": "assigned to ([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
+        "extractionType": "explicit_assignment",
+        "examples": ["assigned to Mario Maruthur", "assigned to Sarah"]
+      },
+      {
+        "pattern": "\\(([A-Z][a-z]+)\\)$",
+        "extractionType": "parenthetical_assignment",
+        "examples": ["Review candidates (Sarah)", "Update system (Luigi)"]
+      }
+    ],
+    "commonNames": [
+      "Mario", "Alvaro", "Sarah", "Chris", "Luigi", "Yoshi", "Rashid",
+      "Kevin", "Christina", "Mandy", "Adam", "Shundra"
+    ]
+  },
+
+  "dueDatePatterns": {
+    "description": "Patterns to extract due dates from task descriptions",
+    "patterns": [
+      {
+        "pattern": "due (today|tomorrow|this (week|month))",
+        "examples": ["due today", "due this week"]
+      },
+      {
+        "pattern": "by (end of day|EOD|Friday|Monday|\\d{1,2}/\\d{1,2})",
+        "examples": ["by end of day", "by Friday", "by 11/20"]
+      },
+      {
+        "pattern": "deadline: ([^\\n]+)",
+        "examples": ["deadline: November 30"]
+      },
+      {
+        "pattern": "(\\d{1,2})/(\\d{1,2})/(\\d{2,4})",
+        "examples": ["11/20/2025", "12/1/25"]
+      }
+    ]
+  },
+
+  "contextualHints": {
+    "description": "Additional context to improve extraction quality",
+    "projectIdentifiers": {
+      "patterns": [
+        "Ticket #?([A-Z0-9-]+)",
+        "Project: ([^\\n]+)",
+        "\\[([A-Z0-9-]+)\\]"
+      ],
+      "examples": [
+        "T20230418.0021.031",
+        "Patient Discharge Protocol Update",
+        "[INFRASTRUCTURE-123]"
+      ]
+    },
+    "statusIndicators": {
+      "inProgress": ["working on", "in progress", "currently", "ongoing"],
+      "blocked": ["blocked", "waiting for", "pending", "stuck"],
+      "completed": ["done", "completed", "finished", "resolved"]
+    }
+  },
+
+  "medicalSpecificPatterns": {
+    "description": "Healthcare/medical practice specific patterns",
+    "keywords": [
+      "prior authorization", "PA", "insurance denial", "appeal",
+      "biopsy report", "pathology", "referral", "consent form",
+      "patient education", "discharge instructions", "medication",
+      "prescription", "lab results", "imaging", "radiology"
+    ],
+    "excludePatterns": [
+      "automated system notification",
+      "daily report notification",
+      "automatic alert"
+    ]
+  },
+
+  "usage": {
+    "exclusionPatterns": "Use to filter out tasks that shouldn't be extracted (return confidence: 0 or skip)",
+    "categoryKeywords": "Use to classify tasks into appropriate categories",
+    "priorityIndicators": "Use to assign High/Medium/Low priority based on context",
+    "ownershipPatterns": "Use to extract task owner from description",
+    "dueDatePatterns": "Use to extract specific due dates from text"
+  },
+
+  "notes": [
+    "This is v1.0 - will be refined based on user feedback and iteration",
+    "Patterns use JavaScript regex syntax for flexibility",
+    "Add new patterns as you discover them during testing",
+    "Consider creating domain-specific dictionaries (e.g., medical, IT, admin)"
+  ]
+}
